@@ -119,7 +119,9 @@ def build_table(assets: pd.DataFrame, readings: pd.DataFrame, maintenance: pd.Da
         df["asset_idx"] = a
         df["type_idx"] = type_idx[a]
         df["running"] = g["status"].to_numpy()[days] == "running"
-        df["label"], df["time_to_event"], df["event_is_failure"] = _labels(m[m["asset_id"] == aid], days, n_days)
+        df["label"], df["time_to_event"], df["event_is_failure"] = _labels(
+            m[m["asset_id"] == aid], days, n_days
+        )
         frames.append(df)
     return pd.concat(frames, ignore_index=True)
 

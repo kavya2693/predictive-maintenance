@@ -36,12 +36,8 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
-
-[tool.ruff.lint.per-file-ignores]
-# X and y follow the usual notation for a feature matrix and labels.
-"src/predictive_maintenance/models.py" = ["N803", "N806"]
-"src/predictive_maintenance/evaluate.py" = ["N803", "N806"]
-"tests/*" = ["N806"]
+# X for a feature matrix and L for load follow the usual notation.
+ignore = ["N803", "N806"]
 
 [tool.mypy]
 python_version = "3.11"

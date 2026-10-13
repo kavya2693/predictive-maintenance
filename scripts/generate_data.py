@@ -20,7 +20,9 @@ def main() -> None:
         f"preventive jobs={(m['kind'] == 'preventive').sum()}  failures={(m['kind'] == 'corrective').sum()}"
     )
     print(m[m["kind"] == "corrective"]["failure_mode"].value_counts().to_string())
-    print("missing sensor share:", hist.readings[["vibration", "temperature"]].isna().mean().round(3).to_dict())
+    print(
+        "missing sensor share:", hist.readings[["vibration", "temperature"]].isna().mean().round(3).to_dict()
+    )
 
 
 if __name__ == "__main__":

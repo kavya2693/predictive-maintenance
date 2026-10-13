@@ -51,7 +51,8 @@ class GBMModel:
     def predict(self, X: pd.DataFrame | np.ndarray) -> np.ndarray:
         if isinstance(X, np.ndarray):
             X = pd.DataFrame(X, columns=FEATURE_NAMES)
-        return np.asarray(self.clf.predict_proba(X[FEATURE_NAMES])[:, 1])
+        proba = np.asarray(self.clf.predict_proba(X[FEATURE_NAMES]))
+        return proba[:, 1]
 
 
 class CoxModel:
@@ -60,11 +61,17 @@ class CoxModel:
     def __init__(self, penalizer: float = 0.05) -> None:
         self.cph = CoxPHFitter(penalizer=penalizer)
         self.fill: pd.Series | None = None
+        self.beta = pd.Series(dtype=float)
+        self.mean = pd.Series(dtype=float)
+        self.h0 = 0.0
 
     def _x(self, X: pd.DataFrame) -> pd.DataFrame:
         assert self.fill is not None
-        return X[COX_FEATURES].fillna(self.fill).clip(-5, 5).assign(
-            days_since_maint=X["days_since_maint"].clip(0, 1500) / 100.0
+        return (
+            X[COX_FEATURES]
+            .fillna(self.fill)
+            .clip(-5, 5)
+            .assign(days_since_maint=X["days_since_maint"].clip(0, 1500) / 100.0)
         )
 
     def fit(self, rows: pd.DataFrame) -> CoxModel:
@@ -76,13 +83,20 @@ class CoxModel:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             self.cph.fit(df, duration_col="T", event_col="E")
+        self.beta = self.cph.params_
+        self.mean = self.cph._norm_mean[self.beta.index]
+        bch = self.cph.baseline_cumulative_hazard_
+        self.h0 = float(bch[bch.index <= HORIZON_DAYS].iloc[-1, 0])
         return self
 
     def predict(self, X: pd.DataFrame | np.ndarray) -> np.ndarray:
         if isinstance(X, np.ndarray):
             X = pd.DataFrame(X, columns=FEATURE_NAMES)
-        surv = self.cph.predict_survival_function(self._x(X), times=[HORIZON_DAYS])
-        return np.asarray(1.0 - surv.to_numpy()[0])
+        # Same as predict_survival_function at the horizon, without a DataFrame per call:
+        # the scheduler asks this question for every asset every working day.
+        x = self._x(X)[self.beta.index].to_numpy()
+        hazard_ratio = np.exp((x - self.mean.to_numpy()) @ self.beta.to_numpy())
+        return np.asarray(1.0 - np.exp(-self.h0 * hazard_ratio))
 
 
 @dataclass
@@ -180,3 +194,24 @@ def lives_from_log(
     out["type_idx"] = out["asset_type"].map({t: k for k, t in enumerate(TYPE_NAMES)})
     out["duty"] = out["asset_id"].map(duty).fillna(duty.mean())
     return out.reset_index(drop=True)
+
+
+class AgeHazard:
+    """Fleet Weibull per type turned into P(fail within the horizon | days since service).
+
+    It sees no sensors, so it is the answer to "does condition monitoring add anything beyond
+    knowing how old each asset is?".
+    """
+
+    def __init__(self, weibull: WeibullByType) -> None:
+        self.w = weibull
+
+    def predict(self, X: pd.DataFrame | np.ndarray) -> np.ndarray:
+        if isinstance(X, pd.DataFrame):
+            X = X[FEATURE_NAMES].to_numpy()
+        onehot = X[:, [FEATURE_NAMES.index(f"type_{t}") for t in TYPE_NAMES]]
+        k_idx = onehot.argmax(axis=1)
+        k, lam = self.w.shape[k_idx], self.w.scale[k_idx]
+        a = np.maximum(X[:, FEATURE_NAMES.index("days_since_maint")], 0.0)
+        cum = lambda t: (t / lam) ** k  # noqa: E731
+        return np.asarray(1.0 - np.exp(cum(a) - cum(a + HORIZON_DAYS)))

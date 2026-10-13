@@ -205,14 +205,14 @@ class Plant:
         in_repair = self.down_left > 0
         status[in_repair] = FAILED
         self.down_left[in_repair] -= 1
-        for i in np.flatnonzero(in_repair & (self.down_left == 0)):
+        for i in np.flatnonzero(in_repair & (self.down_left == 0)).tolist():
             self.last_maint_day[i] = d
             self._new_life(i, start_day=d + 1)
 
         if shutdown:
             status[status == RUNNING] = SHUTDOWN
         else:
-            for i in actions:
+            for i in map(int, actions):
                 if status[i] != RUNNING:
                     continue
                 remaining = self._close_life(i, d, "preventive")
@@ -224,10 +224,12 @@ class Plant:
             running = status == RUNNING
             self.age[running] += 1.0
             failing = running & (self.age >= self.life)
-            for i in np.flatnonzero(failing):
+            for i in np.flatnonzero(failing).tolist():
                 self._close_life(i, d, "failure")
                 t = self.types[self.type_idx[i]]
-                events.append(Event(d, i, "corrective", t.fail_downtime_days, FAILURE_MODES[self.mode[i]], 0.0))
+                events.append(
+                    Event(d, i, "corrective", t.fail_downtime_days, FAILURE_MODES[self.mode[i]], 0.0)
+                )
                 status[i] = FAILED
                 self.down_left[i] = t.fail_downtime_days - 1
                 if self.down_left[i] == 0:
@@ -239,8 +241,8 @@ class Plant:
         load = self.load_mean * weekend * (0.6 if holiday else 1.0) * (1.0 + 0.05 * zl)
         load = np.where(running, np.clip(load, 0.2, 1.05), 0.0)
 
-        remaining = np.maximum(self.life - self.age, 0.0)
-        deg = np.where(self.mode == SUDDEN, 0.0, self.amp * np.exp(-remaining / self.tau))
+        left = np.maximum(self.life - self.age, 0.0)
+        deg = np.where(self.mode == SUDDEN, 0.0, self.amp * np.exp(-left / self.tau))
         eff = EFFECTS[self.mode] * deg[:, None]
         L = load
         mult = np.stack(
