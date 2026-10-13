@@ -135,8 +135,11 @@ def _labels(m: pd.DataFrame, days: np.ndarray, n_days: int) -> tuple[np.ndarray,
     ev_days, ev_fail = ev_days[order], ev_fail[order]
     idx = np.searchsorted(ev_days, days, side="right")  # next event strictly after the day
     has_next = idx < len(ev_days)
-    nxt = np.where(has_next, ev_days[np.minimum(idx, len(ev_days) - 1)], n_days - 1)
-    nxt_fail = np.where(has_next, ev_fail[np.minimum(idx, len(ev_days) - 1)], False)
+    # A sentinel at the end of the data covers assets with no maintenance at all.
+    ev_days = np.append(ev_days, n_days - 1)
+    ev_fail = np.append(ev_fail, False)
+    nxt = np.where(has_next, ev_days[idx], n_days - 1)
+    nxt_fail = np.where(has_next, ev_fail[idx], False)
     dt = nxt - days
     label = np.full(len(days), np.nan)
     label[(dt <= HORIZON_DAYS) & nxt_fail & has_next] = 1.0
