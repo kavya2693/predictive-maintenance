@@ -1,0 +1,50 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - run: uv sync --locked
+
+      - name: lint
+        run: uv run ruff check .
+
+      - name: format
+        run: uv run ruff format --check .
+
+      - name: types
+        run: uv run mypy
+
+      - name: tests
+        run: uv run pytest -q
+
+      # The whole pipeline needs no model server or network: generate, train, score and run
+      # the closed loop on one seed to prove the one-command path works from a clean clone.
+      - name: end-to-end run
+        run: |
+          uv run python scripts/generate_data.py
+          uv run predmaint --seeds 1 --no-sweep --out outputs/ci
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: build image
+        run: docker buildx build --load -t predictive-maintenance .
+
+      - name: run one seed in the container
+        run: docker run --rm predictive-maintenance predmaint --seeds 1 --no-sweep
