@@ -1,0 +1,53 @@
+[project]
+name = "predictive-maintenance"
+version = "0.1.0"
+description = "Which pumps, compressors and heat exchangers to service this week when the crew cannot reach them all"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = { text = "MIT" }
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "lightgbm>=4.6",
+    "lifelines>=0.30",
+    "scikit-learn>=1.5",
+]
+
+[project.scripts]
+predmaint = "predictive_maintenance.cli:main"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15",
+    "pytest>=8.3",
+    "ruff>=0.11",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/predictive_maintenance"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# X and y follow the usual notation for a feature matrix and labels.
+"src/predictive_maintenance/models.py" = ["N803", "N806"]
+"src/predictive_maintenance/evaluate.py" = ["N803", "N806"]
+"tests/*" = ["N806"]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src"]
+ignore_missing_imports = true
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
