@@ -1,0 +1,386 @@
+{
+  "horizon_days": 14,
+  "crew_jobs_per_week": 6,
+  "fixed_intervals_days": {
+    "pump": 187.0,
+    "compressor": 121.0,
+    "heat_exchanger": 218.0
+  },
+  "training": {
+    "n_train": 98769,
+    "n_valid": 20111,
+    "train_pos_rate": 0.027306138565744313,
+    "n_lives": 663,
+    "n_landmarks": 18464,
+    "best_iteration": 119
+  },
+  "offline": {
+    "base_rate": 0.03167530322874552,
+    "rows": 70244,
+    "policies": {
+      "fixed-interval": {
+        "weekly_precision_at_budget": 0.07333333333333333,
+        "weekly_alerts": 300,
+        "gradual_failures": 126,
+        "gradual_detected_share": 0.5476190476190477,
+        "median_lead_days_detected": 30.0,
+        "sudden_detected_share": 0.42857142857142855,
+        "by_mode": {
+          "bearing": 0.472,
+          "fouling": 0.765,
+          "overheating": 0.476,
+          "seal": 0.278,
+          "sudden": 0.429,
+          "tube_leak": 1.0,
+          "valve": 0.909
+        }
+      },
+      "alarm-limits": {
+        "weekly_precision_at_budget": 0.5095057034220533,
+        "weekly_alerts": 263,
+        "gradual_failures": 126,
+        "gradual_detected_share": 0.8968253968253969,
+        "median_lead_days_detected": 12.0,
+        "sudden_detected_share": 0.3333333333333333,
+        "by_mode": {
+          "bearing": 1.0,
+          "fouling": 1.0,
+          "overheating": 0.81,
+          "seal": 0.722,
+          "sudden": 0.333,
+          "tube_leak": 0.833,
+          "valve": 0.727
+        },
+        "average_precision": 0.28206237759284697,
+        "c_index": 0.6465880990518839
+      },
+      "weibull-age": {
+        "weekly_precision_at_budget": NaN,
+        "weekly_alerts": 0,
+        "gradual_failures": 126,
+        "gradual_detected_share": 0.0,
+        "median_lead_days_detected": 0.0,
+        "sudden_detected_share": 0.0,
+        "by_mode": {
+          "bearing": 0.0,
+          "fouling": 0.0,
+          "overheating": 0.0,
+          "seal": 0.0,
+          "sudden": 0.0,
+          "tube_leak": 0.0,
+          "valve": 0.0
+        },
+        "average_precision": 0.060909203507185414,
+        "mean_predicted": 0.025194159193278703,
+        "c_index": 0.6602282775586089
+      },
+      "cox-sensors": {
+        "weekly_precision_at_budget": 0.7948717948717948,
+        "weekly_alerts": 117,
+        "gradual_failures": 126,
+        "gradual_detected_share": 0.49206349206349204,
+        "median_lead_days_detected": 15.0,
+        "sudden_detected_share": 0.0,
+        "by_mode": {
+          "bearing": 0.943,
+          "fouling": 0.0,
+          "overheating": 0.095,
+          "seal": 0.056,
+          "sudden": 0.0,
+          "tube_leak": 0.0,
+          "valve": 0.818
+        },
+        "average_precision": 0.4375879058757647,
+        "mean_predicted": 0.030121909534701827,
+        "c_index": 0.7792803827163622
+      },
+      "gbm-sensors": {
+        "weekly_precision_at_budget": 0.7727272727272727,
+        "weekly_alerts": 220,
+        "gradual_failures": 126,
+        "gradual_detected_share": 0.9761904761904762,
+        "median_lead_days_detected": 15.0,
+        "sudden_detected_share": 0.0,
+        "by_mode": {
+          "bearing": 1.0,
+          "fouling": 1.0,
+          "overheating": 0.952,
+          "seal": 0.944,
+          "sudden": 0.0,
+          "tube_leak": 1.0,
+          "valve": 0.909
+        },
+        "average_precision": 0.681189195956752,
+        "mean_predicted": 0.027281374509776475,
+        "c_index": 0.7529625997638902
+      }
+    },
+    "rul_c_index": 0.7423805680272194
+  },
+  "closed_loop": [
+    {
+      "policy": "alarm-limits",
+      "crew": 3,
+      "uptime": 0.992391871517358,
+      "uptime_sd": 0.00033406360737557855,
+      "failures": 104.8,
+      "planned_jobs": 154.4,
+      "precision_at_budget": 0.625564837860853,
+      "precision_30d": 0.7576740569150436,
+      "median_lead_days": 5.032613865084973,
+      "failures_caught_share": 0.4797557650261507,
+      "cost_total": 3196000.0
+    },
+    {
+      "policy": "alarm-limits",
+      "crew": 6,
+      "uptime": 0.9929776231655445,
+      "uptime_sd": 0.00023871999410950053,
+      "failures": 58.2,
+      "planned_jobs": 279.6,
+      "precision_at_budget": 0.30769843391222806,
+      "precision_30d": 0.49437236889976466,
+      "median_lead_days": 5.606501994021491,
+      "failures_caught_share": 0.5962821711974161,
+      "cost_total": 2695400.0
+    },
+    {
+      "policy": "alarm-limits",
+      "crew": 10,
+      "uptime": 0.992848009201652,
+      "uptime_sd": 0.00017765723778515011,
+      "failures": 50.4,
+      "planned_jobs": 317.6,
+      "precision_at_budget": 0.2664329454452885,
+      "precision_30d": 0.44587203353986116,
+      "median_lead_days": 5.77771749243359,
+      "failures_caught_share": 0.6270446502257474,
+      "cost_total": 2680400.0
+    },
+    {
+      "policy": "cox-sensors",
+      "crew": 6,
+      "uptime": 0.9919385027675756,
+      "uptime_sd": 0.000502699941114311,
+      "failures": 128.6,
+      "planned_jobs": 110.2,
+      "precision_at_budget": 0.48247505563159565,
+      "precision_30d": 0.8523145187581255,
+      "median_lead_days": 6.104256988766035,
+      "failures_caught_share": 0.2929242478869427,
+      "cost_total": 3401500.0
+    },
+    {
+      "policy": "fixed-interval",
+      "crew": 3,
+      "uptime": 0.9898203502867702,
+      "uptime_sd": 0.0005395280609739572,
+      "failures": 156.6,
+      "planned_jobs": 155.0,
+      "precision_at_budget": 0.06709677419354838,
+      "precision_30d": 0.1393548387096774,
+      "median_lead_days": 4.2128598522577985,
+      "failures_caught_share": 0.06258195891433106,
+      "cost_total": 4408700.0
+    },
+    {
+      "policy": "fixed-interval",
+      "crew": 6,
+      "uptime": 0.989988985510444,
+      "uptime_sd": 0.0001273700881093567,
+      "failures": 111.2,
+      "planned_jobs": 310.0,
+      "precision_at_budget": 0.036774193548387096,
+      "precision_30d": 0.08645161290322581,
+      "median_lead_days": 7.672757024494516,
+      "failures_caught_share": 0.09284406779661017,
+      "cost_total": 4009400.0
+    },
+    {
+      "policy": "fixed-interval",
+      "crew": 10,
+      "uptime": 0.9903044723584481,
+      "uptime_sd": 0.00016252042316038264,
+      "failures": 90.8,
+      "planned_jobs": 362.4,
+      "precision_at_budget": 0.06399979764140687,
+      "precision_30d": 0.10982053004252075,
+      "median_lead_days": 7.104237050752258,
+      "failures_caught_share": 0.20366740647902812,
+      "cost_total": 3752600.0
+    },
+    {
+      "policy": "gbm-sensors",
+      "crew": 3,
+      "uptime": 0.9937381869026375,
+      "uptime_sd": 0.00038204361186702584,
+      "failures": 84.0,
+      "planned_jobs": 150.4,
+      "precision_at_budget": 0.7422825801402239,
+      "precision_30d": 0.9640836855713587,
+      "median_lead_days": 5.882328625289796,
+      "failures_caught_share": 0.5712742474595399,
+      "cost_total": 2539200.0
+    },
+    {
+      "policy": "gbm-sensors",
+      "crew": 6,
+      "uptime": 0.9947155673863748,
+      "uptime_sd": 0.00035482955261270183,
+      "failures": 44.2,
+      "planned_jobs": 211.4,
+      "precision_at_budget": 0.45602093427163953,
+      "precision_30d": 0.8431462938292398,
+      "median_lead_days": 7.689500717871979,
+      "failures_caught_share": 0.686821809390912,
+      "cost_total": 2015700.0
+    },
+    {
+      "policy": "gbm-sensors",
+      "crew": 10,
+      "uptime": 0.9946789481838284,
+      "uptime_sd": 0.00038576610351373947,
+      "failures": 43.8,
+      "planned_jobs": 215.2,
+      "precision_at_budget": 0.4366162001826511,
+      "precision_30d": 0.8225555397995942,
+      "median_lead_days": 7.72929164431001,
+      "failures_caught_share": 0.683173973241884,
+      "cost_total": 2023000.0
+    },
+    {
+      "policy": "oracle",
+      "crew": 3,
+      "uptime": 0.9940845775004938,
+      "uptime_sd": 0.00040410509400787704,
+      "failures": 72.6,
+      "planned_jobs": 154.6,
+      "precision_at_budget": 1.0,
+      "precision_30d": 1.0,
+      "median_lead_days": 2.7637702462895732,
+      "failures_caught_share": 0.6811863123060063,
+      "cost_total": 2407100.0
+    },
+    {
+      "policy": "oracle",
+      "crew": 6,
+      "uptime": 0.9965492957746479,
+      "uptime_sd": 0.00015524934989467792,
+      "failures": 2.0,
+      "planned_jobs": 237.4,
+      "precision_at_budget": 1.0,
+      "precision_30d": 1.0,
+      "median_lead_days": 12.38047467047141,
+      "failures_caught_share": 0.9917042254036753,
+      "cost_total": 1119500.0
+    },
+    {
+      "policy": "oracle",
+      "crew": 10,
+      "uptime": 0.9965464788732394,
+      "uptime_sd": 0.0001488566489083472,
+      "failures": 1.6,
+      "planned_jobs": 239.2,
+      "precision_at_budget": 1.0,
+      "precision_30d": 1.0,
+      "median_lead_days": 12.988925834509331,
+      "failures_caught_share": 0.9933541219343605,
+      "cost_total": 1116600.0
+    },
+    {
+      "policy": "run-to-failure",
+      "crew": 6,
+      "uptime": 0.9885274720432831,
+      "uptime_sd": 0.0004715891292913529,
+      "failures": 223.6,
+      "planned_jobs": 0.0,
+      "precision_at_budget": NaN,
+      "precision_30d": NaN,
+      "median_lead_days": NaN,
+      "failures_caught_share": 0.0,
+      "cost_total": 5267400.0
+    },
+    {
+      "policy": "weibull-age",
+      "crew": 6,
+      "uptime": 0.9884429699997359,
+      "uptime_sd": 0.0004810697753455506,
+      "failures": 223.2,
+      "planned_jobs": 8.0,
+      "precision_at_budget": 0.125,
+      "precision_30d": 0.125,
+      "median_lead_days": 4.28457597690732,
+      "failures_caught_share": 0.004467036403981063,
+      "cost_total": 5288600.0
+    }
+  ],
+  "paired_gbm_minus": {
+    "run-to-failure": {
+      "uptime_pp_mean": 0.6188095343091748,
+      "uptime_pp_min": 0.5788193249006923,
+      "uptime_pp_max": 0.6731793728684599,
+      "cost_mean": -3251700.0,
+      "seeds_gbm_better_uptime": 5
+    },
+    "fixed-interval": {
+      "uptime_pp_mean": 0.47265818759308686,
+      "uptime_pp_min": 0.4239376910184389,
+      "uptime_pp_max": 0.499992957845663,
+      "cost_mean": -1993700.0,
+      "seeds_gbm_better_uptime": 5
+    },
+    "alarm-limits": {
+      "uptime_pp_mean": 0.17379442208302232,
+      "uptime_pp_min": 0.14505802466785456,
+      "uptime_pp_max": 0.19153677886987186,
+      "cost_mean": -679700.0,
+      "seeds_gbm_better_uptime": 5
+    },
+    "weibull-age": {
+      "uptime_pp_mean": 0.6272597386638878,
+      "uptime_pp_min": 0.5900862957755715,
+      "uptime_pp_max": 0.684446343743339,
+      "cost_mean": -3272900.0,
+      "seeds_gbm_better_uptime": 5
+    },
+    "cox-sensors": {
+      "uptime_pp_mean": 0.2777064618799385,
+      "uptime_pp_min": 0.25066873866198547,
+      "uptime_pp_max": 0.33376187526269474,
+      "cost_mean": -1385800.0,
+      "seeds_gbm_better_uptime": 5
+    }
+  },
+  "gbm_caught_by_mode": {
+    "bearing": {
+      "caught": 152,
+      "would_fail": 156
+    },
+    "seal": {
+      "caught": 136,
+      "would_fail": 146
+    },
+    "overheating": {
+      "caught": 85,
+      "would_fail": 97
+    },
+    "valve": {
+      "caught": 26,
+      "would_fail": 31
+    },
+    "fouling": {
+      "caught": 42,
+      "would_fail": 44
+    },
+    "tube_leak": {
+      "caught": 40,
+      "would_fail": 40
+    },
+    "sudden": {
+      "caught": 1,
+      "would_fail": 189
+    }
+  },
+  "work_orders_first_two_weeks": 12,
+  "runtime_seconds": 127.3
+}

@@ -1,0 +1,482 @@
+[
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2024-00001",
+    "created_on": "2024-12-31",
+    "order_type": "condition_based",
+    "priority": 1,
+    "asset": {
+      "asset_id": "COMP-141",
+      "asset_type": "compressor",
+      "functional_location": "U200-K-141"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.736,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 127.0,
+      "expected_saving": 22727.67
+    },
+    "evidence": [
+      {
+        "sensor": "vibration",
+        "change_vs_baseline_7d": 0.521
+      },
+      {
+        "sensor": "current",
+        "change_vs_baseline_7d": 0.046
+      },
+      {
+        "sensor": "temperature",
+        "change_vs_baseline_7d": 0.032
+      }
+    ],
+    "schedule": {
+      "requested_start": "2024-12-31",
+      "due_by": "2025-01-03",
+      "estimated_duration_hours": 8,
+      "crew": "rotating-equipment"
+    },
+    "estimated_cost": 1500.0
+  },
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2024-00002",
+    "created_on": "2024-12-31",
+    "order_type": "condition_based",
+    "priority": 1,
+    "asset": {
+      "asset_id": "PUMP-106",
+      "asset_type": "pump",
+      "functional_location": "U300-P-106"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.964,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 96.0,
+      "expected_saving": 12847.3
+    },
+    "evidence": [
+      {
+        "sensor": "vibration",
+        "change_vs_baseline_7d": 0.859
+      },
+      {
+        "sensor": "temperature",
+        "change_vs_baseline_7d": 0.072
+      },
+      {
+        "sensor": "current",
+        "change_vs_baseline_7d": 0.063
+      }
+    ],
+    "schedule": {
+      "requested_start": "2024-12-31",
+      "due_by": "2025-01-03",
+      "estimated_duration_hours": 8,
+      "crew": "mechanical"
+    },
+    "estimated_cost": 1500.0
+  },
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2025-00003",
+    "created_on": "2025-01-01",
+    "order_type": "condition_based",
+    "priority": 1,
+    "asset": {
+      "asset_id": "PUMP-054",
+      "asset_type": "pump",
+      "functional_location": "U300-P-054"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.934,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 175.3,
+      "expected_saving": 12318.85
+    },
+    "evidence": [
+      {
+        "sensor": "vibration",
+        "change_vs_baseline_7d": 0.592
+      },
+      {
+        "sensor": "temperature",
+        "change_vs_baseline_7d": 0.066
+      },
+      {
+        "sensor": "flow",
+        "change_vs_baseline_7d": -0.058
+      }
+    ],
+    "schedule": {
+      "requested_start": "2025-01-01",
+      "due_by": "2025-01-04",
+      "estimated_duration_hours": 8,
+      "crew": "mechanical"
+    },
+    "estimated_cost": 1500.0
+  },
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2025-00004",
+    "created_on": "2025-01-01",
+    "order_type": "condition_based",
+    "priority": 1,
+    "asset": {
+      "asset_id": "PUMP-026",
+      "asset_type": "pump",
+      "functional_location": "U300-P-026"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.748,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 87.4,
+      "expected_saving": 8957.51
+    },
+    "evidence": [
+      {
+        "sensor": "vibration",
+        "change_vs_baseline_7d": 0.513
+      },
+      {
+        "sensor": "current",
+        "change_vs_baseline_7d": 0.053
+      },
+      {
+        "sensor": "temperature",
+        "change_vs_baseline_7d": 0.03
+      }
+    ],
+    "schedule": {
+      "requested_start": "2025-01-01",
+      "due_by": "2025-01-04",
+      "estimated_duration_hours": 8,
+      "crew": "mechanical"
+    },
+    "estimated_cost": 1500.0
+  },
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2025-00005",
+    "created_on": "2025-01-02",
+    "order_type": "condition_based",
+    "priority": 1,
+    "asset": {
+      "asset_id": "PUMP-014",
+      "asset_type": "pump",
+      "functional_location": "U300-P-014"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.893,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 121.7,
+      "expected_saving": 11576.99
+    },
+    "evidence": [
+      {
+        "sensor": "vibration",
+        "change_vs_baseline_7d": 0.112
+      },
+      {
+        "sensor": "flow",
+        "change_vs_baseline_7d": -0.101
+      },
+      {
+        "sensor": "pressure",
+        "change_vs_baseline_7d": -0.091
+      }
+    ],
+    "schedule": {
+      "requested_start": "2025-01-02",
+      "due_by": "2025-01-05",
+      "estimated_duration_hours": 8,
+      "crew": "mechanical"
+    },
+    "estimated_cost": 1500.0
+  },
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2025-00006",
+    "created_on": "2025-01-02",
+    "order_type": "condition_based",
+    "priority": 2,
+    "asset": {
+      "asset_id": "PUMP-032",
+      "asset_type": "pump",
+      "functional_location": "U100-P-032"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.459,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 169.0,
+      "expected_saving": 3770.61
+    },
+    "evidence": [
+      {
+        "sensor": "pressure",
+        "change_vs_baseline_7d": -0.059
+      },
+      {
+        "sensor": "current",
+        "change_vs_baseline_7d": 0.018
+      },
+      {
+        "sensor": "flow",
+        "change_vs_baseline_7d": -0.012
+      }
+    ],
+    "schedule": {
+      "requested_start": "2025-01-02",
+      "due_by": "2025-01-05",
+      "estimated_duration_hours": 8,
+      "crew": "mechanical"
+    },
+    "estimated_cost": 1500.0
+  },
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2025-00007",
+    "created_on": "2025-01-06",
+    "order_type": "condition_based",
+    "priority": 2,
+    "asset": {
+      "asset_id": "HEAT-150",
+      "asset_type": "heat_exchanger",
+      "functional_location": "U300-E-150"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.348,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 142.4,
+      "expected_saving": 3852.24
+    },
+    "evidence": [
+      {
+        "sensor": "pressure",
+        "change_vs_baseline_7d": 0.081
+      },
+      {
+        "sensor": "temperature",
+        "change_vs_baseline_7d": 0.064
+      },
+      {
+        "sensor": "flow",
+        "change_vs_baseline_7d": -0.02
+      }
+    ],
+    "schedule": {
+      "requested_start": "2025-01-06",
+      "due_by": "2025-01-09",
+      "estimated_duration_hours": 8,
+      "crew": "static-equipment"
+    },
+    "estimated_cost": 1500.0
+  },
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2025-00008",
+    "created_on": "2025-01-06",
+    "order_type": "condition_based",
+    "priority": 3,
+    "asset": {
+      "asset_id": "COMP-110",
+      "asset_type": "compressor",
+      "functional_location": "U300-K-110"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.163,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 148.1,
+      "expected_saving": 1538.24
+    },
+    "evidence": [
+      {
+        "sensor": "pressure",
+        "change_vs_baseline_7d": -0.077
+      },
+      {
+        "sensor": "vibration",
+        "change_vs_baseline_7d": 0.064
+      },
+      {
+        "sensor": "flow",
+        "change_vs_baseline_7d": -0.031
+      }
+    ],
+    "schedule": {
+      "requested_start": "2025-01-06",
+      "due_by": "2025-01-09",
+      "estimated_duration_hours": 8,
+      "crew": "rotating-equipment"
+    },
+    "estimated_cost": 1500.0
+  },
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2025-00009",
+    "created_on": "2025-01-07",
+    "order_type": "condition_based",
+    "priority": 3,
+    "asset": {
+      "asset_id": "COMP-149",
+      "asset_type": "compressor",
+      "functional_location": "U200-K-149"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.247,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 290.4,
+      "expected_saving": 4627.38
+    },
+    "evidence": [
+      {
+        "sensor": "pressure",
+        "change_vs_baseline_7d": -0.059
+      },
+      {
+        "sensor": "flow",
+        "change_vs_baseline_7d": -0.055
+      },
+      {
+        "sensor": "vibration",
+        "change_vs_baseline_7d": 0.046
+      }
+    ],
+    "schedule": {
+      "requested_start": "2025-01-07",
+      "due_by": "2025-01-10",
+      "estimated_duration_hours": 8,
+      "crew": "rotating-equipment"
+    },
+    "estimated_cost": 1500.0
+  },
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2025-00010",
+    "created_on": "2025-01-08",
+    "order_type": "condition_based",
+    "priority": 2,
+    "asset": {
+      "asset_id": "PUMP-019",
+      "asset_type": "pump",
+      "functional_location": "U400-P-019"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.256,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 159.8,
+      "expected_saving": 105.59
+    },
+    "evidence": [
+      {
+        "sensor": "pressure",
+        "change_vs_baseline_7d": -0.039
+      },
+      {
+        "sensor": "flow",
+        "change_vs_baseline_7d": -0.033
+      },
+      {
+        "sensor": "vibration",
+        "change_vs_baseline_7d": 0.03
+      }
+    ],
+    "schedule": {
+      "requested_start": "2025-01-08",
+      "due_by": "2025-01-11",
+      "estimated_duration_hours": 8,
+      "crew": "mechanical"
+    },
+    "estimated_cost": 1500.0
+  },
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2025-00011",
+    "created_on": "2025-01-09",
+    "order_type": "condition_based",
+    "priority": 2,
+    "asset": {
+      "asset_id": "PUMP-017",
+      "asset_type": "pump",
+      "functional_location": "U200-P-017"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.391,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 169.1,
+      "expected_saving": 2536.96
+    },
+    "evidence": [
+      {
+        "sensor": "vibration",
+        "change_vs_baseline_7d": 0.282
+      },
+      {
+        "sensor": "temperature",
+        "change_vs_baseline_7d": 0.035
+      },
+      {
+        "sensor": "flow",
+        "change_vs_baseline_7d": 0.012
+      }
+    ],
+    "schedule": {
+      "requested_start": "2025-01-09",
+      "due_by": "2025-01-12",
+      "estimated_duration_hours": 8,
+      "crew": "mechanical"
+    },
+    "estimated_cost": 1500.0
+  },
+  {
+    "schema_version": "1.0",
+    "work_order_id": "CBM-2025-00012",
+    "created_on": "2025-01-13",
+    "order_type": "condition_based",
+    "priority": 1,
+    "asset": {
+      "asset_id": "PUMP-084",
+      "asset_type": "pump",
+      "functional_location": "U100-P-084"
+    },
+    "risk": {
+      "model": "gbm-sensors",
+      "failure_probability": 0.828,
+      "horizon_days": 14,
+      "fleet_median_remaining_life_days": 104.9,
+      "expected_saving": 10402.23
+    },
+    "evidence": [
+      {
+        "sensor": "temperature",
+        "change_vs_baseline_7d": 0.082
+      },
+      {
+        "sensor": "current",
+        "change_vs_baseline_7d": 0.019
+      },
+      {
+        "sensor": "flow",
+        "change_vs_baseline_7d": 0.004
+      }
+    ],
+    "schedule": {
+      "requested_start": "2025-01-13",
+      "due_by": "2025-01-16",
+      "estimated_duration_hours": 8,
+      "crew": "mechanical"
+    },
+    "estimated_cost": 1500.0
+  }
+]
