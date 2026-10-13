@@ -45,3 +45,4 @@ models/*.joblib
 # generated data and run outputs that are rebuilt by make
 data/*.csv.gz
 outputs/ci/
+data/*.csv
