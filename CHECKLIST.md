@@ -10,10 +10,10 @@
 [x] Lint + format + types clean
 [x] One-command E2E run verified on this machine (`make run`, outputs/run.log)
 [ ] Gate 2 closed (results not reviewed by Kavyasri before publishing)
-[ ] Dockerfile builds and runs (Docker daemon not available locally; built and run in CI)
-[ ] CI workflow green on GitHub
+[x] Dockerfile builds and runs (local daemon failed with an I/O error; built and run in the CI docker job)
+[x] CI workflow green on GitHub (same seed-101 numbers as the local run)
 [x] .env.example present, no real values
-[ ] prepush-scan.sh passes
+[x] prepush-scan.sh passes
 [x] 10+ incremental commits
-[ ] Public repo created, pushed, remote HEAD == local HEAD
-[ ] Root README index updated
+[x] Public repo created, pushed, remote HEAD == local HEAD
+[x] Root README index updated
