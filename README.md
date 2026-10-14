@@ -6,9 +6,9 @@ Picks which pumps, compressors and heat exchangers the crew should service this 
 cannot reach them all, and shows what that choice does to uptime and cost against calendar
 maintenance and running to failure.
 
-[![86-second silent walkthrough: the plant, the crew constraint, how it works, the architecture, the closed-loop run, the results and the planner's work orders](docs/demo/demo.gif)](docs/demo/demo.mp4)
+[![86-second silent walkthrough: the plant, the crew constraint, how it works, the architecture, the closed-loop run, the results and the planner's work orders](docs/demo/demo.gif)](https://kavya2693.github.io/work-demos/predictive-maintenance.mp4)
 
-*86-second silent walkthrough. Click for the full video ([MP4, 4.8 MB](docs/demo/demo.mp4)).*
+*86-second silent walkthrough. [Play the full video](https://kavya2693.github.io/work-demos/predictive-maintenance.mp4) · [download the MP4, 4.8 MB](docs/demo/demo.mp4).*
 
 📄 **Audit report:** every figure and assumption in the video, traced to its source — [PDF](docs/demo/AUDIT_REPORT.pdf) · [Word](docs/demo/AUDIT_REPORT.docx) · [Markdown](docs/demo/AUDIT_REPORT.md)
 
