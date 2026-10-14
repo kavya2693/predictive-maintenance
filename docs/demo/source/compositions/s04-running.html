@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        #running-root { position: absolute; inset: 0; }
+        #running-root svg { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+        #running-root .panel {
+          position: absolute; border-radius: 14px; border: 2px solid var(--line); background: rgba(11, 23, 34, 0.92);
+        }
+        #running-root .ax { font-family: var(--mono); font-size: 20px; fill: #8494a6; }
+        #running-root .legend {
+          position: absolute; right: 120px; top: 126px; font-family: var(--mono); font-size: 24px;
+          line-height: 1.5; color: var(--ink-soft); text-align: right;
+        }
+        #running-root .note { position: absolute; font-family: var(--mono); font-size: 22px; white-space: nowrap; }
+        #running-root .chip {
+          position: absolute; font-family: var(--mono); font-size: 28px; font-weight: 700;
+          padding: 8px 16px; border-radius: 8px; background: var(--c-opt-deep); color: #ffffff; white-space: nowrap;
+        }
+        /* work order card */
+        #running-root .wo {
+          position: absolute; left: 1250px; top: 214px; width: 550px; height: 636px; border-radius: 14px;
+          border: 2px solid rgba(242, 196, 109, 0.7); background: rgba(15, 26, 38, 0.96); padding: 28px 30px; overflow: hidden;
+        }
+        #running-root .wo-h { font-family: var(--mono); font-size: 22px; letter-spacing: 0.1em; color: var(--c-eval); }
+        #running-root .wo-id { margin-top: 8px; font-family: var(--mono); font-size: 34px; font-weight: 700; color: var(--ink); }
+        #running-root .kv { display: flex; justify-content: space-between; align-items: baseline; margin-top: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--line); }
+        #running-root .kv .k { font-family: var(--mono); font-size: 22px; color: var(--ink-mute); }
+        #running-root .kv .v { font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--ink); }
+        #running-root .kv .v.hot { color: var(--c-risk); }
+        #running-root .truth {
+          margin-top: 22px; padding: 14px 16px; border-radius: 10px; border: 2px solid rgba(63, 216, 168, 0.5);
+          background: rgba(63, 216, 168, 0.08); font-size: 24px; line-height: 1.35; color: var(--ink);
+        }
+        #running-root .truth b { color: var(--c-opt); }
+        #running-root .endlab { position: absolute; font-family: var(--mono); font-size: 22px; font-weight: 700; white-space: nowrap; }
+        #running-root .endlab span { display: inline-block; min-width: 56px; text-align: right; margin-left: 10px; }
+        #running-root .daylab { position: absolute; font-family: var(--mono); font-size: 24px; color: var(--ink-soft); white-space: nowrap; }
+        #running-root .daylab b { color: var(--ink); }
+      </style>
+
+      <div id="running-root" data-composition-id="running" data-width="1920" data-height="1080">
+        <div class="scene" id="running-in">
+          <div class="eyebrow" data-layout-allow-overlap id="running-eyebrow">06 · The system running</div>
+
+          <!-- phase A: one machine, one alert -->
+          <div id="ra">
+            <div class="scene-title" data-layout-allow-overlap id="ra-title">One compressor, the morning its alert fired.</div>
+            <div class="panel" id="ra-panel" style="left: 120px; top: 214px; width: 1090px; height: 636px"></div>
+            <svg id="ra-svg" viewBox="0 0 1920 1080"></svg>
+            <div class="note" id="ra-n1" style="left: 160px; top: 236px; color: var(--ink-soft)">daily vibration · last 60 days</div>
+            <div class="note" id="ra-n2" style="left: 160px; top: 270px; color: var(--ink-mute)">from sensor_readings.csv.gz</div>
+            <div class="chip" id="ra-chip" style="left: 640px; top: 352px">+52% vs baseline</div>
+            <div class="wo" id="ra-wo">
+              <div class="wo-h">WORK ORDER · workorders.py</div>
+              <div class="wo-id" id="ra-id"></div>
+              <div class="kv" id="ra-k1"><span class="k">asset</span><span class="v" id="ra-asset"></span></div>
+              <div class="kv" id="ra-k2"><span class="k">p(fail in 14 d)</span><span class="v hot" id="ra-p">0.000</span></div>
+              <div class="kv" id="ra-k3"><span class="k">evidence</span><span class="v" id="ra-ev"></span></div>
+              <div class="kv" id="ra-k4"><span class="k">priority · due</span><span class="v" id="ra-due"></span></div>
+              <div class="kv" id="ra-k5"><span class="k">crew</span><span class="v" id="ra-crew"></span></div>
+              <div class="truth" id="ra-truth"></div>
+            </div>
+          </div>
+
+          <!-- phase B: the year, six policies -->
+          <div id="rb">
+            <div class="scene-title" data-layout-allow-overlap id="rb-title">Same plant, same year, six policies.</div>
+            <div class="legend" id="rb-legend">
+              <div>closed loop · fork 1 of 5 · crew 6 jobs / week</div>
+              <div>cumulative breakdowns</div>
+            </div>
+            <div class="panel" id="rb-panel" style="left: 120px; top: 214px; width: 1680px; height: 690px"></div>
+            <svg id="rb-svg" viewBox="0 0 1920 1080"></svg>
+            <div class="daylab" id="rb-day" style="left: 220px; top: 236px">day <b id="rb-dayn">0</b> / 365</div>
+            <div id="rb-labels"></div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (() => {
+          /* RUN:BEGIN */ const RUN = {"seed":101,"curves":{"run-to-failure":[1,2,2,2,2,3,4,4,4,4,4,5,5,5,5,5,5,6,6,6,8,10,10,11,11,11,12,13,13,13,14,14,14,14,14,14,14,14,14,15,15,16,17,18,18,18,18,18,18,18,18,18,20,22,22,23,25,25,25,27,29,29,30,30,31,32,33,34,36,36,37,37,37,38,38,39,39,40,41,41,43,43,45,45,45,45,46,46,46,49,50,52,54,54,54,54,56,56,56,56,57,57,59,61,61,62,63,63,63,64,64,66,67,67,68,68,68,69,69,69,71,71,74,74,75,75,75,77,78,78,78,78,79,79,80,80,80,80,80,80,81,81,81,81,82,82,82,84,85,86,86,86,86,86,86,86,86,86,86,86,86,87,88,88,90,90,91,92,92,92,93,94,95,96,97,97,97,97,101,101,101,101,103,103,104,104,107,107,108,109,109,109,110,110,110,111,111,112,112,112,113,113,113,114,115,116,116,116,116,117,117,117,117,120,120,120,120,121,121,121,121,123,126,130,131,131,131,132,132,132,134,134,134,134,134,136,137,138,139,141,142,142,143,144,144,144,145,145,146,147,148,149,150,151,152,155,156,156,156,156,156,157,157,157,158,158,160,161,162,165,165,165,167,167,167,168,168,168,169,171,171,172,173,173,173,173,173,175,176,177,178,181,182,182,182,183,183,183,183,183,183,186,187,188,192,193,195,197,198,198,199,199,199,201,202,202,202,205,205,205,206,206,207,207,209,209,210,210,210,210,211,213,214,215,216,216,216,217,218,218,219,219,220,220,221,221,222,224,224,225,225,227,227,227,227,228,229,229,229,229,230,231,232,232,232],"fixed-interval":[1,2,2,2,2,3,4,4,4,4,4,5,5,5,5,5,5,6,6,7,9,10,10,11,11,11,12,13,13,13,14,14,14,14,14,14,14,14,14,15,15,16,17,18,18,18,18,18,18,18,18,18,20,22,22,23,25,25,25,26,27,27,27,27,28,29,30,30,30,30,30,30,30,30,30,30,30,31,31,31,33,33,33,33,33,33,33,33,33,34,34,36,37,37,37,37,37,37,37,37,37,38,38,39,40,40,42,43,43,43,43,44,45,45,45,45,45,46,46,46,48,48,50,50,50,50,50,50,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,52,52,52,52,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,54,55,55,56,56,56,56,56,56,56,58,58,58,59,61,61,61,61,61,61,61,61,62,62,62,62,62,63,63,63,63,63,63,63,63,64,64,64,64,64,64,64,64,64,64,66,66,66,66,67,67,67,67,68,68,68,69,69,70,71,72,72,72,73,74,74,74,74,74,74,74,74,75,77,78,79,79,79,79,79,79,79,79,79,80,81,81,82,82,82,82,84,84,84,84,84,84,84,84,84,84,84,84,84,84,86,86,86,86,87,87,87,87,88,88,88,88,88,88,88,89,91,91,92,92,93,94,94,94,94,94,94,94,94,94,94,94,94,94,94,95,95,95,95,97,97,97,97,97,97,98,98,99,99,99,99,99,99,99,99,99,99,100,100,100,101,101,101,102,103,103,103,103,103,104,104,106,106,107,107,107,107,107,108,108,108,108,109,110,110,110,111,111,111,111,111,111,111,111,111,111],"alarm-limits":[0,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,4,4,5,5,5,5,5,6,6,6,6,7,8,8,8,9,9,9,9,9,9,9,9,9,9,9,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,12,12,12,12,14,14,14,14,14,14,15,15,15,15,15,15,15,16,16,17,17,17,18,18,18,19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,21,21,22,22,22,22,22,22,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,24,24,24,24,24,25,25,25,25,25,26,27,27,27,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,29,30,31,31,31,32,32,32,32,34,34,34,34,34,34,35,35,35,35,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,37,38,38,39,39,39,39,39,39,39,39,39,40,40,42,42,42,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,48,48,48,48,48,48,48,48,48,48,48,49,49,49,49,49,50,50,50,50,50,50,50,50,50,50,50,50,50,50,51,51,51,52,52,52,52,52,52,53,53,53,53,53,53,54,55,55,55,55,56,56,56,56,56,56,56,56,56,56,56,56,56,56],"cox-sensors":[0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,4,6,6,6,6,6,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,8,9,9,9,9,9,9,9,9,9,10,12,12,13,14,14,14,14,14,14,14,14,14,15,15,16,18,18,19,19,19,21,21,22,22,23,23,23,24,24,25,25,25,25,25,25,25,27,28,28,28,28,28,28,30,30,30,30,31,31,32,32,32,32,33,33,33,34,34,35,35,35,36,36,36,37,37,37,37,37,38,38,38,38,38,39,39,39,39,39,39,39,40,40,40,40,40,40,41,41,41,41,42,42,42,44,45,46,46,46,46,46,46,46,46,46,46,46,46,47,48,48,48,48,49,49,49,49,49,49,51,52,53,53,53,53,55,55,55,55,56,56,57,57,60,60,61,62,62,62,62,62,62,62,62,62,62,62,63,63,63,63,64,65,65,65,65,66,66,66,67,68,68,68,68,69,70,70,70,70,71,72,72,72,72,72,72,72,73,73,73,73,73,73,74,74,75,75,76,76,77,77,77,77,77,77,77,78,78,79,81,81,83,84,84,84,84,85,85,86,86,86,87,87,88,89,89,90,90,90,92,92,94,95,95,95,95,96,96,97,97,97,97,97,98,99,99,99,99,101,101,101,101,102,102,102,102,102,102,106,107,107,110,111,111,111,112,112,112,114,114,117,118,118,118,120,120,121,121,121,121,121,123,125,125,125,126,126,126,127,127,127,128,128,128,129,130,130,130,130,131,131,132,132,132,134,134,134,134,134,134,134,134,135,135,136,136,136,137,137,137,137,138],"gbm-sensors":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,3,3,3,3,3,3,3,3,4,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,7,7,7,7,7,8,8,8,8,8,8,8,9,9,9,9,9,9,10,10,10,10,10,10,10,10,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,13,13,13,14,14,14,15,15,15,15,15,15,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,17,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,19,19,20,20,20,21,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,25,25,26,26,26,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,28,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,32,33,34,34,34,34,34,34,34,34,34,34,34,34,35,35,35,35,35,35,36,36,36,36,36,36,36,36,36,36,37,38,38,38,38,38,39,39,39,39,39,39,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,43,43,43,43,43,43,43,43,43,43],"oracle":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]},"trace":{"asset_id":"COMP-141","sensor":"vibration","alert_date":"2024-12-31","days":[-60,-59,-58,-57,-56,-55,-54,-53,-52,-51,-50,-49,-48,-47,-46,-45,-44,-43,-42,-41,-40,-39,-38,-37,-36,-35,-34,-33,-32,-31,-30,-29,-28,-27,-26,-25,-24,-23,-22,-21,-20,-19,-18,-17,-16,-15,-14,-13,-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1],"values":[4.893,4.838,4.402,4.965,4.554,5.336,4.844,5.138,4.98,5.207,4.248,5.277,4.942,5.029,4.911,4.942,4.787,5.305,5.46,5.477,5.662,5.889,5.107,5.11,5.612,5.91,5.68,5.718,6.126,5.495,4.907,5.774,5.685,6.278,5.958,6.142,5.748,5.855,6.368,6.178,6.028,6.955,6.11,6.11,6.268,7.827,7.604,6.959,6.547,7.94,7.391,7.29,8.366,6.963,8.215,8.393,7.529,9.136,8.781,8.347],"probability":0.736,"latent_days_to_failure":1.8},"first_order":{"id":"CBM-2024-00001","asset":"COMP-141","type":"compressor","loc":"U200-K-141","p":0.736,"priority":1,"evidence":{"sensor":"vibration","change_vs_baseline_7d":0.521},"rul":127.0,"due":"2025-01-03","crew":"rotating-equipment","truth_days":1.8,"truth_mode":"bearing"},"totals":{"run-to-failure":{"failures":232,"planned_jobs":0},"fixed-interval":{"failures":111,"planned_jobs":310},"alarm-limits":{"failures":56,"planned_jobs":286},"cox-sensors":{"failures":138,"planned_jobs":110},"gbm-sensors":{"failures":43,"planned_jobs":212},"oracle":{"failures":3,"planned_jobs":244}}}; /* RUN:END */
+          const NS = "http://www.w3.org/2000/svg";
+          const tl = gsap.timeline({ paused: true });
+          const D = 14.6;
+          const mk = (svg, tag, at) => { const n = document.createElementNS(NS, tag); Object.entries(at).forEach(([k, v]) => n.setAttribute(k, v)); svg.appendChild(n); return n; };
+          tl.fromTo("#running-in", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
+          tl.fromTo("#running-eyebrow", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }, 0.1);
+
+          // ================= phase A: the vibration trace and the work order it produced
+          const TR = RUN.trace, WO = RUN.first_order;
+          const A = { x0: 200, x1: 1150, y0: 790, y1: 330 };
+          const vals = TR.values.filter((v) => v !== null);
+          const vmin = Math.floor(Math.min(...vals) - 0.5), vmax = Math.ceil(Math.max(...vals) + 0.5);
+          const X = (d) => A.x0 + ((d + 60) / 60) * (A.x1 - A.x0);
+          const Y = (v) => A.y0 - ((v - vmin) / (vmax - vmin)) * (A.y0 - A.y1);
+          const sa = document.getElementById("ra-svg");
+          // axes
+          mk(sa, "line", { x1: A.x0, y1: A.y0, x2: A.x1, y2: A.y0, stroke: "#24364a", "stroke-width": 2 });
+          [-60, -45, -30, -15, 0].forEach((d) => {
+            const t = mk(sa, "text", { x: X(d), y: A.y0 + 34, "text-anchor": "middle", class: "ax" });
+            t.textContent = d === 0 ? "alert" : d + " d";
+          });
+          for (let v = vmin; v <= vmax; v += 1) {
+            mk(sa, "line", { x1: A.x0, y1: Y(v), x2: A.x1, y2: Y(v), stroke: "rgba(127,168,255,0.06)", "stroke-width": 2 });
+            const t = mk(sa, "text", { x: A.x0 - 14, y: Y(v) + 7, "text-anchor": "end", class: "ax" });
+            t.textContent = v;
+          }
+          // baseline: the window median excluding the last 14 days (features.py RECENT = 14)
+          const baseVals = TR.days.map((d, i) => [d, TR.values[i]]).filter(([d, v]) => d < -14 && v !== null).map(([, v]) => v).sort((a, b) => a - b);
+          const mid = baseVals.length / 2;
+          const base = baseVals.length % 2 ? baseVals[Math.floor(mid)] : (baseVals[mid - 1] + baseVals[mid]) / 2;
+          const bl = mk(sa, "line", { x1: A.x0, y1: Y(base), x2: X(-15), y2: Y(base), stroke: "#7fa8ff", "stroke-width": 3, "stroke-dasharray": "10 8", opacity: 0 });
+          const blab = mk(sa, "g", { opacity: 0 });
+          mk(blab, "line", { x1: 640, y1: 251, x2: 678, y2: 251, stroke: "#7fa8ff", "stroke-width": 3, "stroke-dasharray": "8 6" });
+          const bt = mk(blab, "text", { x: 688, y: 258, class: "ax", style: "fill:#7fa8ff" });
+          bt.textContent = "its own baseline: median of days −60…−15";
+          // recent 7 days band
+          const band = mk(sa, "rect", { x: X(-7), y: A.y1 - 10, width: X(0) - X(-7), height: A.y0 - A.y1 + 10, fill: "rgba(255,138,115,0.10)", opacity: 0 });
+          // the trace
+          const pts = TR.days.map((d, i) => [d, TR.values[i]]).filter(([, v]) => v !== null);
+          const dpath = "M" + pts.map(([d, v]) => X(d).toFixed(1) + " " + Y(v).toFixed(1)).join(" L");
+          const line = mk(sa, "path", { d: dpath, fill: "none", stroke: "#b9a2ff", "stroke-width": 4, "stroke-linejoin": "round" });
+          const L = Math.ceil(line.getTotalLength ? line.getTotalLength() : 2000);
+          line.setAttribute("stroke-dasharray", L + " " + L);
+          line.setAttribute("stroke-dashoffset", L);
+          const dots = pts.map(([d, v]) => mk(sa, "circle", { cx: X(d), cy: Y(v), r: 4.5, fill: d >= -7 ? "#ff8a73" : "#b9a2ff", opacity: 0 }));
+          // alert marker
+          const am = mk(sa, "line", { x1: X(0), y1: A.y1 - 20, x2: X(0), y2: A.y0, stroke: "#f2c46d", "stroke-width": 4, opacity: 0 });
+          const at = mk(sa, "text", { x: X(0) - 12, y: A.y1 - 30, "text-anchor": "end", class: "ax", opacity: 0, style: "fill:#f2c46d;font-weight:700" });
+          at.textContent = "alert · " + TR.alert_date;
+
+          document.getElementById("ra-id").textContent = WO.id;
+          document.getElementById("ra-asset").textContent = WO.asset + " · " + WO.loc;
+          document.getElementById("ra-ev").textContent = WO.evidence.sensor + " +" + Math.round(WO.evidence.change_vs_baseline_7d * 100) + "%";
+          document.getElementById("ra-due").textContent = "P" + WO.priority + " · " + WO.due;
+          document.getElementById("ra-crew").textContent = WO.crew;
+          document.getElementById("ra-truth").innerHTML = "In the replay its hidden life ended <b>" + WO.truth_days.toFixed(1) + " days later</b> (" + WO.truth_mode + "). The job got there first.";
+          document.getElementById("ra-chip").textContent = "+" + Math.round(WO.evidence.change_vs_baseline_7d * 100) + "% vs its baseline";
+
+          tl.fromTo("#ra-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 0.2);
+          tl.fromTo("#ra-panel", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.5);
+          tl.fromTo("#ra-svg", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.6);
+          tl.fromTo(["#ra-n1", "#ra-n2"], { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.8);
+          tl.fromTo(line, { attr: { "stroke-dashoffset": L } }, { attr: { "stroke-dashoffset": 0 }, duration: 2.4, ease: "none" }, 0.9);
+          dots.forEach((c, i) => tl.fromTo(c, { attr: { opacity: 0 } }, { attr: { opacity: 1 }, duration: 0.1 }, 0.9 + (2.4 * i) / dots.length));
+          tl.fromTo([bl, blab], { attr: { opacity: 0 } }, { attr: { opacity: 1 }, duration: 0.4 }, 1.9);
+          tl.fromTo(band, { attr: { opacity: 0 } }, { attr: { opacity: 1 }, duration: 0.4 }, 3.1);
+          tl.fromTo("#ra-chip", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 3.4);
+          tl.fromTo([am, at], { attr: { opacity: 0 } }, { attr: { opacity: 1 }, duration: 0.3 }, 3.7);
+          tl.fromTo("#ra-wo", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 3.9);
+          ["#ra-k1", "#ra-k2", "#ra-k3", "#ra-k4", "#ra-k5"].forEach((k, i) =>
+            tl.fromTo(k, { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, 4.3 + i * 0.18));
+          const pv = { v: 0 }, pEl = document.getElementById("ra-p");
+          tl.to(pv, { v: WO.p, duration: 0.9, ease: "power2.out", onUpdate: () => { pEl.textContent = pv.v.toFixed(3); } }, 4.5);
+          tl.fromTo("#ra-truth", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 5.6);
+          const P2 = 7.0;
+          tl.to("#ra", { opacity: 0, duration: 0.4, ease: "power2.in" }, P2);
+
+          // ================= phase B: cumulative breakdowns over the closed-loop year
+          const B = { x0: 220, x1: 1490, y0: 840, y1: 290, ymax: 240 };
+          const XB = (d) => B.x0 + (d / 365) * (B.x1 - B.x0);
+          const YB = (v) => B.y0 - (v / B.ymax) * (B.y0 - B.y1);
+          const sb = document.getElementById("rb-svg");
+          mk(sb, "line", { x1: B.x0, y1: B.y0, x2: B.x1, y2: B.y0, stroke: "#24364a", "stroke-width": 2 });
+          for (let v = 0; v <= 240; v += 60) {
+            mk(sb, "line", { x1: B.x0, y1: YB(v), x2: B.x1, y2: YB(v), stroke: "rgba(127,168,255,0.06)", "stroke-width": 2 });
+            const t = mk(sb, "text", { x: B.x0 - 14, y: YB(v) + 7, "text-anchor": "end", class: "ax" });
+            t.textContent = v;
+          }
+          [[0, "Dec 31"], [91, "Apr"], [182, "Jul"], [273, "Oct"], [365, "Dec 30"]].forEach(([d, s]) => {
+            const t = mk(sb, "text", { x: XB(d), y: B.y0 + 34, "text-anchor": "middle", class: "ax" });
+            t.textContent = s;
+          });
+          const SER = [
+            ["run-to-failure", "run-to-failure", "#8494a6", ""],
+            ["cox-sensors", "Cox", "#b9a2ff", ""],
+            ["fixed-interval", "calendar", "#7fa8ff", ""],
+            ["alarm-limits", "alarm limits", "#f2c46d", ""],
+            ["gbm-sensors", "model", "#3fd8a8", ""],
+            ["oracle", "oracle", "#eef2f6", "6 6"],
+          ];
+          const RUNB = 4.6, T0 = P2 + 1.2;
+          const labHost = document.getElementById("rb-labels");
+          SER.forEach(([key, name, col, dash], i) => {
+            const cum = RUN.curves[key];
+            const dd = "M" + XB(0) + " " + YB(0) + cum.map((v, d) => " L" + XB(d + 1).toFixed(1) + " " + YB(v).toFixed(1)).join("");
+            const p = mk(sb, "path", { d: dd, fill: "none", stroke: col, "stroke-width": key === "gbm-sensors" ? 6 : 4, "stroke-linejoin": "round", opacity: key === "gbm-sensors" ? 1 : 0.85 });
+            if (dash) p.setAttribute("stroke-dasharray", dash);
+            // reveal left to right with a clip rect so dashes survive
+            const cp = mk(sb, "clipPath", { id: "rb-clip" + i });
+            const cr = mk(cp, "rect", { x: B.x0 - 10, y: 200, width: 0, height: 700 });
+            p.setAttribute("clip-path", "url(#rb-clip" + i + ")");
+            tl.fromTo(cr, { attr: { width: 0 } }, { attr: { width: B.x1 - B.x0 + 20 }, duration: RUNB, ease: "none" }, T0);
+            const fin = cum[cum.length - 1];
+            labHost.insertAdjacentHTML("beforeend", '<div class="endlab" id="rb-l' + i + '" style="left:' + (B.x1 + 22) + "px;top:" + (YB(fin) - 15) + "px;color:" + col + '">' + name + '<span id="rb-v' + i + '">0</span></div>');
+            const o = { v: 0 }, el = () => document.getElementById("rb-v" + i);
+            tl.to(o, { v: fin, duration: RUNB, ease: "none", onUpdate: () => { const e = el(); if (e) e.textContent = Math.round(o.v); } }, T0);
+            tl.fromTo("#rb-l" + i, { opacity: 0 }, { opacity: 1, duration: 0.4 }, T0 + RUNB - 0.2);
+          });
+          const dv = { v: 0 }, dEl = document.getElementById("rb-dayn");
+          tl.to(dv, { v: 365, duration: RUNB, ease: "none", onUpdate: () => { dEl.textContent = Math.round(dv.v); } }, T0);
+          const cursor = mk(sb, "line", { x1: B.x0, y1: B.y1 - 20, x2: B.x0, y2: B.y0, stroke: "rgba(238,242,246,0.5)", "stroke-width": 2, opacity: 0 });
+          tl.fromTo(cursor, { attr: { opacity: 0 } }, { attr: { opacity: 1 }, duration: 0.2 }, T0);
+          tl.fromTo(cursor, { attr: { x1: B.x0, x2: B.x0 } }, { attr: { x1: B.x1, x2: B.x1 }, duration: RUNB, ease: "none" }, T0);
+          tl.to(cursor, { attr: { opacity: 0 }, duration: 0.3 }, T0 + RUNB);
+          tl.fromTo("#rb", { opacity: 0 }, { opacity: 1, duration: 0.01 }, P2 + 0.39);
+          tl.fromTo("#rb-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, P2 + 0.4);
+          tl.fromTo("#rb-legend", { opacity: 0 }, { opacity: 1, duration: 0.5 }, P2 + 0.6);
+          tl.fromTo(["#rb-panel", "#rb-svg", "#rb-day"], { opacity: 0 }, { opacity: 1, duration: 0.5 }, P2 + 0.5);
+          tl.to("#running-in", { opacity: 0, duration: 0.4, ease: "power2.in" }, D - 0.4);
+          window.__timelines["running"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

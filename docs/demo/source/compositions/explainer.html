@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        /* WHITE "HOW IT WORKS" CHAPTER — two slides on a white page, wiped in over the dark video.
+           Per repo, edit only the CONFIG object in the script below (and slide B's markup if the key idea differs). */
+        #explainer-root {
+          position: absolute; inset: 0;
+          --w-bg: #ffffff; --w-ink: #111827; --w-soft: #4b5563; --w-mute: #6b7280; --w-line: #d1d5db;
+          --w-data: #d97706; --w-model: #6d3cf0; --w-tools: #1f8fa8; --w-risk: #dc2b4a; --w-opt: #0f9f6e; --w-eval: #b45309;
+          color: var(--w-ink); font-family: Inter, "Helvetica Neue", sans-serif;
+        }
+        #explainer-root .page { position: absolute; inset: 0; background: var(--w-bg); }
+        #explainer-root .edge { position: absolute; top: 0; width: 10px; height: 1080px; background: var(--w-opt); }
+        #explainer-root .slide { position: absolute; inset: 0; }
+        #explainer-root .kick {
+          position: absolute; left: 120px; top: 84px; font-family: "JetBrains Mono", monospace; font-size: 24px;
+          font-weight: 700; letter-spacing: 0.18em; color: var(--w-mute);
+        }
+        #explainer-root .ttl {
+          position: absolute; left: 120px; top: 124px; font-family: Montserrat, sans-serif; font-weight: 900;
+          font-size: 68px; letter-spacing: -0.02em; color: var(--w-ink); white-space: nowrap;
+        }
+        #explainer-root .ttl em { font-style: normal; }
+        #explainer-root .uline { position: absolute; left: 124px; top: 222px; width: 120px; height: 10px; border-radius: 5px; transform-origin: left center; }
+        /* icon blocks */
+        #explainer-root .blk { position: absolute; width: 260px; display: flex; flex-direction: column; align-items: center; }
+        #explainer-root .tile {
+          position: relative; width: 150px; height: 150px; border-radius: 36px; display: flex; align-items: center; justify-content: center;
+          box-shadow: 0 14px 30px rgba(17, 24, 39, 0.14);
+        }
+        #explainer-root .tile svg { width: 78px; height: 78px; }
+        #explainer-root .lab {
+          margin-top: 24px; font-family: "JetBrains Mono", monospace; font-size: 24px; font-weight: 700;
+          letter-spacing: 0.14em; text-align: center; white-space: nowrap;
+        }
+        #explainer-root .sub { margin-top: 10px; font-size: 24px; line-height: 1.3; color: var(--w-soft); text-align: center; width: 250px; }
+        #explainer-root .conn { position: absolute; height: 3px; background: var(--w-line); transform-origin: left center; }
+        #explainer-root .conn::after {
+          content: ""; position: absolute; right: -2px; top: -6px; border-left: 12px solid var(--w-line);
+          border-top: 7.5px solid transparent; border-bottom: 7.5px solid transparent;
+        }
+        #explainer-root .box { position: absolute; border: 3px solid var(--w-line); border-radius: 28px; }
+        #explainer-root .pill {
+          position: absolute; left: 28px; top: -22px; padding: 6px 18px; border-radius: 999px; background: var(--w-bg);
+          border: 3px solid var(--w-line); font-family: "JetBrains Mono", monospace; font-size: 20px; font-weight: 700;
+          letter-spacing: 0.14em; color: var(--w-soft); white-space: nowrap;
+        }
+        #explainer-root .loop { position: absolute; width: 84px; height: 84px; }
+        #explainer-root .loop-lab {
+          position: absolute; font-family: "JetBrains Mono", monospace; font-size: 22px; font-weight: 700; color: var(--w-opt); white-space: nowrap;
+        }
+        #explainer-root .badges { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
+        #explainer-root .badge { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: var(--w-ink); white-space: nowrap; }
+        #explainer-root .badge i { display: block; width: 30px; height: 30px; border-radius: 50%; background: var(--w-opt); position: relative; }
+        #explainer-root .badge svg { position: absolute; left: 6px; top: 6px; width: 18px; height: 18px; }
+        /* slide B */
+        #explainer-root .steps { position: absolute; left: 120px; top: 320px; width: 760px; display: flex; flex-direction: column; gap: 44px; }
+        #explainer-root .step { display: flex; align-items: center; gap: 30px; }
+        #explainer-root .step .tile { width: 104px; height: 104px; border-radius: 26px; flex: 0 0 auto; }
+        #explainer-root .step .tile svg { width: 56px; height: 56px; }
+        #explainer-root .step .txt { font-size: 32px; font-weight: 700; line-height: 1.25; color: var(--w-ink); }
+        #explainer-root .step .txt small { display: block; margin-top: 6px; font-size: 24px; font-weight: 400; color: var(--w-soft); }
+        #explainer-root .demo {
+          position: absolute; left: 990px; top: 320px; width: 810px; height: 470px; border: 3px solid var(--w-line); border-radius: 28px;
+        }
+        #explainer-root .demo .pill { left: 32px; }
+        #explainer-root .demo svg { position: absolute; left: 0; top: 0; width: 810px; height: 470px; overflow: visible; }
+        #explainer-root .blab { position: absolute; font-family: "JetBrains Mono", monospace; font-size: 20px; font-weight: 700; letter-spacing: 0.08em; white-space: nowrap; }
+        #explainer-root .verdict { position: absolute; left: 40px; top: 368px; width: 730px; font-size: 26px; line-height: 1.35; color: var(--w-ink); }
+        #explainer-root .verdict b { color: var(--w-opt); }
+        #explainer-root .foot {
+          position: absolute; left: 120px; top: 880px; font-family: "JetBrains Mono", monospace; font-size: 24px; color: var(--w-soft);
+        }
+      </style>
+
+      <div id="explainer-root" data-composition-id="explainer" data-width="1920" data-height="1080">
+        <div class="page" id="ex-page">
+          <!-- SLIDE A: the flow -->
+          <div class="slide" id="ex-a">
+            <div class="kick" id="ex-a-kick">03 · HOW IT WORKS</div>
+            <div class="ttl" id="ex-a-ttl">From sensors to <em style="color: var(--w-opt)">work orders</em></div>
+            <div class="uline" id="ex-a-ul" style="background: var(--w-opt)"></div>
+            <div id="ex-a-flow"></div>
+          </div>
+
+          <!-- SLIDE B: the one key idea -->
+          <div class="slide" id="ex-b">
+            <div class="kick" id="ex-b-kick">04 · THE KEY IDEA</div>
+            <div class="ttl" id="ex-b-ttl">Judge policies in a closed <em style="color: var(--w-tools)">loop</em></div>
+            <div class="uline" id="ex-b-ul" style="background: var(--w-tools)"></div>
+            <div class="steps">
+              <div class="step" id="ex-b-s1"><div class="tile" style="background: var(--w-data)" data-icon="fork"></div>
+                <div class="txt">Replay the plant to today, then fork it<small>every policy starts from the same plant and future</small></div></div>
+              <div class="step" id="ex-b-s2"><div class="tile" style="background: var(--w-tools)" data-icon="calendar"></div>
+                <div class="txt">Each policy runs a full year<small>its jobs change which machines fail next</small></div></div>
+              <div class="step" id="ex-b-s3"><div class="tile" style="background: var(--w-risk)" data-icon="shield"></div>
+                <div class="txt">Score each job against the hidden failure day<small>a job counts even when it prevented the failure</small></div></div>
+            </div>
+            <div class="demo" id="ex-b-demo">
+              <div class="pill">ONE FORK · ONE YEAR · EACH TICK = A BREAKDOWN</div>
+              <svg id="ex-fork" viewBox="0 0 810 470"></svg>
+              <div class="blab" style="left: 40px; top: 176px; color: var(--w-mute)">HISTORY</div>
+              <div class="blab" id="ex-fl0" style="left: 330px; top: 58px; color: var(--w-data)">CALENDAR</div>
+              <div class="blab" id="ex-fl1" style="left: 330px; top: 158px; color: var(--w-risk)">ALARM LIMITS</div>
+              <div class="blab" id="ex-fl2" style="left: 330px; top: 258px; color: var(--w-opt)">MODEL + BREAK-EVEN</div>
+              <div class="verdict" id="ex-b-verdict">Same future for every policy, so a gap in breakdowns is <b>caused by the policy</b>.</div>
+            </div>
+            <div class="foot" id="ex-b-foot">Ranked by C-index alone, Cox would have won (0.779 vs 0.753). In the loop it caught 29% of failures, not 69%.</div>
+          </div>
+        </div>
+        <div class="edge" id="ex-edge"></div>
+      </div>
+
+      <script>
+        (() => {
+          /* ================= CONFIG (edit per repo) ================= */
+          const CONFIG = {
+            duration: 15.0, // whole chapter
+            slideB: 8.0, // when slide B replaces slide A
+            blocks: [
+              // x = block centre; colour = layer; icon = key in ICONS
+              { x: 260, label: "SENSORS", sub: "daily readings per machine", color: "--w-data", icon: "archive" },
+              { x: 545, label: "SERVICE LOG", sub: "past jobs and breakdowns", color: "--w-data", icon: "wrench" },
+              { x: 825, label: "RISK MODEL", sub: "fails within two weeks?", color: "--w-model", icon: "sparkle" },
+              { x: 1115, label: "WORTH A JOB?", sub: "risk × cost beats job cost", color: "--w-risk", icon: "shield" },
+              { x: 1395, label: "CREW PLAN", sub: "biggest savings first", color: "--w-tools", icon: "calendar" },
+              { x: 1675, label: "WORK ORDERS", sub: "", color: "--w-opt", icon: "doc",
+                badges: ["fewer breakdowns", "lower cost", "higher uptime"] },
+            ],
+            groups: [
+              // rounded containers with a pill label, spanning block indexes [from, to]
+              { from: 0, to: 1, label: "WHAT THE PLANT LOGS" },
+              { from: 2, to: 4, label: "EVERY WORKING DAY" },
+            ],
+            loop: { block: 4, label: "fill the week's crew" },
+          };
+          /* ========================================================== */
+
+          const ICONS = {
+            archive: '<rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9"/><path d="M10 13h4"/>',
+            sparkle: '<path d="M12 3l1.9 5.6L19.5 10.5 13.9 12.4 12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
+            calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 15l2.5 2.5L16 13"/>',
+            shield: '<path d="M12 3l8 3v6c0 4.8-3.4 8.3-8 9.5C7.4 20.3 4 16.8 4 12V6z"/><path d="M12 8v5M12 16.5v.5"/>',
+            route: '<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/>',
+            doc: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 14l2 2 4-4"/>',
+            layers: '<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 17.5l9 5 9-5" opacity="0.6"/>',
+            wrench: '<path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8-3-3 6.3-6.3"/><path d="M14.7 6.3L9 12l-6 6 3 3 6-6"/><path d="M14.7 6.3a4 4 0 0 1 5.3-3.1l-2.6 2.6.4 2.1 2.1.4 2.6-2.6a4 4 0 0 1-3.1 5.3"/>',
+            fork: '<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="5" r="2.2"/><circle cx="18" cy="12" r="2.2"/><circle cx="18" cy="19" r="2.2"/><path d="M8.5 12h7.3M8 10.5l7.8-4.8M8 13.5l7.8 4.8"/>',
+          };
+          const svgIcon = (k, stroke) =>
+            '<svg viewBox="0 0 24 24" fill="none" stroke="' + (stroke || "#fff") + '" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + ICONS[k] + "</svg>";
+          const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+          const root = document.getElementById("explainer-root");
+          root.querySelectorAll("[data-icon]").forEach((t) => (t.innerHTML = svgIcon(t.dataset.icon)));
+
+          // ---- build slide A from CONFIG
+          const flow = document.getElementById("ex-a-flow");
+          const TILE_TOP = 470, W = 260, T = 150;
+          const html = [];
+          CONFIG.groups.forEach((g, i) => {
+            const a = CONFIG.blocks[g.from].x, b = CONFIG.blocks[g.to].x;
+            html.push('<div class="box" id="ex-g' + i + '" style="left:' + (a - 135) + "px;top:" + (TILE_TOP - 50) + "px;width:" + (b - a + 270) + 'px;height:350px"><div class="pill">' + g.label + "</div></div>");
+          });
+          CONFIG.blocks.forEach((b, i) => {
+            if (i > 0) {
+              const x0 = CONFIG.blocks[i - 1].x + T / 2 + 14, x1 = b.x - T / 2 - 14;
+              html.push('<div class="conn" id="ex-c' + i + '" style="left:' + x0 + "px;top:" + (TILE_TOP + T / 2 - 1) + "px;width:" + (x1 - x0) + 'px"></div>');
+            }
+            const col = "var(" + b.color + ")";
+            let inner = '<div class="tile" style="background:' + col + '">' + svgIcon(b.icon) + "</div>" +
+              '<div class="lab" style="color:' + col + '">' + b.label + "</div>";
+            if (b.sub) inner += '<div class="sub">' + b.sub + "</div>";
+            if (b.badges) inner += '<div class="badges">' + b.badges.map((t, k) => '<div class="badge" id="ex-bd' + k + '"><i>' + CHECK + "</i>" + t + "</div>").join("") + "</div>";
+            html.push('<div class="blk" id="ex-b' + i + '" style="left:' + (b.x - W / 2) + "px;top:" + TILE_TOP + 'px">' + inner + "</div>");
+          });
+          const lb = CONFIG.blocks[CONFIG.loop.block];
+          html.push('<svg class="loop" id="ex-loop" viewBox="0 0 84 84" style="left:' + (lb.x - 42) + "px;top:" + (TILE_TOP - 150) + 'px">' +
+            '<path d="M70 42a28 28 0 1 1-8.2-19.8" fill="none" stroke="#0f9f6e" stroke-width="7" stroke-linecap="round"/>' +
+            '<path d="M64 8v16H48" fill="none" stroke="#0f9f6e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+          html.push('<div class="loop-lab" id="ex-loop-lab" style="left:' + (lb.x + 56) + "px;top:" + (TILE_TOP - 124) + 'px">' + CONFIG.loop.label + "</div>");
+          flow.innerHTML = html.join("");
+
+          // ---- timeline
+          const tl = gsap.timeline({ paused: true });
+          const D = CONFIG.duration, B = CONFIG.slideB;
+          // wipe in (dark -> white), led by a coloured edge
+          tl.fromTo("#ex-page", { clipPath: "inset(0px 100% 0px 0px)" }, { clipPath: "inset(0px 0% 0px 0px)", duration: 0.7, ease: "power3.inOut" }, 0);
+          tl.fromTo("#ex-edge", { x: 0, opacity: 1 }, { x: 1920, duration: 0.7, ease: "power3.inOut" }, 0);
+          tl.to("#ex-edge", { opacity: 0, duration: 0.1 }, 0.7);
+          // slide A
+          tl.fromTo("#ex-a-kick", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.5);
+          tl.fromTo("#ex-a-ttl", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.55);
+          tl.fromTo("#ex-a-ul", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 0.9);
+          const STEP = 0.55, S0 = 1.3;
+          CONFIG.blocks.forEach((b, i) => {
+            const at = S0 + i * STEP;
+            if (i > 0) tl.fromTo("#ex-c" + i, { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, at - 0.2);
+            tl.fromTo("#ex-b" + i, { opacity: 0, y: 24, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, at);
+          });
+          CONFIG.groups.forEach((g, i) =>
+            tl.fromTo("#ex-g" + i, { opacity: 0 }, { opacity: 1, duration: 0.5 }, S0 + g.to * STEP + 0.2));
+          const loopAt = S0 + CONFIG.loop.block * STEP + 0.3;
+          tl.fromTo(["#ex-loop", "#ex-loop-lab"], { opacity: 0 }, { opacity: 1, duration: 0.4 }, loopAt);
+          tl.fromTo("#ex-loop", { rotation: 0 }, { rotation: 360 * 3, duration: B - loopAt, ease: "none" }, loopAt);
+          const last = CONFIG.blocks[CONFIG.blocks.length - 1];
+          (last.badges || []).forEach((_, k) =>
+            tl.fromTo("#ex-bd" + k, { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, S0 + (CONFIG.blocks.length - 1) * STEP + 0.4 + k * 0.25));
+          tl.to("#ex-a", { opacity: 0, duration: 0.4, ease: "power2.in" }, B - 0.4);
+          // slide B
+          tl.fromTo("#ex-b", { opacity: 0 }, { opacity: 1, duration: 0.01 }, B - 0.01);
+          tl.fromTo("#ex-b-kick", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, B);
+          tl.fromTo("#ex-b-ttl", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, B + 0.05);
+          tl.fromTo("#ex-b-ul", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, B + 0.4);
+          ["#ex-b-s1", "#ex-b-s2", "#ex-b-s3"].forEach((s, i) =>
+            tl.fromTo(s, { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, B + 0.6 + i * 0.5));
+          tl.fromTo("#ex-b-demo", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, B + 0.7);
+          // the fork: history bar, three branches, a breakdown tick on each real failure day (seed 101)
+          /* LOOP:BEGIN */ const LOOP = {"calendar":[0,1,5,6,11,17,19,20,20,21,23,26,27,30,39,41,42,43,52,52,53,53,55,56,56,59,60,64,65,66,77,80,80,89,91,91,92,101,103,104,106,106,107,111,112,117,120,120,122,122,128,144,148,164,165,167,174,174,177,178,178,186,191,199,209,209,213,217,220,222,223,224,227,228,236,237,237,238,239,248,249,251,255,255,269,269,273,277,284,285,285,287,289,290,304,308,308,314,316,326,329,332,333,338,340,340,342,347,351,352,355],"alarm":[1,5,31,41,43,48,52,53,56,67,70,82,96,96,102,109,111,114,117,122,132,134,140,161,166,171,172,175,213,222,223,226,230,230,236,240,255,256,258,267,269,269,272,272,291,299,301,301,312,317,331,334,340,346,347,351],"model":[41,43,44,52,53,65,70,75,82,88,96,96,111,114,117,131,147,148,166,168,171,172,174,182,194,204,207,254,255,261,269,271,272,273,285,291,301,302,307,313,313,334,347]}; /* LOOP:END */
+          const NS = "http://www.w3.org/2000/svg";
+          const fsv = document.getElementById("ex-fork");
+          const mk = (tag, at) => { const n = document.createElementNS(NS, tag); Object.entries(at).forEach(([k, v]) => n.setAttribute(k, v)); fsv.appendChild(n); return n; };
+          const FX0 = 40, FX = 230, FX1 = 770, FY = 222, BY = [100, 200, 300], BC = ["#d97706", "#dc2b4a", "#0f9f6e"];
+          const SW = B + 2.0, RUN = 3.2;
+          const hist = mk("line", { x1: FX0, y1: FY, x2: FX, y2: FY, stroke: "#111827", "stroke-width": 8, "stroke-linecap": "round" });
+          tl.fromTo(hist, { attr: { x2: FX0 } }, { attr: { x2: FX }, duration: 0.6, ease: "power2.out" }, B + 1.1);
+          const node = mk("circle", { cx: FX, cy: FY, r: 13, fill: "#111827", opacity: 0 });
+          tl.fromTo(node, { attr: { opacity: 0 } }, { attr: { opacity: 1 }, duration: 0.2 }, B + 1.7);
+          ["calendar", "alarm", "model"].forEach((k, i) => {
+            const y = BY[i];
+            const d = "M" + FX + " " + FY + " C" + (FX + 40) + " " + FY + " " + (FX + 30) + " " + y + " " + (FX + 80) + " " + y + " L" + FX1 + " " + y;
+            const br = mk("path", { d, fill: "none", stroke: BC[i], "stroke-width": 5, "stroke-linecap": "round", opacity: 0.85 });
+            const len = Math.ceil(br.getTotalLength ? br.getTotalLength() : FX1 - FX + 60);
+            br.setAttribute("stroke-dasharray", len + " " + len);
+            br.setAttribute("stroke-dashoffset", len);
+            tl.fromTo(br, { attr: { "stroke-dashoffset": len } }, { attr: { "stroke-dashoffset": 0 }, duration: RUN, ease: "none" }, SW);
+            tl.fromTo("#ex-fl" + i, { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, SW - 0.2 + i * 0.1);
+            const days = LOOP[k] || [];
+            const x0 = FX + 80, w = FX1 - x0;
+            days.forEach((day) => {
+              const x = x0 + (w * day) / 365;
+              const t = mk("line", { x1: x, x2: x, y1: y + 12, y2: y + 30, stroke: "#dc2b4a", "stroke-width": 2, opacity: 0 });
+              tl.fromTo(t, { attr: { opacity: 0 } }, { attr: { opacity: 0.9 }, duration: 0.05 }, SW + (RUN * (x - FX)) / (FX1 - FX));
+            });
+          });
+          tl.fromTo("#ex-b-verdict", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, SW + RUN + 0.1);
+          tl.fromTo("#ex-b-foot", { opacity: 0 }, { opacity: 1, duration: 0.5 }, SW + RUN + 0.5);
+          // wipe out (white -> dark), revealing the next dark scene underneath
+          tl.to("#ex-page", { clipPath: "inset(0px 0px 0px 100%)", duration: 0.7, ease: "power3.inOut" }, D - 0.7);
+          tl.fromTo("#ex-edge", { x: 0, opacity: 0 }, { x: 1920, opacity: 1, duration: 0.7, ease: "power3.inOut", immediateRender: false }, D - 0.7);
+          window.__timelines["explainer"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

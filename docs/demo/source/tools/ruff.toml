@@ -1,0 +1,6 @@
+# Lint these demo scripts with the repo's rules. build_audit_report.py is shared byte-for-byte
+# across repos and carries a noqa for N806, which this repo already ignores globally.
+extend = "../../../../pyproject.toml"
+
+[lint]
+extend-ignore = ["RUF100"]

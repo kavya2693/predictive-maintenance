@@ -1,0 +1,249 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        /* WHITE "END-USER VALUE" SLIDE: the artifact the user plans with (left) + a small 2D scene of the
+           person using it (right). Data is inlined by tools/inject_sheet.py between the SHEET markers. */
+        #value-root {
+          position: absolute; inset: 0;
+          --w-bg: #ffffff; --w-ink: #111827; --w-soft: #4b5563; --w-mute: #6b7280; --w-line: #d1d5db; --w-faint: #f3f4f6;
+          --w-data: #d97706; --w-model: #6d3cf0; --w-tools: #1f8fa8; --w-risk: #dc2b4a; --w-opt: #0f9f6e;
+          color: var(--w-ink); font-family: Inter, "Helvetica Neue", sans-serif;
+        }
+        #value-root .page { position: absolute; inset: 0; background: var(--w-bg); }
+        #value-root .edge { position: absolute; top: 0; width: 10px; height: 1080px; background: var(--w-model); }
+        #value-root .kick {
+          position: absolute; left: 120px; top: 84px; font-family: "JetBrains Mono", monospace; font-size: 24px;
+          font-weight: 700; letter-spacing: 0.18em; color: var(--w-mute);
+        }
+        #value-root .ttl {
+          position: absolute; left: 120px; top: 124px; font-family: Montserrat, sans-serif; font-weight: 900;
+          font-size: 68px; letter-spacing: -0.02em; white-space: nowrap;
+        }
+        #value-root .ttl em { font-style: normal; color: var(--w-model); }
+        #value-root .uline { position: absolute; left: 124px; top: 222px; width: 120px; height: 10px; border-radius: 5px; background: var(--w-model); transform-origin: left center; }
+
+        /* sheet */
+        #value-root .sheet {
+          position: absolute; left: 120px; top: 280px; width: 1110px; height: 640px; border: 3px solid var(--w-line);
+          border-radius: 24px; background: #fff; box-shadow: 0 18px 40px rgba(17, 24, 39, 0.08); overflow: hidden;
+        }
+        #value-root .sheet-head {
+          height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px;
+          background: var(--w-ink); color: #fff; font-family: "JetBrains Mono", monospace; font-size: 22px; font-weight: 700; letter-spacing: 0.08em;
+        }
+        #value-root .sheet-head span:last-child { color: #fcd34d; }
+        #value-root .row {
+          position: relative; display: flex; align-items: center; height: 64px; padding: 0 26px;
+          font-family: "JetBrains Mono", monospace; font-size: 21px; color: var(--w-ink); border-bottom: 2px solid var(--w-faint);
+        }
+        #value-root .row.hdr { height: 54px; font-size: 18px; font-weight: 700; letter-spacing: 0.1em; color: var(--w-mute); background: #fafafa; }
+        #value-root .row .tint { position: absolute; inset: 0; opacity: 0; background: #ecfdf5; }
+        #value-root .c { position: relative; white-space: nowrap; }
+        #value-root .c1 { width: 210px; font-weight: 700; }
+        #value-root .c2 { width: 136px; }
+        #value-root .c4 { width: 96px; font-weight: 700; color: var(--w-risk); }
+        #value-root .c5 { width: 214px; }
+        #value-root .c6 { width: 106px; text-align: right; padding-right: 22px; }
+        #value-root .c7 { width: 112px; }
+        #value-root .c8 { width: 150px; color: var(--w-soft); }
+        #value-root .more { padding: 14px 30px 0; font-family: "JetBrains Mono", monospace; font-size: 20px; color: var(--w-mute); }
+        #value-root .totals {
+          position: absolute; left: 0; bottom: 0; width: 100%; height: 66px; display: flex; align-items: center; gap: 14px; padding: 0 30px;
+          background: #ecfdf5; border-top: 2px solid #a7f3d0; font-size: 23px; font-weight: 700; color: #065f46; white-space: nowrap;
+        }
+        #value-root .totals b { display: block; width: 28px; height: 28px; border-radius: 50%; background: var(--w-opt); position: relative; flex: 0 0 auto; }
+        #value-root .totals svg { position: absolute; left: 6px; top: 6px; width: 16px; height: 16px; }
+
+        /* scene */
+        #value-root .scene-lab { position: absolute; font-family: "JetBrains Mono", monospace; font-size: 20px; font-weight: 700; letter-spacing: 0.14em; color: var(--w-mute); white-space: nowrap; }
+        #value-root .shop { position: absolute; left: 1270px; top: 312px; width: 530px; height: 128px; border-radius: 20px; background: var(--w-faint); }
+        #value-root .floor {
+          position: absolute; left: 1270px; top: 462px; width: 530px; height: 458px; border-radius: 24px; border: 3px solid var(--w-line);
+          background: #fbfbfc; overflow: hidden;
+        }
+        #value-root .day {
+          position: absolute; left: 1560px; top: 350px; width: 220px; text-align: center; font-family: "JetBrains Mono", monospace;
+          font-size: 22px; font-weight: 700; color: var(--w-ink); padding: 8px 0; border-radius: 10px; background: #fff; border: 2px solid var(--w-line);
+        }
+        #value-root svg.layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+        #value-root .caption {
+          position: absolute; left: 120px; top: 944px; width: 1700px; font-size: 30px; font-weight: 700; color: var(--w-ink);
+        }
+        #value-root .caption span { color: var(--w-model); }
+      </style>
+
+      <div id="value-root" data-composition-id="value" data-width="1920" data-height="1080">
+        <div class="page" id="va-page">
+          <div class="kick" id="va-kick">07 · END-USER VALUE</div>
+          <div class="ttl" id="va-ttl">What the <em>planner</em> gets</div>
+          <div class="uline" id="va-ul"></div>
+
+          <div class="sheet" id="va-sheet">
+            <div class="sheet-head"><span id="va-head-l">WORK ORDERS · THIS WEEK</span><span id="va-head-r"></span></div>
+            <div class="row hdr" id="va-hdr">
+              <div class="c c1">ORDER</div><div class="c c2">ASSET</div><div class="c c4">P(14D)</div>
+              <div class="c c5">EVIDENCE</div><div class="c c6">SAVING</div><div class="c c7">DUE</div><div class="c c8">CREW</div>
+            </div>
+            <div id="va-rows"></div>
+            <div class="more" id="va-more"></div>
+            <div class="totals" id="va-totals"></div>
+          </div>
+
+          <div class="scene-lab" id="va-lab-shop" style="left: 1270px; top: 280px">WORKSHOP · PLANNER + 2 CREWS</div>
+          <div class="shop" id="va-shop"></div>
+          <div class="day" id="va-day">TUE 31 DEC</div>
+          <div class="floor" id="va-floor"></div>
+          <div class="scene-lab" id="va-lab-floor" style="left: 1294px; top: 476px">PLANT FLOOR</div>
+          <svg class="layer" id="va-svg" viewBox="0 0 1920 1080"></svg>
+
+          <div class="caption" id="va-caption">Six ready jobs, each with the sensor that moved. <span>The crew goes where a breakdown is coming.</span></div>
+        </div>
+        <div class="edge" id="va-edge"></div>
+      </div>
+
+      <script>
+        (() => {
+          /* SHEET:BEGIN */ const SHEET = {"fork_date":"2024-12-31","crew_jobs_per_week":6,"orders_two_weeks":12,"rows":[{"id":"CBM-2024-00001","created":"2024-12-31","priority":1,"asset":"COMP-141","type":"compressor","loc":"U200-K-141","p":0.736,"saving":22727.67,"evidence":{"sensor":"vibration","change_vs_baseline_7d":0.521},"due":"2025-01-03","crew":"rotating-equipment","truth_days":1.8,"truth_mode":"bearing"},{"id":"CBM-2024-00002","created":"2024-12-31","priority":1,"asset":"PUMP-106","type":"pump","loc":"U300-P-106","p":0.964,"saving":12847.3,"evidence":{"sensor":"vibration","change_vs_baseline_7d":0.859},"due":"2025-01-03","crew":"mechanical","truth_days":0.3,"truth_mode":"bearing"},{"id":"CBM-2025-00003","created":"2025-01-01","priority":1,"asset":"PUMP-054","type":"pump","loc":"U300-P-054","p":0.934,"saving":12318.85,"evidence":{"sensor":"vibration","change_vs_baseline_7d":0.592},"due":"2025-01-04","crew":"mechanical","truth_days":5.0,"truth_mode":"bearing"},{"id":"CBM-2025-00004","created":"2025-01-01","priority":1,"asset":"PUMP-026","type":"pump","loc":"U300-P-026","p":0.748,"saving":8957.51,"evidence":{"sensor":"vibration","change_vs_baseline_7d":0.513},"due":"2025-01-04","crew":"mechanical","truth_days":11.0,"truth_mode":"bearing"},{"id":"CBM-2025-00005","created":"2025-01-02","priority":1,"asset":"PUMP-014","type":"pump","loc":"U300-P-014","p":0.893,"saving":11576.99,"evidence":{"sensor":"vibration","change_vs_baseline_7d":0.112},"due":"2025-01-05","crew":"mechanical","truth_days":3.3,"truth_mode":"seal"},{"id":"CBM-2025-00006","created":"2025-01-02","priority":2,"asset":"PUMP-032","type":"pump","loc":"U100-P-032","p":0.459,"saving":3770.61,"evidence":{"sensor":"pressure","change_vs_baseline_7d":-0.059},"due":"2025-01-05","crew":"mechanical","truth_days":18.1,"truth_mode":"seal"}]}; /* SHEET:END */
+
+          const CONFIG = {
+            duration: 13.0,
+            units: ["U100", "U200", "U300", "U400"],
+            floor: { left: 1270, top: 462, w: 530, h: 458 },
+            shopY: 376,
+            crewX: [1380, 1460],
+            person: { x: 1312, y: 376 },
+          };
+          const NS = "http://www.w3.org/2000/svg";
+          const svg = document.getElementById("va-svg");
+          const el = (tag, attrs, parent) => {
+            const n = document.createElementNS(NS, tag);
+            Object.entries(attrs).forEach(([k, v]) => n.setAttribute(k, v));
+            (parent || svg).appendChild(n);
+            return n;
+          };
+          const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+          const tl = gsap.timeline({ paused: true });
+          const D = CONFIG.duration;
+          const MON = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+          const DOW = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+          const dayName = (iso) => { const d = new Date(iso + "T00:00:00Z"); return DOW[d.getUTCDay()] + " " + d.getUTCDate() + " " + MON[d.getUTCMonth()]; };
+          const short = (iso) => { const d = new Date(iso + "T00:00:00Z"); return MON[d.getUTCMonth()].charAt(0) + MON[d.getUTCMonth()].slice(1).toLowerCase() + " " + String(d.getUTCDate()).padStart(2, "0"); };
+          const pct = (v) => (v >= 0 ? "+" : "−") + Math.abs(Math.round(v * 100)) + "%";
+          const crewShort = { mechanical: "mechanical", "rotating-equipment": "rotating", "static-equipment": "static" };
+
+          // ---------------- sheet ----------------
+          const R = SHEET.rows;
+          document.getElementById("va-head-r").textContent = "CREW " + R.length + " / " + SHEET.crew_jobs_per_week;
+          const rowsEl = document.getElementById("va-rows");
+          R.forEach((r, i) => {
+            rowsEl.insertAdjacentHTML("beforeend",
+              '<div class="row" id="va-r' + i + '"><div class="tint" id="va-t' + i + '"></div>' +
+              '<div class="c c1">' + r.id + '</div><div class="c c2">' + r.asset + "</div>" +
+              '<div class="c c4">' + r.p.toFixed(2) + '</div><div class="c c5">' + r.evidence.sensor + " " + pct(r.evidence.change_vs_baseline_7d) + "</div>" +
+              '<div class="c c6">' + (r.saving / 1000).toFixed(1) + 'k</div><div class="c c7">' + short(r.due) + '</div><div class="c c8">' + crewShort[r.crew] + "</div></div>");
+          });
+          document.getElementById("va-more").textContent = "+ " + (SHEET.orders_two_weeks - R.length) + " more orders the following week";
+          const caught = R.filter((r) => r.truth_days > 0 && r.truth_days <= 14).length;
+          document.getElementById("va-totals").innerHTML =
+            "<b>" + CHECK + "</b>All " + R.length + " pass validate() · in the replay, " + caught + " of " + R.length + " were under 14 days from failing";
+
+          // ---------------- scene: workshop, planner, crews, plant floor ----------------
+          const F = CONFIG.floor, colW = F.w / CONFIG.units.length;
+          CONFIG.units.forEach((u, k) => {
+            const x = F.left + k * colW;
+            if (k > 0) el("line", { x1: x, y1: F.top + 50, x2: x, y2: F.top + F.h - 16, stroke: "#e5e7eb", "stroke-width": 2, "stroke-dasharray": "6 6" });
+            const t = el("text", { x: x + colW / 2, y: F.top + 74, "text-anchor": "middle", "font-family": "JetBrains Mono, monospace", "font-size": 20, "font-weight": 700, fill: "#9ca3af" });
+            t.textContent = u;
+          });
+          // machines placed in their unit column, stacked
+          const perUnit = {};
+          const machines = R.map((r, i) => {
+            const u = r.loc.slice(0, 4), k = CONFIG.units.indexOf(u);
+            const n = (perUnit[u] = (perUnit[u] || 0) + 1) - 1;
+            const cx = F.left + k * colW + colW / 2, cy = F.top + 124 + n * 90;
+            const g = el("g", { id: "va-m" + i });
+            const body = el("g", {}, g);
+            const amber = "#d97706";
+            let shape;
+            if (r.type === "compressor") shape = el("rect", { x: cx - 30, y: cy - 22, width: 60, height: 44, rx: 8, fill: amber }, body);
+            else shape = el("circle", { cx, cy, r: 22, fill: amber }, body);
+            el("rect", { x: cx - 6, y: cy - 6, width: 12, height: 12, rx: 3, fill: "#fff", opacity: 0.85 }, body);
+            const lab = el("text", { x: cx, y: cy + 44, "text-anchor": "middle", "font-family": "JetBrains Mono, monospace", "font-size": 20, "font-weight": 700, fill: "#374151" }, g);
+            lab.textContent = r.asset;
+            const ok = el("g", { opacity: 0 }, g);
+            el("circle", { cx: cx + 24, cy: cy - 20, r: 13, fill: "#0f9f6e" }, ok);
+            el("path", { d: "M" + (cx + 18) + " " + (cy - 20) + "l4 4 8-8.5", fill: "none", stroke: "#fff", "stroke-width": 3, "stroke-linecap": "round", "stroke-linejoin": "round" }, ok);
+            return { g, shape, ok, cx, cy, created: r.created };
+          });
+          // planner with tablet
+          const P = CONFIG.person;
+          const person = el("g", { id: "va-person" });
+          el("circle", { cx: P.x, cy: P.y - 34, r: 16, fill: "#111827" }, person);
+          el("path", { d: "M" + (P.x - 26) + " " + (P.y + 40) + "v-26a26 22 0 0 1 52 0v26z", fill: "#d97706" }, person);
+          const tab = el("g", { id: "va-tab" }, person);
+          el("rect", { x: P.x + 18, y: P.y - 12, width: 30, height: 36, rx: 4, fill: "#fff", stroke: "#111827", "stroke-width": 2.5 }, tab);
+          [0, 1, 2].forEach((k) => el("line", { x1: P.x + 23, x2: P.x + 43, y1: P.y - 3 + k * 8, y2: P.y - 3 + k * 8, stroke: "#9ca3af", "stroke-width": 2 }, tab));
+          // two crews (wrench badge)
+          const crewCol = ["#1f8fa8", "#6d3cf0"];
+          const crews = CONFIG.crewX.map((x, c) => {
+            const g = el("g", { id: "va-crew" + c });
+            el("circle", { cx: 0, cy: -16, r: 11, fill: "#111827" }, g);
+            el("path", { d: "M-17 20v-16a17 15 0 0 1 34 0v16z", fill: crewCol[c] }, g);
+            el("rect", { x: -19, y: -30, width: 38, height: 9, rx: 4, fill: "#fbbf24" }, g); // hard hat
+            return { g, x, y: CONFIG.shopY };
+          });
+
+          // ---------------- choreography ----------------
+          tl.fromTo("#va-page", { clipPath: "inset(0px 100% 0px 0px)" }, { clipPath: "inset(0px 0% 0px 0px)", duration: 0.7, ease: "power3.inOut" }, 0);
+          tl.fromTo("#va-edge", { x: 0, opacity: 1 }, { x: 1920, duration: 0.7, ease: "power3.inOut" }, 0);
+          tl.to("#va-edge", { opacity: 0, duration: 0.1 }, 0.7);
+          tl.fromTo("#va-kick", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.5);
+          tl.fromTo("#va-ttl", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.55);
+          tl.fromTo("#va-ul", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 0.9);
+          tl.fromTo("#va-sheet", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.8);
+          R.forEach((_, i) => tl.fromTo("#va-r" + i, { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, 1.3 + i * 0.3));
+          tl.fromTo("#va-more", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 1.3 + R.length * 0.3);
+          tl.fromTo(["#va-shop", "#va-lab-shop", "#va-floor", "#va-lab-floor"], { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.9);
+          tl.fromTo("#va-person", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1.1);
+          crews.forEach((c, k) => tl.fromTo(c.g, { x: c.x, y: c.y + 30, opacity: 0 }, { x: c.x, y: c.y, opacity: 1, duration: 0.5, ease: "power3.out" }, 1.25 + k * 0.12));
+          machines.forEach((m, i) => tl.fromTo(m.g, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 1.5 + i * 0.12));
+          tl.fromTo("#va-tab", { rotation: 0 }, { rotation: -10, svgOrigin: P.x + 33 + " " + (P.y + 6), duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 5 }, 2.6);
+
+          // the week: each working day, the two crews take that day's jobs, then return
+          const days = [...new Set(R.map((r) => r.created))];
+          const DAY0 = 4.4, DAYLEN = 1.75;
+          const dayEl = document.getElementById("va-day");
+          tl.fromTo("#va-day", { opacity: 0 }, { opacity: 1, duration: 0.3 }, DAY0 - 0.3);
+          dayEl.textContent = dayName(days[0]);
+          const dv = { v: 0 };
+          if (days.length > 1)
+            tl.to(dv, { v: days.length - 1, duration: (days.length - 1) * DAYLEN, ease: "steps(" + (days.length - 1) + ")",
+              onUpdate: () => { dayEl.textContent = dayName(days[Math.round(dv.v)]); } }, DAY0);
+          days.forEach((d, di) => {
+            const t0 = DAY0 + di * DAYLEN;
+            tl.fromTo("#va-day", { scale: 1.08 }, { scale: 1, duration: 0.3, ease: "power2.out" }, t0);
+            const jobs = R.map((r, i) => ({ r, i })).filter((o) => o.r.created === d);
+            jobs.forEach((o, k) => {
+              const c = crews[k % crews.length], m = machines[o.i];
+              tl.to(c.g, { x: m.cx - 38, y: m.cy + 4, duration: 0.55, ease: "power2.inOut" }, t0 + 0.05);
+              tl.to(m.shape, { attr: { fill: "#0f9f6e" }, duration: 0.3 }, t0 + 0.75);
+              tl.fromTo(m.ok, { attr: { opacity: 0 } }, { attr: { opacity: 1 }, duration: 0.2 }, t0 + 0.85);
+              tl.to("#va-t" + o.i, { opacity: 1, duration: 0.3 }, t0 + 0.8);
+              tl.to(c.g, { x: c.x, y: c.y, duration: 0.55, ease: "power2.inOut" }, t0 + 1.1);
+            });
+          });
+          const tEnd = DAY0 + days.length * DAYLEN;
+          tl.fromTo("#va-totals", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, tEnd);
+          tl.fromTo("#va-caption", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, tEnd + 0.5);
+          // wipe out (white -> dark), revealing the next dark scene underneath
+          tl.to("#va-page", { clipPath: "inset(0px 0px 0px 100%)", duration: 0.7, ease: "power3.inOut" }, D - 0.7);
+          tl.fromTo("#va-edge", { x: 0, opacity: 0 }, { x: 1920, opacity: 1, duration: 0.7, ease: "power3.inOut", immediateRender: false }, D - 0.7);
+          window.__timelines["value"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

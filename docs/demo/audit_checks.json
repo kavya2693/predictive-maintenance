@@ -1,0 +1,510 @@
+{
+ "generated": "2026-10-14 14:37",
+ "commit": "70531ff3190a5ff2de81b5edc3ef1ee5888ae47c",
+ "checks": [
+  {
+   "id": "F-01",
+   "shown": "3 industry chips",
+   "type": "general-knowledge",
+   "status": "manual",
+   "computed": "-",
+   "reason": "Context statement, not a repo output."
+  },
+  {
+   "id": "F-02",
+   "shown": "4 problem cards",
+   "type": "general-knowledge",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-03",
+   "shown": "200 machines",
+   "type": "direct",
+   "computed": "200",
+   "expect": "200",
+   "status": "pass"
+  },
+  {
+   "id": "F-04",
+   "shown": "About 6 planned jobs a week / crew 6 jobs / week",
+   "type": "direct",
+   "computed": "6",
+   "expect": "6",
+   "status": "pass"
+  },
+  {
+   "id": "F-05",
+   "shown": "110 pumps \u00b7 40 compressors \u00b7 50 heat exchangers",
+   "type": "direct",
+   "computed": "110 pumps \u00b7 40 compressors \u00b7 50 heat exchangers",
+   "expect": "110 pumps \u00b7 40 compressors \u00b7 50 heat exchangers",
+   "status": "pass"
+  },
+  {
+   "id": "F-06",
+   "shown": "219,000 daily sensor readings / .csv.gz \u00b7 219,000",
+   "type": "direct",
+   "computed": "219,000",
+   "expect": "219,000",
+   "status": "pass"
+  },
+  {
+   "id": "F-07",
+   "shown": "130\u2013157 breakdowns a year on the calendar",
+   "type": "derived",
+   "computed": "130\u2013157",
+   "expect": "130\u2013157",
+   "status": "pass"
+  },
+  {
+   "id": "F-08",
+   "shown": "SENSORS \u00b7 SERVICE LOG \u00b7 RISK MODEL \u00b7 WORTH A JOB? \u00b7 CREW PLAN \u00b7 WORK ORDERS",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-09",
+   "shown": "fewer breakdowns / lower cost / higher uptime",
+   "type": "derived",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-10",
+   "shown": "EVERY WORKING DAY",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-11",
+   "shown": "Replay the plant to today, then fork it",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-12",
+   "shown": "Each policy runs a full year",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-13",
+   "shown": "tick barcodes (no numbers)",
+   "type": "derived",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-14",
+   "shown": "0.779",
+   "type": "direct",
+   "computed": "0.779",
+   "expect": "0.779",
+   "status": "pass"
+  },
+  {
+   "id": "F-15",
+   "shown": "0.753",
+   "type": "direct",
+   "computed": "0.753",
+   "expect": "0.753",
+   "status": "pass"
+  },
+  {
+   "id": "F-16",
+   "shown": "29%",
+   "type": "direct",
+   "computed": "29%",
+   "expect": "29%",
+   "status": "pass"
+  },
+  {
+   "id": "F-17",
+   "shown": "69%",
+   "type": "direct",
+   "computed": "69%",
+   "expect": "69%",
+   "status": "pass"
+  },
+  {
+   "id": "F-18",
+   "shown": "seed 7 \u00b7 3 years",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-19",
+   "shown": ".csv \u00b7 1,005 jobs",
+   "type": "direct",
+   "computed": "1,005",
+   "expect": "1,005",
+   "status": "pass"
+  },
+  {
+   "id": "F-20",
+   "shown": "eval only \u00b7 1,205",
+   "type": "direct",
+   "computed": "1,205",
+   "expect": "1,205",
+   "status": "pass"
+  },
+  {
+   "id": "F-21",
+   "shown": "observable only",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-22",
+   "shown": "plant.py, features.py, models.py (LightGBM, Cox, Weibull, AFT), config.py, policy.py (CostAwareModel, schedule, other policies), workorders.py, simulate.py, evaluate.py",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-23",
+   "shown": "60-day window",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-24",
+   "shown": "26 per asset-day",
+   "type": "derived",
+   "computed": "26",
+   "expect": "26",
+   "status": "pass"
+  },
+  {
+   "id": "F-25",
+   "shown": "p(fail \u2264 14 d) / fail within 14 d / p(14 d)",
+   "type": "direct",
+   "computed": "14",
+   "expect": "14",
+   "status": "pass"
+  },
+  {
+   "id": "F-26",
+   "shown": "119 trees",
+   "type": "direct",
+   "computed": "119",
+   "expect": "119",
+   "status": "pass"
+  },
+  {
+   "id": "F-27",
+   "shown": "T* 187\u00b7121\u00b7218 d",
+   "type": "direct",
+   "computed": "187\u00b7121\u00b7218",
+   "expect": "187\u00b7121\u00b7218",
+   "status": "pass"
+  },
+  {
+   "id": "F-28",
+   "shown": "saving = p\u00b7C_fail \u2212 C_job; > 0 ? yes: propose",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-29",
+   "shown": "\u2264 2 a day \u00b7 \u2264 6 a week \u00b7 21-day cooldown",
+   "type": "derived",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-30",
+   "shown": "7 policies \u00d7 5 forks",
+   "type": "direct",
+   "computed": "7 policies \u00d7 5 forks",
+   "expect": "7 policies \u00d7 5 forks",
+   "status": "pass"
+  },
+  {
+   "id": "F-31",
+   "shown": "make run \u2248 2 min / ~2 min",
+   "type": "derived",
+   "computed": "~2 min",
+   "expect": "~2 min",
+   "status": "pass"
+  },
+  {
+   "id": "F-32",
+   "shown": "Planner \u00b7 accept \u2192 CMMS",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-33",
+   "shown": "daily vibration \u00b7 last 60 days (line chart)",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-34",
+   "shown": "alert \u00b7 2024-12-31",
+   "type": "direct",
+   "computed": "2024-12-31",
+   "expect": "2024-12-31",
+   "status": "pass"
+  },
+  {
+   "id": "F-35",
+   "shown": "+52% vs its baseline / vibration +52%",
+   "type": "direct",
+   "computed": "vibration +52%",
+   "expect": "vibration +52%",
+   "status": "pass"
+  },
+  {
+   "id": "F-36",
+   "shown": "CBM-2024-00001 \u00b7 COMP-141 \u00b7 U200-K-141 \u00b7 0.736 \u00b7 P1 \u00b7 2025-01-03 \u00b7 rotating-equipment",
+   "type": "direct",
+   "computed": "CBM-2024-00001 \u00b7 COMP-141 \u00b7 U200-K-141 \u00b7 0.736 \u00b7 P1 \u00b7 2025-01-03 \u00b7 rotating-equipment",
+   "expect": "CBM-2024-00001 \u00b7 COMP-141 \u00b7 U200-K-141 \u00b7 0.736 \u00b7 P1 \u00b7 2025-01-03 \u00b7 rotating-equipment",
+   "status": "pass"
+  },
+  {
+   "id": "F-37",
+   "shown": "hidden life ended 1.8 days later (bearing)",
+   "type": "direct",
+   "computed": "1.8 bearing",
+   "expect": "1.8 bearing",
+   "status": "pass"
+  },
+  {
+   "id": "F-38",
+   "shown": "232 \u00b7 138 \u00b7 111 \u00b7 56 \u00b7 43 \u00b7 3",
+   "type": "direct",
+   "computed": "232 \u00b7 138 \u00b7 111 \u00b7 56 \u00b7 43 \u00b7 3",
+   "expect": "232 \u00b7 138 \u00b7 111 \u00b7 56 \u00b7 43 \u00b7 3",
+   "status": "pass"
+  },
+  {
+   "id": "F-39",
+   "shown": "fork 1 of 5",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-40",
+   "shown": "CBM-2024-00001 \u2026 CBM-2025-00006",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-41",
+   "shown": "+ 6 more orders the following week",
+   "type": "derived",
+   "computed": "6",
+   "expect": "6",
+   "status": "pass"
+  },
+  {
+   "id": "F-42",
+   "shown": "All 6 pass validate()",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-43",
+   "shown": "5 of 6 were under 14 days from failing",
+   "type": "derived",
+   "computed": "5 of 6",
+   "expect": "5 of 6",
+   "status": "pass"
+  },
+  {
+   "id": "F-44",
+   "shown": "CREW 6 / 6",
+   "type": "derived",
+   "computed": "6 / 6",
+   "expect": "6 / 6",
+   "status": "pass"
+  },
+  {
+   "id": "F-45",
+   "shown": "TUE 31 DEC \u00b7 WED 1 JAN \u00b7 THU 2 JAN",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-46",
+   "shown": "99.47%",
+   "type": "direct",
+   "computed": "99.47%",
+   "expect": "99.47%",
+   "status": "pass"
+  },
+  {
+   "id": "F-47",
+   "shown": "vs calendar 99.00%",
+   "type": "direct",
+   "computed": "99.00%",
+   "expect": "99.00%",
+   "status": "pass"
+  },
+  {
+   "id": "F-48",
+   "shown": "+0.47 pp",
+   "type": "direct",
+   "computed": "+0.47 pp",
+   "expect": "+0.47 pp",
+   "status": "pass"
+  },
+  {
+   "id": "F-49",
+   "shown": "44.2",
+   "type": "direct",
+   "computed": "44.2",
+   "expect": "44.2",
+   "status": "pass"
+  },
+  {
+   "id": "F-50",
+   "shown": "calendar 111.2",
+   "type": "direct",
+   "computed": "111.2",
+   "expect": "111.2",
+   "status": "pass"
+  },
+  {
+   "id": "F-51",
+   "shown": "2.02M",
+   "type": "direct",
+   "computed": "2.02M",
+   "expect": "2.02M",
+   "status": "pass"
+  },
+  {
+   "id": "F-52",
+   "shown": "4.01M",
+   "type": "direct",
+   "computed": "4.01M",
+   "expect": "4.01M",
+   "status": "pass"
+  },
+  {
+   "id": "F-53",
+   "shown": "68.7%",
+   "type": "direct",
+   "computed": "68.7%",
+   "expect": "68.7%",
+   "status": "pass"
+  },
+  {
+   "id": "F-54",
+   "shown": "median lead 7.7 days",
+   "type": "direct",
+   "computed": "7.7",
+   "expect": "7.7",
+   "status": "pass"
+  },
+  {
+   "id": "F-55",
+   "shown": "the model beat every runnable policy in all 5 forks",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-56",
+   "shown": "+0.30 pp",
+   "type": "derived",
+   "computed": "+0.30 pp",
+   "expect": "+0.30 pp",
+   "status": "pass"
+  },
+  {
+   "id": "F-57",
+   "shown": "+0.19 pp",
+   "type": "derived",
+   "computed": "+0.19 pp",
+   "expect": "+0.19 pp",
+   "status": "pass"
+  },
+  {
+   "id": "F-58",
+   "shown": "+0.66 pp",
+   "type": "derived",
+   "computed": "+0.66 pp",
+   "expect": "+0.66 pp",
+   "status": "pass"
+  },
+  {
+   "id": "F-59",
+   "shown": "38 of the 44 breakdowns left are sudden",
+   "type": "derived",
+   "computed": "38 of 44",
+   "expect": "38 of 44",
+   "status": "pass"
+  },
+  {
+   "id": "F-60",
+   "shown": "The model caught 1 of 189",
+   "type": "direct",
+   "computed": "1 of 189",
+   "expect": "1 of 189",
+   "status": "pass"
+  },
+  {
+   "id": "F-61",
+   "shown": "MIT",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-62",
+   "shown": "LightGBM \u00b7 lifelines \u00b7 closed-loop sim \u00b7 Python",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  },
+  {
+   "id": "F-63",
+   "shown": "$ make run",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
+   "status": "pass"
+  }
+ ]
+}
