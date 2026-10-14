@@ -263,14 +263,18 @@ def main() -> None:
                 cc, tt = by_mode.get(mode, (0, 0))
                 by_mode[mode] = (cc + c, tt + tot)
 
-    first = next(r for r in runs if r.policy == "gbm-sensors" and r.crew_jobs_per_week == k0)
+    # Pick the model by what the simulated year shows, not by C-index: the candidate that
+    # catches the most failures at the crew budget writes the crew's work orders.
+    candidates = ["alarm-limits", "weibull-age", "cox-sensors", "gbm-sensors"]
+    winner = str(main_tbl.loc[candidates, "failures_caught_share"].idxmax())
+    first = next(r for r in runs if r.policy == winner and r.crew_jobs_per_week == k0)
     window = [a for a in first.alerts if a.day < TRAIN_DAYS + 14]
     rul = m["rul"].median_remaining(
         base.type_idx[[a.asset for a in window]],
         np.array([m["duty"].get(assets.iloc[a.asset]["asset_id"], m["duty"].mean()) for a in window]),
         np.array([a.features[FEATURE_NAMES.index("days_since_maint")] for a in window]),
     )
-    orders = build(window, assets, base.type_idx, rul, "gbm-sensors")
+    orders = build(window, assets, base.type_idx, rul, winner)
     bad = [e for o in orders for e in validate(o)]
     assert not bad, bad
 
@@ -283,6 +287,7 @@ def main() -> None:
         "closed_loop": agg.to_dict(orient="records"),
         "paired_gbm_minus": paired,
         "gbm_caught_by_mode": {k: {"caught": v[0], "would_fail": v[1]} for k, v in by_mode.items()},
+        "selected_policy": winner,
         "work_orders_first_two_weeks": len(orders),
         "runtime_seconds": round(time.time() - t_start, 1),
     }
@@ -328,6 +333,11 @@ def report(res: dict[str, Any], main_tbl: pd.DataFrame, agg: pd.DataFrame, k0: i
             f"{_fmt(r.median_lead_days, nd=1)} | "
             f"{_fmt(r.failures_caught_share, True, 1)} | {r.cost_total / 1e6:.2f}M |"
         )
+    lines += [
+        "",
+        f"Selected by failures caught in the simulated year: **{res['selected_policy']}** "
+        "(writes work_orders.json).",
+    ]
     lines += ["", "## Paired difference, gbm-sensors minus each policy (same seeds)", ""]
     lines.append("| vs | uptime pp (mean) | min..max | seeds gbm better | cost difference |")
     lines.append("|---|---|---|---|---|")

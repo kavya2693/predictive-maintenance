@@ -10,6 +10,8 @@
 | gbm-sensors | 99.47% | 44.2 | 211.4 | 45.6% | 84.3% | 7.7 | 68.7% | 2.02M |
 | oracle | 99.65% | 2.0 | 237.4 | 100.0% | 100.0% | 12.4 | 99.2% | 1.12M |
 
+Selected by failures caught in the simulated year: **gbm-sensors** (writes work_orders.json).
+
 ## Paired difference, gbm-sensors minus each policy (same seeds)
 
 | vs | uptime pp (mean) | min..max | seeds gbm better | cost difference |

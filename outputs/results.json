@@ -381,6 +381,7 @@
       "would_fail": 189
     }
   },
+  "selected_policy": "gbm-sensors",
   "work_orders_first_two_weeks": 12,
-  "runtime_seconds": 127.3
+  "runtime_seconds": 81.8
 }
