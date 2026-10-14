@@ -6,6 +6,192 @@ Picks which pumps, compressors and heat exchangers the crew should service this 
 cannot reach them all, and shows what that choice does to uptime and cost against calendar
 maintenance and running to failure.
 
+[![86-second silent walkthrough: the plant, the crew constraint, how it works, the architecture, the closed-loop run, the results and the planner's work orders](docs/demo/demo.gif)](docs/demo/demo.mp4)
+
+*86-second silent walkthrough. Click for the full video ([MP4, 4.8 MB](docs/demo/demo.mp4)).*
+
+📄 **Audit report:** every figure and assumption in the video, traced to its source — [PDF](docs/demo/AUDIT_REPORT.pdf) · [Word](docs/demo/AUDIT_REPORT.docx) · [Markdown](docs/demo/AUDIT_REPORT.md)
+
+## At a glance
+
+| | |
+|---|---|
+| **Problem** | A 200-asset process plant (110 pumps, 40 compressors, 50 heat exchangers) has a crew for about six planned jobs a week. Calendar maintenance with postponements leaves 130 to 157 unplanned failures a year, each costing three to five days of throughput plus the repair. |
+| **Approach** | Rolling 60-day sensor features feed a LightGBM "fails in the next 14 days" model; a job is proposed when probability times failure cost beats the cost of the job, and a crew-budgeted scheduler takes the highest expected savings. Seven policies run a full year from the same plant fork, five times over, scored against each asset's latent failure day. |
+| **Result** | Against Weibull-optimal calendar maintenance: uptime **99.47% vs 99.00%**, unplanned failures **44.2 vs 111.2** a year, cost **2.02M vs 4.01M** a year; **68.7%** of would-be failures caught. Better than every runnable policy on uptime in all five paired forks. |
+| **What didn't win** | Cox had the best ranking (C-index 0.779 vs 0.753) and caught only 29.3% of failures in the closed loop against 68.7%. Hand-set alarm limits get most of the way (the model adds 0.17 pp of uptime over them). Sudden failures are untouched: 1 of 189 caught, 38 of the 44 that remain each year. |
+
+## Architecture
+
+![Architecture walkthrough: sensor history and maintenance log, shared features, the three model views, the break-even policy and crew scheduler, and the closed loop that scores them](docs/demo/architecture.gif)
+
+```mermaid
+flowchart LR
+    subgraph SRC["Sources"]
+        CFG["Plant layout, lives, costs<br/>config.py"]
+        PLANT["Day-by-day plant<br/>plant.Plant"]
+        HIST["History under calendar PM<br/>data.run_history · data.tables<br/>scripts/generate_data.py"]
+        ASSETS[("assets.csv<br/>200 assets")]
+        READ[("sensor_readings.csv.gz<br/>219,000 daily rows")]
+        MLOG[("maintenance_log.csv<br/>1,005 jobs")]
+        LIVES[("lives_truth.csv<br/>evaluation only")]
+    end
+
+    subgraph FEAT["Data and features"]
+        WF["Rolling window features<br/>features.window_features"]
+        TBL["Asset-day table<br/>features.build_table"]
+        LBL["Observable labels<br/>features._labels"]
+        LAT["Latent labels<br/>features.latent_labels"]
+    end
+
+    subgraph MOD["Models"]
+        GBM["LightGBM p(fail in 14 d)<br/>models.GBMModel"]
+        COX["Landmark Cox<br/>models.CoxModel"]
+        WEIB["Weibull per type<br/>models.WeibullByType · AgeHazard"]
+        RUL["Weibull AFT remaining life<br/>models.RemainingLife"]
+    end
+
+    subgraph DEC["Decision"]
+        CAM["Break-even rule, rank by saving<br/>policy.CostAwareModel"]
+        BASE["Baselines: fixed-interval,<br/>alarm limits, run-to-failure<br/>policy.py"]
+        ORC["Oracle, upper bound<br/>policy.Oracle"]
+        SCHED["Crew scheduler<br/>policy.schedule · policy.Crew"]
+        WO["Work orders + validator<br/>workorders.build · validate"]
+    end
+
+    subgraph EVAL["Evaluation"]
+        FORK["Replay to day 730, fork<br/>plant.Plant.fork"]
+        LOOP["Closed loop, 5 forks x 365 d<br/>simulate.run_policy"]
+        OFF["Offline scoring, held-out year<br/>evaluate.py"]
+    end
+
+    subgraph OUT["Outputs"]
+        RES[("outputs/results.md<br/>results.json · closed_loop_runs.csv")]
+        WOJ[("outputs/work_orders.json")]
+    end
+
+    CFG --> PLANT
+    PLANT -->|"daily readings, jobs, latent lives"| HIST
+    HIST --> ASSETS & READ & MLOG & LIVES
+    READ -->|"60-day sensor windows"| WF
+    MLOG -->|"days since service"| WF
+    ASSETS -->|"asset type"| WF
+    WF -->|"26 features per asset-day"| TBL
+    MLOG -->|"next event per asset-day"| LBL
+    TBL -->|"features, years 1-2"| GBM
+    LBL -->|"label, censored days dropped"| GBM
+    TBL -->|"weekly landmarks"| COX
+    LBL -->|"time to next event"| COX
+    MLOG -->|"observed lives"| WEIB
+    MLOG -->|"observed lives + duty"| RUL
+    GBM -->|"p"| CAM
+    COX -->|"p"| CAM
+    WEIB -->|"age-only p"| CAM
+    WEIB -->|"cost-optimal interval per type"| BASE
+    CAM -->|"expected saving"| SCHED
+    BASE -->|"priority"| SCHED
+    ORC -->|"priority"| SCHED
+    PLANT -->|"replayed to end of training"| FORK
+    FORK -->|"same start, same noise"| LOOP
+    SCHED -->|"today's jobs"| LOOP
+    LOOP -.->|"previous evening's 60-day window"| WF
+    LOOP -.->|"serviced asset renews, 21-day cooldown"| SCHED
+    LOOP -.->|"latent remaining life"| ORC
+    SCHED -->|"accepted alerts"| WO
+    RUL -->|"fleet median remaining life"| WO
+    WO -->|"validated JSON"| WOJ
+    LIVES -->|"latent failure day"| LAT
+    LAT -->|"truth by construction"| OFF
+    GBM -->|"held-out year scores"| OFF
+    COX -->|"held-out year scores"| OFF
+    LOOP -->|"uptime, failures, cost, precision"| RES
+    OFF -->|"AP, C-index, lead time"| RES
+
+    classDef data fill:#7fa8ff,stroke:#3d6fd9,color:#0b1020
+    classDef model fill:#b9a2ff,stroke:#7a5fd6,color:#0b1020
+    classDef decision fill:#3fd8a8,stroke:#1f9c76,color:#0b1020
+    classDef evaluation fill:#f2c46d,stroke:#b8902f,color:#0b1020
+    classDef risk fill:#ff8a73,stroke:#cc5640,color:#0b1020
+
+    class CFG,PLANT,HIST,ASSETS,READ,MLOG,WF,TBL,LBL,RES,WOJ data
+    class GBM,COX,WEIB,RUL model
+    class CAM,BASE,SCHED,WO decision
+    class FORK,LOOP,OFF evaluation
+    class LIVES,LAT,ORC risk
+```
+
+Solid edges are the data flow of one run; dotted edges are the closed-loop feedback, where
+each day's jobs change the plant the next day's features are read from. Red nodes hold the
+latent failure day: they score the policies and the oracle reads them, and nothing on the
+training or live-policy path is allowed to touch them.
+
+### Components
+
+| Component | Responsibility | File |
+|---|---|---|
+| Assumptions | Plant layout, Weibull lives per type, failure modes and precursor lengths, costs, crew budget, LightGBM parameters | [`config.py`](src/predictive_maintenance/config.py) |
+| Plant model | Day-by-day assets: latent lives, sensor drift before failure, dropouts and outages, turnaround, repair; `fork` for paired evaluation | [`plant.py`](src/predictive_maintenance/plant.py) |
+| History generator | Runs the plant three years under the old calendar policy with postponements and writes the four tables | [`data.py`](src/predictive_maintenance/data.py), [`scripts/generate_data.py`](scripts/generate_data.py) |
+| Features and labels | One `window_features` for training and live scoring; observable labels with censored days dropped; latent labels for evaluation | [`features.py`](src/predictive_maintenance/features.py) |
+| Models | LightGBM 14-day classifier, landmark Cox, Weibull per type with age-replacement optimum, Weibull AFT remaining life | [`models.py`](src/predictive_maintenance/models.py) |
+| Policies and scheduler | Seven policies behind one `score` interface; crew capacity per day and week, 21-day cooldown, ranking by expected saving | [`policy.py`](src/predictive_maintenance/policy.py) |
+| Closed loop | One policy for one year from a fork; uptime, failures, cost, precision at budget, lead time | [`simulate.py`](src/predictive_maintenance/simulate.py) |
+| Offline evaluation | Average precision, weekly precision at budget, lead time by failure mode, C-index | [`evaluate.py`](src/predictive_maintenance/evaluate.py) |
+| Work orders | JSON hand-off to the maintenance system with risk, sensor evidence and schedule window; validator | [`workorders.py`](src/predictive_maintenance/workorders.py) |
+| Orchestrator | One command: generate if missing, train, score offline, run the closed loop and sweep, write outputs | [`cli.py`](src/predictive_maintenance/cli.py) |
+
+### Design decisions
+
+| Decision | Options considered | Chosen | Trade-off |
+|---|---|---|---|
+| How policies are judged | Offline precision@k on the old policy's history; closed-loop replay | A year in the closed loop from one fork, same random stream, five forks ([ADR-0001](docs/adr/0001-judge-policies-in-closed-loop.md)) | Measures what an alert does to the future, but only on a plant whose physics are an assumption; the biggest gap in the limitations |
+| Training labels | Censored days as negatives; observable-only labels | Positive if a corrective job starts within 14 days, negative if the next event is more than 14 days out, dropped otherwise | Fewer training rows, no bias toward "whatever planners serviced was healthy" |
+| Ground truth for scoring | Observed failures only; a model as judge; latent failure day | Latent failure day recorded by the plant for every life | An alert is scored against the failure it prevented, by construction; the same truth is unavailable on a real plant, where job close-out findings would stand in |
+| When to propose a job | Fixed probability threshold (0.5); top-k by probability; cost break-even | `p x failure cost > planned job cost`, ranked by expected saving | Sends the crew to a compressor before a pump at the same risk; leaves capacity idle when nothing clears break-even (seen above six jobs a week) |
+| Which risk model drives the crew | Weibull on age only; landmark Cox on sensors; LightGBM on sensors | LightGBM, with Cox and Weibull kept as comparators and for the remaining-life view | Cox ranks better over months (C-index 0.779 vs 0.753) but is not sharp at 14 days; the choice was made in the closed loop, not on concordance |
+| Feature code paths | Separate batch and live feature code; one function | One `window_features`, with a test that rebuilds a live day from the CSVs | No train/serve skew from duplicate code; daily summaries only, no vibration spectra |
+
+### Data contracts
+
+| Stage | Input | Output |
+|---|---|---|
+| Generator | seed (7), `config.py` | `assets.csv`: `asset_id, asset_type, functional_location, last_service_date`; `sensor_readings.csv.gz`: `date, asset_id, load_pct, ambient_c` (float), `vibration, temperature, pressure, flow, current` (float, NaN when missing), `status` (running / failed / planned_job / turnaround); `maintenance_log.csv`: `date, asset_id, kind` (preventive / corrective), `failure_mode, downtime_days` (int), `cost` (float); `lives_truth.csv`: `asset_id, start_day, end_day, ended_by, mode, life_days, latent_failure_day` |
+| Features | 60-day window per asset `(m, 60, 5)`, load window `(m, 60)`, days since service, type index | `(m, 26)` float matrix: per sensor `rel3, rel7, slope14, sd7` against the asset's own baseline, `load_m7, load_rel3, days_since_maint`, three type one-hots |
+| Asset-day table | the three observable tables | one row per asset per day from day 59: the 26 features plus `asset_id, day, running, label` (1 / 0 / NaN), `time_to_event, event_is_failure` |
+| Models | feature rows | `predict(X) -> p` in [0, 1] for the 14-day horizon; Weibull: interval per type; AFT: median remaining days |
+| Policy and scheduler | `Observation`: day, features as of the previous evening, days since service, type, eligibility | `Alert`: `day, asset, probability, features` (plus latent remaining life and mode, read only for scoring) |
+| Work order | accepted alerts, assets, remaining life | JSON `schema_version, work_order_id, created_on, order_type, priority` (1-3), `asset{}`, `risk{failure_probability, horizon_days, fleet_median_remaining_life_days, expected_saving}`, `evidence[]` (top three sensor moves), `schedule{}`, `estimated_cost` |
+
+### Failure modes and fallbacks
+
+| Failure | What the code does |
+|---|---|
+| Sensor reading missing (1.5% of days, multi-day outages, no vibration or current probe on heat exchangers) | The reading stays NaN in the window. Medians and spreads ignore NaN, a slope needs at least five points or is NaN, LightGBM routes missing values natively, Cox treats a missing deviation as no deviation, and the alarm-limit rule treats it as no alarm. |
+| Single-day sensor spikes | Baselines and recent levels are medians, so one spike moves `rel3` and `rel7` little; the baseline also excludes the last 14 days so a developing fault does not raise its own bar. |
+| Asset in repair, or serviced in the last 21 days | Not offered to the crew that day. |
+| Weekend, annual turnaround, or the week's crew budget spent | Capacity is zero; nothing is scheduled. The weekly budget resets on Monday and no day takes more than `ceil(K/5)` jobs. |
+| No policy score clears break-even | No job is proposed; spare crew capacity goes unused rather than spent on low-value work. |
+| Asset with no maintenance events in the log | A sentinel at the end of the data labels it; this case crashed the feature-parity test on its first run and is now covered. |
+| Work order fails validation | The run stops with the list of problems (`assert not bad`) rather than writing an order the receiving system would reject. |
+| Fork does not match the logged history | The run stops: the number of events in the forked plant must equal the number of jobs in the training log. |
+| Model degrades or drifts | Not handled. Models are retrained on every run and are not monitored; the limitations note that a deployed model would need retraining once its own jobs dominate the log. |
+| Solver or LLM timeout | Not applicable: scheduling is a sort under a budget, and there is no solver, LLM, model server or network call in the pipeline. |
+
+### Path to production
+
+This is a mapping of each local piece to what would replace it in a deployed system, not a
+description of one that exists.
+
+| Here | Production equivalent |
+|---|---|
+| Seeded plant writing CSVs to `data/` | Process historian (daily or hourly aggregates per tag) and the maintenance system's order history, landed in a warehouse (BigQuery, Snowflake or Redshift) partitioned by date |
+| `make run` on a laptop | A daily scheduled job in Airflow or Step Functions: pull yesterday's readings, build features, score, schedule, emit orders before the morning planning meeting |
+| LightGBM retrained each run | Versioned model in a registry (MLflow, SageMaker or Vertex AI), retrained monthly on observable labels, promoted only if it beats the incumbent on a held-out window |
+| `work_orders.json` | Notifications or orders posted to the maintenance system's API, mapped to its order types and functional location codes, with planner accept or reject captured back |
+| Closed loop against latent lives | Shadow mode first: the model's list next to the planners' for a quarter, scored on job close-out findings (was the bearing actually worn) and on failures that followed |
+| Daily summaries | Vibration spectra from the condition-monitoring system as extra features, for earlier bearing detection |
+| Monitoring (not built) | Weekly precision at budget from close-out findings; failures per month against the calendar baseline; share of missing readings per sensor; feature drift on `rel7` and `days_since_maint`; an alert when the model's own jobs exceed half of recent maintenance history, which is the retraining trigger |
+
 ## The problem
 
 A process plant runs 200 assets that matter: 110 pumps, 40 compressors and 50 shell-and-tube
