@@ -15,7 +15,7 @@ Everything needed to rebuild the silent walkthrough (`docs/demo/demo.mp4`) and t
 | `compositions/s03-architecture.html` | Slide 05, the architecture diagram |
 | `compositions/s04-running.html` | Slide 06, one machine's vibration trace and work order, then the closed-loop year (`RUN` block) |
 | `compositions/value.html` | Slide 07, the week's work orders and the plant-floor scene (`SHEET` block) |
-| `compositions/s05-results.html`, `s06-twist.html`, `s07-end.html` | Slides 08-10, results, what didn't win, end card |
+| `compositions/s05-results.html`, `s06-twist.html`, `s07-end.html` | Slides 08-10, results, lesson and fix, end card |
 | `assets/plant_run.json` | Work orders of the first two weeks plus their latent truth, daily cumulative failures per policy (fork seed 101) and one vibration trace, exported by `tools/export_work_orders.py` |
 | `audit/facts.yaml` | Every figure (F-xx), assumption (A-xx), slide text and check expression used by the report |
 | `tools/build_audit_report.py` | Builds the slide stills, re-checks every figure against the repo outputs, writes MD, DOCX and PDF |
@@ -47,7 +47,7 @@ make run
 python3 docs/demo/source/tools/inject_sheet.py docs/demo/source/assets/plant_run.json \
   docs/demo/source/compositions --rows 0,1,2,3,4,5
 
-# 3. render (86 s, 1920x1080, 30 fps, silent) and compress
+# 3. render (89 s, 1920x1080, 30 fps, silent) and compress
 cd docs/demo/source
 npx --yes hyperframes@0.8.156 check
 npx --yes hyperframes@0.8.156 render -f 30 -q looks -o renders/predictive-maintenance-master.mp4

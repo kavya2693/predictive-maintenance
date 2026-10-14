@@ -5,21 +5,21 @@
     <template>
       <style>
         #arch-root { position: absolute; inset: 0; }
-        #arch-root .diagram { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+        #arch-root .diagram { position: absolute; left: 0; top: 46px; width: 1920px; height: 1080px; }
         #arch-root svg.wires { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
         #arch-root .wire { fill: none; stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
         /* lanes = layers, left to right */
         #arch-root .lane { position: absolute; top: 234px; height: 656px; border-radius: 16px; border: 2px solid; }
-        #arch-root .lane-h { position: absolute; top: 196px; font-family: var(--mono); font-size: 20px; font-weight: 700; letter-spacing: 0.14em; white-space: nowrap; }
+        #arch-root .lane-h { position: absolute; top: 196px; font-family: var(--mono); font-size: 22px; font-weight: 700; letter-spacing: 0.14em; white-space: nowrap; }
         /* nodes */
         #arch-root .node {
           position: absolute; display: flex; flex-direction: column; justify-content: center; gap: 4px;
           padding: 14px 18px 2px; border: 2px solid var(--line); border-radius: 12px; background: var(--panel);
         }
         #arch-root .node .t { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); white-space: nowrap; }
-        #arch-root .node .s { font-family: var(--mono); font-size: 20px; color: var(--ink-soft); white-space: nowrap; }
+        #arch-root .node .s { font-size: 22px; font-weight: 500; color: var(--ink-soft); white-space: nowrap; }
         #arch-root .node .f {
-          position: absolute; left: 12px; top: -15px; font-family: var(--mono); font-size: 20px; line-height: 24px; padding: 1px 8px;
+          position: absolute; left: 12px; top: -17px; font-family: var(--mono); font-size: 22px; line-height: 26px; padding: 0 8px;
           border-radius: 6px; background: var(--bg); border: 2px solid var(--line); white-space: nowrap;
         }
         #arch-root .L-data { border-color: rgba(127, 168, 255, 0.6); }
@@ -43,7 +43,7 @@
         #arch-root .store { position: absolute; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px; padding-top: 16px; }
         #arch-root .store svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
         #arch-root .store .t { position: relative; font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--ink); white-space: nowrap; }
-        #arch-root .store .s { position: relative; font-family: var(--mono); font-size: 20px; color: var(--ink-soft); white-space: nowrap; }
+        #arch-root .store .s { position: relative; font-size: 22px; font-weight: 500; color: var(--ink-soft); white-space: nowrap; }
         /* hero: the decision point */
         #arch-root .hero { border: 3px solid var(--c-opt); background: #0f2629; box-shadow: 0 0 30px rgba(63, 216, 168, 0.12); gap: 6px; padding-left: 16px; padding-right: 12px; }
         #arch-root .hero .t { font-size: 30px; }
@@ -51,27 +51,27 @@
         #arch-root .decide { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
         #arch-root .diamond { position: relative; width: 116px; height: 56px; flex: 0 0 auto; }
         #arch-root .diamond svg { position: absolute; inset: 0; width: 116px; height: 56px; }
-        #arch-root .diamond span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--c-opt); }
-        #arch-root .decide .yes { font-family: var(--mono); font-size: 20px; color: var(--ink); white-space: nowrap; }
+        #arch-root .diamond span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--c-opt); }
+        #arch-root .decide .yes { font-size: 22px; font-weight: 500; color: var(--ink); white-space: nowrap; }
         #arch-root .decide .yes b { color: var(--c-opt); }
-        #arch-root .daybar { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 20px; color: var(--ink-soft); margin-top: 4px; }
+        #arch-root .daybar { display: flex; justify-content: space-between; font-size: 22px; font-weight: 500; color: var(--ink-soft); margin-top: 4px; }
         #arch-root .daybar b { color: var(--c-opt); }
         #arch-root .dtrack { position: relative; width: 100%; height: 8px; border-radius: 4px; background: rgba(63, 216, 168, 0.15); overflow: hidden; }
         #arch-root .dfill { position: absolute; left: 0; top: 0; width: 100%; height: 8px; background: var(--c-opt); transform-origin: left center; }
         /* edge labels sit on their wire */
         #arch-root .wl {
-          position: absolute; font-family: var(--mono); font-size: 20px; line-height: 26px; padding: 0 6px; border-radius: 6px;
+          position: absolute; font-family: var(--mono); font-size: 22px; line-height: 26px; padding: 0 6px; border-radius: 6px;
           background: var(--bg); white-space: nowrap;
         }
-        #arch-root .note { position: absolute; font-family: var(--mono); font-size: 20px; color: var(--ink-mute); white-space: nowrap; }
+        #arch-root .note { position: absolute; font-family: var(--mono); font-size: 22px; color: var(--ink-soft); white-space: nowrap; }
         #arch-root .nfr {
-          position: absolute; font-family: var(--mono); font-size: 20px; padding: 3px 10px; border-radius: 6px; white-space: nowrap;
+          position: absolute; font-family: var(--mono); font-size: 22px; padding: 2px 10px; border-radius: 6px; white-space: nowrap;
           border: 2px solid rgba(242, 196, 109, 0.5); color: var(--c-eval); background: rgba(242, 196, 109, 0.06);
         }
         /* legend */
         #arch-root .legend {
-          position: absolute; left: 120px; top: 904px; display: flex; gap: 30px; align-items: center;
-          font-family: var(--mono); font-size: 20px; color: var(--ink-soft); white-space: nowrap;
+          position: absolute; left: 120px; top: 900px; display: flex; gap: 30px; align-items: center;
+          font-family: var(--mono); font-size: 22px; color: var(--ink-soft); white-space: nowrap;
         }
         #arch-root .legend span { display: flex; align-items: center; gap: 10px; }
         #arch-root .legend svg { display: block; }
@@ -85,7 +85,8 @@
         <div class="scene" id="arch-in">
           <div class="eyebrow" data-layout-allow-overlap id="arch-eyebrow">05 · Architecture</div>
           <div class="scene-title" data-layout-allow-overlap id="arch-title">One model scores, one rule decides, a closed loop judges.</div>
-          <div class="crit" id="arch-crit" data-layout-allow-overlap>critical path: readings → features → p → break-even → crew → work order</div>
+          <div class="scene-sub" id="arch-sub">Each box is a file in the repo. Read left to right: sensor data in, this week's work orders out.</div>
+          <div class="crit" id="arch-crit" data-layout-allow-overlap>main path: readings → features → risk → break-even → crew → work order</div>
 
           <div class="diagram" id="arch-diagram">
             <!-- layer lanes -->
@@ -116,72 +117,72 @@
 
             <!-- 2 features -->
             <div class="node L-data" id="n-b1" style="left: 426px; top: 376px; width: 238px; height: 150px">
-              <div class="f">features.py</div><div class="t">Window features</div><div class="s">60-day window</div><div class="s">rel · slope · sd</div><div class="s">26 per asset-day</div></div>
+              <div class="f">features.py</div><div class="t">Window features</div><div class="s">60-day window</div><div class="s">trend · spread</div><div class="s">26 per machine-day</div></div>
             <div class="node L-data" id="n-b2" style="left: 426px; top: 616px; width: 238px; height: 110px">
-              <div class="f">features.py</div><div class="t">Labels</div><div class="s">fail within 14 d</div><div class="s">observable only</div></div>
+              <div class="f">features.py</div><div class="t">Labels</div><div class="s">fail within 14 d</div><div class="s">no hidden truth</div></div>
 
             <!-- 3 models -->
             <div class="node L-model" id="n-c1" style="left: 740px; top: 266px; width: 260px; height: 120px">
-              <div class="f">models.py</div><div class="t">LightGBM</div><div class="s">p(fail ≤ 14 d)</div><div class="s">119 trees</div></div>
+              <div class="f">models.py</div><div class="t">LightGBM</div><div class="s">odds of failing in 14 d</div><div class="s">119 trees</div></div>
             <div class="node L-model" id="n-c2" style="left: 740px; top: 420px; width: 260px; height: 90px">
-              <div class="f">models.py</div><div class="t">Landmark Cox</div><div class="s">same features</div></div>
+              <div class="f">models.py</div><div class="t">Landmark Cox</div><div class="s">survival model, rival</div></div>
             <div class="node human" id="n-c3" style="left: 740px; top: 546px; width: 260px; height: 96px">
               <svg viewBox="0 0 40 40" fill="none" stroke="#eef2f6" stroke-width="2.6" stroke-linecap="round"><circle cx="20" cy="12" r="7"/><path d="M6 37c0-8 6.3-13 14-13s14 5 14 13"/></svg>
               <div class="f">config.py</div><div class="t">Set by hand</div><div class="s">costs · budget</div></div>
             <div class="node L-model" id="n-c4" style="left: 740px; top: 680px; width: 260px; height: 110px">
-              <div class="f">models.py</div><div class="t">Weibull by type</div><div class="s">T* 187·121·218 d</div><div class="s">+ AFT median RUL</div></div>
+              <div class="f">models.py</div><div class="t">Weibull by type</div><div class="s">calendar: 121–218 d</div><div class="s">+ remaining life</div></div>
 
             <!-- 4 decide -->
             <div class="node L-opt hero" id="n-d1" style="left: 1100px; top: 266px; width: 330px; height: 230px">
-              <div class="f">policy.py · CostAwareModel</div>
+              <div class="f">policy.CostAwareModel</div>
               <div class="t">Break-even rule</div>
-              <div class="s">saving = p·C_fail − C_job</div>
+              <div class="s">risk × failure cost</div><div class="s">− job cost = saving</div>
               <div class="decide">
                 <div class="diamond"><svg viewBox="0 0 116 56"><path d="M58 2L114 28L58 54L2 28Z" fill="rgba(63,216,168,0.12)" stroke="#3fd8a8" stroke-width="2.5"/></svg><span>&gt; 0 ?</span></div>
                 <div class="yes"><b>yes:</b> propose</div>
               </div>
               <div class="s accent">no: leave it running</div>
             </div>
-            <div class="node L-opt" id="n-d2" style="left: 1100px; top: 540px; width: 330px; height: 150px">
-              <div class="f">policy.py · schedule()</div><div class="t">Crew scheduler</div><div class="s">≤ 2 a day · ≤ 6 a week</div><div class="s">21-day cooldown</div>
+            <div class="node L-opt" id="n-d2" style="left: 1100px; top: 556px; width: 330px; height: 150px">
+              <div class="f">policy.py · schedule()</div><div class="t">Crew scheduler</div><div class="s">≤ 2 a day · ≤ 6 a week</div><div class="s">21 days between jobs</div>
               <div class="daybar"><span>crew this week</span><span><b id="arch-crew">0</b> / 6</span></div>
               <div class="dtrack"><div class="dfill" id="arch-cfill"></div></div>
             </div>
-            <div class="node alt" id="n-d3" style="left: 1100px; top: 730px; width: 330px; height: 100px">
+            <div class="node alt" id="n-d3" style="left: 1100px; top: 756px; width: 330px; height: 86px">
               <div class="f">other policies</div><div class="s">alarm limits · calendar</div><div class="s">run-to-failure · oracle</div></div>
 
             <!-- 5 serve + judge -->
             <div class="node L-eval" id="n-e1" style="left: 1510px; top: 266px; width: 290px; height: 110px">
-              <div class="f">workorders.py</div><div class="t">Work orders</div><div class="s">JSON · validate()</div><div class="s">p · RUL · evidence</div></div>
+              <div class="f">workorders.py</div><div class="t">Work orders</div><div class="s">JSON · validate()</div><div class="s">risk · evidence · due</div></div>
             <div class="node human" id="n-e2" style="left: 1510px; top: 410px; width: 290px; height: 90px">
               <svg viewBox="0 0 40 40" fill="none" stroke="#eef2f6" stroke-width="2.6" stroke-linecap="round"><circle cx="20" cy="12" r="7"/><path d="M6 37c0-8 6.3-13 14-13s14 5 14 13"/></svg>
-              <div class="f">outside the repo</div><div class="t">Planner</div><div class="s">accept → CMMS</div></div>
+              <div class="f">outside the repo</div><div class="t">Planner</div><div class="s">approves the job</div></div>
             <div class="node L-eval" id="n-e3" style="left: 1510px; top: 536px; width: 290px; height: 160px">
-              <div class="f">simulate.py</div><div class="t">Closed loop</div><div class="s">plant.step(jobs)</div><div class="s">7 policies × 5 forks</div>
+              <div class="f">simulate.py</div><div class="t">Closed loop</div><div class="s">jobs change the plant</div><div class="s">7 policies × 5 runs</div>
               <div class="daybar"><span>day <b id="arch-day">0</b> / 365</span></div>
               <div class="dtrack"><div class="dfill" id="arch-dfill"></div></div>
             </div>
             <div class="node L-eval" id="n-e4" style="left: 1510px; top: 726px; width: 290px; height: 104px">
-              <div class="f">evaluate.py</div><div class="t">Scoring</div><div class="s">precision@budget</div><div class="s">lead · C-index</div></div>
+              <div class="f">evaluate.py</div><div class="t">Scoring</div><div class="s">jobs truly needed</div><div class="s">warning days · ranking</div></div>
             <div class="nfr" id="n-nfr1" style="left: 1510px; top: 846px">make run ≈ 2 min</div>
 
             <!-- edge labels -->
             <div class="wl" id="wl-make" style="left: 246px; top: 350px; color: var(--c-data)">make data</div>
-            <div class="wl" id="wl-p" style="left: 1010px; top: 286px; color: var(--c-model)">p(14 d)</div>
+            <div class="wl" id="wl-p" style="left: 1010px; top: 286px; color: var(--c-model)">risk</div>
             <div class="wl" id="wl-cox" style="left: 1012px; top: 432px; color: var(--c-risk)">alt</div>
-            <div class="wl" id="wl-t" style="left: 1036px; top: 728px; color: var(--c-model)">T*</div>
+            <div class="wl" id="wl-t" style="left: 1018px; top: 728px; color: var(--c-model)">days</div>
             <div class="wl" id="wl-fit" style="left: 430px; top: 740px; color: var(--c-data)">labels · lives → fit</div>
-            <div class="wl" id="wl-rank" style="left: 1276px; top: 504px; color: var(--c-opt)">rank by saving</div>
-            <div class="wl" id="wl-same" style="left: 1276px; top: 697px; color: var(--c-risk)">same scheduler</div>
-            <div class="wl" id="wl-truth" style="left: 560px; top: 859px; color: var(--c-eval)">latent failure day · evaluation only</div>
+            <div class="wl" id="wl-rank" style="left: 1060px; top: 509px; color: var(--c-opt)">rank by saving</div>
+            <div class="wl" id="wl-same" style="left: 1060px; top: 708px; color: var(--c-risk)">same scheduler</div>
+            <div class="wl" id="wl-truth" style="left: 560px; top: 859px; color: var(--c-eval)">hidden failure day · scoring only</div>
 
             <!-- legend: line styles + shapes -->
             <div class="legend" id="arch-legend">
-              <span><svg width="44" height="10"><path d="M2 5H42" stroke="#b2bfcc" stroke-width="3.5"/></svg>per-day call</span>
-              <span><svg width="44" height="10"><path d="M2 5H42" stroke="#b2bfcc" stroke-width="3.5" stroke-dasharray="9 7"/></svg>batch / training</span>
-              <span><svg width="44" height="10"><path d="M2 5H42" stroke="#b2bfcc" stroke-width="3.5" stroke-dasharray="1 7" stroke-linecap="round"/></svg>feedback</span>
-              <span><svg width="26" height="30" viewBox="0 0 26 30"><path d="M2 6v18c0 2.2 5 4 11 4s11-1.8 11-4V6" fill="none" stroke="#b2bfcc" stroke-width="2.2"/><ellipse cx="13" cy="6" rx="11" ry="4" fill="none" stroke="#b2bfcc" stroke-width="2.2"/></svg>data store</span>
-              <span><svg width="26" height="26" viewBox="0 0 40 40" fill="none" stroke="#b2bfcc" stroke-width="3" stroke-linecap="round"><circle cx="20" cy="12" r="7"/><path d="M6 37c0-8 6.3-13 14-13s14 5 14 13"/></svg>human</span>
+              <span><svg width="44" height="10"><path d="M2 5H42" stroke="#c8d3de" stroke-width="3.5"/></svg>per-day call</span>
+              <span><svg width="44" height="10"><path d="M2 5H42" stroke="#c8d3de" stroke-width="3.5" stroke-dasharray="9 7"/></svg>batch / training</span>
+              <span><svg width="44" height="10"><path d="M2 5H42" stroke="#c8d3de" stroke-width="3.5" stroke-dasharray="1 7" stroke-linecap="round"/></svg>feedback</span>
+              <span><svg width="26" height="30" viewBox="0 0 26 30"><path d="M2 6v18c0 2.2 5 4 11 4s11-1.8 11-4V6" fill="none" stroke="#c8d3de" stroke-width="2.2"/><ellipse cx="13" cy="6" rx="11" ry="4" fill="none" stroke="#c8d3de" stroke-width="2.2"/></svg>data store</span>
+              <span><svg width="26" height="26" viewBox="0 0 40 40" fill="none" stroke="#c8d3de" stroke-width="3" stroke-linecap="round"><circle cx="20" cy="12" r="7"/><path d="M6 37c0-8 6.3-13 14-13s14 5 14 13"/></svg>human</span>
               <span><svg width="44" height="26"><rect x="2" y="3" width="40" height="20" rx="5" fill="none" stroke="#ff8a73" stroke-width="2.2" stroke-dasharray="6 4"/></svg>alternate path</span>
               <span><svg width="34" height="26"><path d="M17 2L32 13L17 24L2 13Z" fill="none" stroke="#3fd8a8" stroke-width="2.2"/></svg>decision</span>
             </div>
@@ -194,7 +195,7 @@
           const tl = gsap.timeline({ paused: true });
           const D = 14.8;
           const NS = "http://www.w3.org/2000/svg";
-          const COL = { data: "#7fa8ff", model: "#b9a2ff", opt: "#3fd8a8", eval: "#f2c46d", risk: "#ff8a73", human: "#b2bfcc" };
+          const COL = { data: "#7fa8ff", model: "#b9a2ff", opt: "#3fd8a8", eval: "#f2c46d", risk: "#ff8a73", human: "#c8d3de" };
 
           // cylinders for the data stores, sized to each box
           document.querySelectorAll("#arch-root .store").forEach((el) => {
@@ -208,6 +209,7 @@
           tl.fromTo("#arch-in", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
           tl.fromTo("#arch-eyebrow", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }, 0.1);
           tl.fromTo("#arch-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 0.2);
+          tl.fromTo("#arch-sub", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.5);
 
           // wires: orthogonal point lists matching the boxes above.
           // s = solid (per-day call) | dash (batch / training) | dot (feedback); ord = execution order for packets
@@ -224,8 +226,8 @@
             { id: "cox", pts: [[1000, 465], [1100, 465]], c: "risk", s: "dash", at: 4.2, ord: 4 },
             { id: "cost", pts: [[1000, 594], [1100, 594]], c: "human", s: "dash", at: 4.2, ord: 3 },
             { id: "tstar", pts: [[1000, 760], [1100, 760]], c: "model", s: "dash", at: 4.2, ord: 4 },
-            { id: "rank", pts: [[1265, 496], [1265, 540]], c: "opt", s: "solid", at: 5.0, ord: 5, crit: true },
-            { id: "same", pts: [[1265, 730], [1265, 690]], c: "risk", s: "dash", at: 5.3, ord: 5 },
+            { id: "rank", pts: [[1265, 496], [1265, 556]], c: "opt", s: "solid", at: 5.0, ord: 5, crit: true },
+            { id: "same", pts: [[1265, 756], [1265, 706]], c: "risk", s: "dash", at: 5.3, ord: 5 },
             { id: "jobs", pts: [[1430, 576], [1470, 576], [1470, 321], [1510, 321]], c: "opt", s: "solid", at: 5.9, ord: 6, crit: true },
             { id: "step", pts: [[1430, 604], [1510, 604]], c: "opt", s: "solid", at: 5.9, ord: 6 },
             { id: "json", pts: [[1655, 376], [1655, 410]], c: "eval", s: "solid", at: 6.4, ord: 7, crit: true },
@@ -347,7 +349,7 @@
           const critNodes = ["#n-b1", "#n-c1", "#n-d1", "#n-d2", "#n-e1", "#n-e2"];
           const otherNodes = ["#n-a0", "#n-a2", "#n-a3", "#n-a4", "#n-b2", "#n-c2", "#n-c3", "#n-c4", "#n-d3", "#n-e3", "#n-e4", "#n-nfr1",
             "#wl-make", "#wl-cox", "#wl-t", "#wl-fit", "#wl-same", "#wl-truth"];
-          tl.to(otherNodes, { opacity: 0.28, duration: 0.5, ease: "power2.inOut" }, H);
+          tl.to(otherNodes, { opacity: 0.75, duration: 0.5, ease: "power2.inOut" }, H);
           wires.filter((w) => !w.crit).forEach((w) => tl.to(wireEls[w.id].g, { opacity: 0.18, duration: 0.5 }, H));
           wires.filter((w) => w.crit).forEach((w, i) => {
             tl.to(wireEls[w.id].p, { attr: { "stroke-opacity": 1, "stroke-width": 5.5 }, duration: 0.35, ease: "power2.out" }, H + 0.15 + i * 0.12);
@@ -355,7 +357,7 @@
           tl.to(critNodes, { boxShadow: "0 0 28px rgba(238,242,246,0.22)", duration: 0.5 }, H + 0.2);
           tl.fromTo("#n-a1", { filter: "drop-shadow(0px 0px 0px rgba(238,242,246,0))" }, { filter: "drop-shadow(0px 0px 14px rgba(238,242,246,0.35))", duration: 0.5 }, H + 0.2);
           tl.fromTo("#arch-crit", { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, H + 0.3);
-          tl.to("#arch-in", { opacity: 0, duration: 0.4, ease: "power2.in" }, D - 0.4);
+          tl.to("#arch-in", { opacity: 0, duration: 0.4, ease: "power2.in" }, D - 0.8); // dip: fully out before the next scene starts
           window.__timelines["arch"] = tl;
         })();
       </script>

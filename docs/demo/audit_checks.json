@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-14 14:37",
+ "generated": "2026-10-14 18:56",
  "commit": "70531ff3190a5ff2de81b5edc3ef1ee5888ae47c",
  "checks": [
   {
@@ -212,10 +212,10 @@
   },
   {
    "id": "F-27",
-   "shown": "T* 187\u00b7121\u00b7218 d",
-   "type": "direct",
-   "computed": "187\u00b7121\u00b7218",
-   "expect": "187\u00b7121\u00b7218",
+   "shown": "calendar: 121\u2013218 d",
+   "type": "derived",
+   "computed": "121\u2013218",
+   "expect": "121\u2013218",
    "status": "pass"
   },
   {
@@ -236,10 +236,10 @@
   },
   {
    "id": "F-30",
-   "shown": "7 policies \u00d7 5 forks",
+   "shown": "7 policies \u00d7 5 runs",
    "type": "direct",
-   "computed": "7 policies \u00d7 5 forks",
-   "expect": "7 policies \u00d7 5 forks",
+   "computed": "7 policies \u00d7 5 runs",
+   "expect": "7 policies \u00d7 5 runs",
    "status": "pass"
   },
   {
@@ -308,7 +308,7 @@
   },
   {
    "id": "F-39",
-   "shown": "fork 1 of 5",
+   "shown": "run 1 of 5",
    "type": "direct",
    "computed": "true",
    "expect": "true",
@@ -332,7 +332,7 @@
   },
   {
    "id": "F-42",
-   "shown": "All 6 pass validate()",
+   "shown": "All 6 pass the format check (validate())",
    "type": "direct",
    "computed": "true",
    "expect": "true",
@@ -379,14 +379,6 @@
    "status": "pass"
   },
   {
-   "id": "F-48",
-   "shown": "+0.47 pp",
-   "type": "direct",
-   "computed": "+0.47 pp",
-   "expect": "+0.47 pp",
-   "status": "pass"
-  },
-  {
    "id": "F-49",
    "shown": "44.2",
    "type": "direct",
@@ -428,7 +420,7 @@
   },
   {
    "id": "F-54",
-   "shown": "median lead 7.7 days",
+   "shown": "median warning 7.7 days",
    "type": "direct",
    "computed": "7.7",
    "expect": "7.7",
@@ -436,50 +428,66 @@
   },
   {
    "id": "F-55",
-   "shown": "the model beat every runnable policy in all 5 forks",
+   "shown": "the model beat every other real policy in all 5 runs",
    "type": "direct",
    "computed": "true",
    "expect": "true",
    "status": "pass"
   },
   {
-   "id": "F-56",
-   "shown": "+0.30 pp",
-   "type": "derived",
-   "computed": "+0.30 pp",
-   "expect": "+0.30 pp",
-   "status": "pass"
-  },
-  {
-   "id": "F-57",
-   "shown": "+0.19 pp",
-   "type": "derived",
-   "computed": "+0.19 pp",
-   "expect": "+0.19 pp",
-   "status": "pass"
-  },
-  {
-   "id": "F-58",
-   "shown": "+0.66 pp",
-   "type": "derived",
-   "computed": "+0.66 pp",
-   "expect": "+0.66 pp",
-   "status": "pass"
-  },
-  {
-   "id": "F-59",
-   "shown": "38 of the 44 breakdowns left are sudden",
-   "type": "derived",
-   "computed": "38 of 44",
-   "expect": "38 of 44",
-   "status": "pass"
-  },
-  {
-   "id": "F-60",
-   "shown": "The model caught 1 of 189",
+   "id": "F-64",
+   "shown": "0.647",
    "type": "direct",
-   "computed": "1 of 189",
-   "expect": "1 of 189",
+   "computed": "0.647",
+   "expect": "0.647",
+   "status": "pass"
+  },
+  {
+   "id": "F-65",
+   "shown": "29.3%",
+   "type": "direct",
+   "computed": "29.3%",
+   "expect": "29.3%",
+   "status": "pass"
+  },
+  {
+   "id": "F-66",
+   "shown": "59.6%",
+   "type": "direct",
+   "computed": "59.6%",
+   "expect": "59.6%",
+   "status": "pass"
+  },
+  {
+   "id": "F-67",
+   "shown": "128.6",
+   "type": "direct",
+   "computed": "128.6",
+   "expect": "128.6",
+   "status": "pass"
+  },
+  {
+   "id": "F-68",
+   "shown": "3.40M",
+   "type": "direct",
+   "computed": "3.40M",
+   "expect": "3.40M",
+   "status": "pass"
+  },
+  {
+   "id": "F-69",
+   "shown": "higher uptime in all 5 runs",
+   "type": "direct",
+   "computed": "5",
+   "expect": "5",
+   "status": "pass"
+  },
+  {
+   "id": "F-70",
+   "shown": "Test each one in a simulated year \u00b7 same plant and same random start \u00b7 the crew's work orders come from the winner \u00b7 PICKED",
+   "type": "direct",
+   "computed": "true",
+   "expect": "true",
    "status": "pass"
   },
   {

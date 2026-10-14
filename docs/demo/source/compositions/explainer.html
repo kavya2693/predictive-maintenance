@@ -8,8 +8,10 @@
            Per repo, edit only the CONFIG object in the script below (and slide B's markup if the key idea differs). */
         #explainer-root {
           position: absolute; inset: 0;
-          --w-bg: #ffffff; --w-ink: #111827; --w-soft: #4b5563; --w-mute: #6b7280; --w-line: #d1d5db;
+          --w-bg: #ffffff; --w-ink: #111827; --w-soft: #4b5563; --w-mute: #4b5563; --w-line: #d1d5db;
           --w-data: #d97706; --w-model: #6d3cf0; --w-tools: #1f8fa8; --w-risk: #dc2b4a; --w-opt: #0f9f6e; --w-eval: #b45309;
+          /* text versions of the layer colours: every one is >= 4.5:1 on white (the fills above are for tiles only) */
+          --w-data-t: #b45309; --w-model-t: #6d3cf0; --w-tools-t: #0e7490; --w-risk-t: #be123c; --w-opt-t: #047857;
           color: var(--w-ink); font-family: Inter, "Helvetica Neue", sans-serif;
         }
         #explainer-root .page { position: absolute; inset: 0; background: var(--w-bg); }
@@ -45,12 +47,12 @@
         #explainer-root .box { position: absolute; border: 3px solid var(--w-line); border-radius: 28px; }
         #explainer-root .pill {
           position: absolute; left: 28px; top: -22px; padding: 6px 18px; border-radius: 999px; background: var(--w-bg);
-          border: 3px solid var(--w-line); font-family: "JetBrains Mono", monospace; font-size: 20px; font-weight: 700;
-          letter-spacing: 0.14em; color: var(--w-soft); white-space: nowrap;
+          border: 3px solid var(--w-line); font-family: "JetBrains Mono", monospace; font-size: 22px; font-weight: 700;
+          letter-spacing: 0.12em; color: var(--w-soft); white-space: nowrap;
         }
         #explainer-root .loop { position: absolute; width: 84px; height: 84px; }
         #explainer-root .loop-lab {
-          position: absolute; font-family: "JetBrains Mono", monospace; font-size: 22px; font-weight: 700; color: var(--w-opt); white-space: nowrap;
+          position: absolute; font-family: "JetBrains Mono", monospace; font-size: 24px; font-weight: 700; color: var(--w-opt-t); white-space: nowrap;
         }
         #explainer-root .badges { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
         #explainer-root .badge { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: var(--w-ink); white-space: nowrap; }
@@ -68,9 +70,10 @@
         }
         #explainer-root .demo .pill { left: 32px; }
         #explainer-root .demo svg { position: absolute; left: 0; top: 0; width: 810px; height: 470px; overflow: visible; }
-        #explainer-root .blab { position: absolute; font-family: "JetBrains Mono", monospace; font-size: 20px; font-weight: 700; letter-spacing: 0.08em; white-space: nowrap; }
+        #explainer-root .blab { position: absolute; font-family: "JetBrains Mono", monospace; font-size: 22px; font-weight: 700; letter-spacing: 0.08em; white-space: nowrap; }
         #explainer-root .verdict { position: absolute; left: 40px; top: 368px; width: 730px; font-size: 26px; line-height: 1.35; color: var(--w-ink); }
-        #explainer-root .verdict b { color: var(--w-opt); }
+        #explainer-root .verdict b { color: var(--w-opt-t); }
+        #explainer-root .subt { position: absolute; left: 120px; top: 252px; width: 1680px; font-size: 28px; font-weight: 500; color: var(--w-soft); }
         #explainer-root .foot {
           position: absolute; left: 120px; top: 880px; font-family: "JetBrains Mono", monospace; font-size: 24px; color: var(--w-soft);
         }
@@ -81,34 +84,36 @@
           <!-- SLIDE A: the flow -->
           <div class="slide" id="ex-a">
             <div class="kick" id="ex-a-kick">03 · HOW IT WORKS</div>
-            <div class="ttl" id="ex-a-ttl">From sensors to <em style="color: var(--w-opt)">work orders</em></div>
+            <div class="ttl" id="ex-a-ttl">From sensors to <em style="color: var(--w-opt-t)">work orders</em></div>
             <div class="uline" id="ex-a-ul" style="background: var(--w-opt)"></div>
+            <div class="subt" id="ex-a-sub">Read left to right: watch the sensors, spot machines likely to fail soon, send the crew where it saves most.</div>
             <div id="ex-a-flow"></div>
           </div>
 
           <!-- SLIDE B: the one key idea -->
           <div class="slide" id="ex-b">
             <div class="kick" id="ex-b-kick">04 · THE KEY IDEA</div>
-            <div class="ttl" id="ex-b-ttl">Judge policies in a closed <em style="color: var(--w-tools)">loop</em></div>
+            <div class="ttl" id="ex-b-ttl">Judge policies in a closed <em style="color: var(--w-tools-t)">loop</em></div>
             <div class="uline" id="ex-b-ul" style="background: var(--w-tools)"></div>
+            <div class="subt" id="ex-b-sub">Each way of picking jobs (a policy) runs a simulated year on the same plant. Fewer breakdown ticks is better.</div>
             <div class="steps">
               <div class="step" id="ex-b-s1"><div class="tile" style="background: var(--w-data)" data-icon="fork"></div>
-                <div class="txt">Replay the plant to today, then fork it<small>every policy starts from the same plant and future</small></div></div>
+                <div class="txt">Replay the plant to today, then copy it<small>every policy starts from the same plant and future</small></div></div>
               <div class="step" id="ex-b-s2"><div class="tile" style="background: var(--w-tools)" data-icon="calendar"></div>
                 <div class="txt">Each policy runs a full year<small>its jobs change which machines fail next</small></div></div>
               <div class="step" id="ex-b-s3"><div class="tile" style="background: var(--w-risk)" data-icon="shield"></div>
                 <div class="txt">Score each job against the hidden failure day<small>a job counts even when it prevented the failure</small></div></div>
             </div>
             <div class="demo" id="ex-b-demo">
-              <div class="pill">ONE FORK · ONE YEAR · EACH TICK = A BREAKDOWN</div>
+              <div class="pill">ONE COPY · ONE YEAR · EACH TICK = A BREAKDOWN</div>
               <svg id="ex-fork" viewBox="0 0 810 470"></svg>
               <div class="blab" style="left: 40px; top: 176px; color: var(--w-mute)">HISTORY</div>
-              <div class="blab" id="ex-fl0" style="left: 330px; top: 58px; color: var(--w-data)">CALENDAR</div>
-              <div class="blab" id="ex-fl1" style="left: 330px; top: 158px; color: var(--w-risk)">ALARM LIMITS</div>
-              <div class="blab" id="ex-fl2" style="left: 330px; top: 258px; color: var(--w-opt)">MODEL + BREAK-EVEN</div>
+              <div class="blab" id="ex-fl0" style="left: 330px; top: 58px; color: var(--w-data-t)">CALENDAR</div>
+              <div class="blab" id="ex-fl1" style="left: 330px; top: 158px; color: var(--w-risk-t)">ALARM LIMITS</div>
+              <div class="blab" id="ex-fl2" style="left: 330px; top: 258px; color: var(--w-opt-t)">MODEL + BREAK-EVEN</div>
               <div class="verdict" id="ex-b-verdict">Same future for every policy, so a gap in breakdowns is <b>caused by the policy</b>.</div>
             </div>
-            <div class="foot" id="ex-b-foot">Ranked by C-index alone, Cox would have won (0.779 vs 0.753). In the loop it caught 29% of failures, not 69%.</div>
+            <div class="foot" id="ex-b-foot">On C-index, a ranking score, Cox looked best. In the loop it caught 29% of failures, not 69%.</div>
           </div>
         </div>
         <div class="edge" id="ex-edge"></div>
@@ -119,7 +124,7 @@
           /* ================= CONFIG (edit per repo) ================= */
           const CONFIG = {
             duration: 15.0, // whole chapter
-            slideB: 8.0, // when slide B replaces slide A
+            slideB: 7.4, // when slide B replaces slide A
             blocks: [
               // x = block centre; colour = layer; icon = key in ICONS
               { x: 260, label: "SENSORS", sub: "daily readings per machine", color: "--w-data", icon: "archive" },
@@ -172,7 +177,7 @@
             }
             const col = "var(" + b.color + ")";
             let inner = '<div class="tile" style="background:' + col + '">' + svgIcon(b.icon) + "</div>" +
-              '<div class="lab" style="color:' + col + '">' + b.label + "</div>";
+              '<div class="lab" style="color:var(' + b.color + '-t)">' + b.label + "</div>";
             if (b.sub) inner += '<div class="sub">' + b.sub + "</div>";
             if (b.badges) inner += '<div class="badges">' + b.badges.map((t, k) => '<div class="badge" id="ex-bd' + k + '"><i>' + CHECK + "</i>" + t + "</div>").join("") + "</div>";
             html.push('<div class="blk" id="ex-b' + i + '" style="left:' + (b.x - W / 2) + "px;top:" + TILE_TOP + 'px">' + inner + "</div>");
@@ -195,6 +200,7 @@
           tl.fromTo("#ex-a-kick", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.5);
           tl.fromTo("#ex-a-ttl", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.55);
           tl.fromTo("#ex-a-ul", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 0.9);
+          tl.fromTo("#ex-a-sub", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 1.0);
           const STEP = 0.55, S0 = 1.3;
           CONFIG.blocks.forEach((b, i) => {
             const at = S0 + i * STEP;
@@ -215,6 +221,7 @@
           tl.fromTo("#ex-b-kick", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, B);
           tl.fromTo("#ex-b-ttl", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, B + 0.05);
           tl.fromTo("#ex-b-ul", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, B + 0.4);
+          tl.fromTo("#ex-b-sub", { opacity: 0 }, { opacity: 1, duration: 0.5 }, B + 0.45);
           ["#ex-b-s1", "#ex-b-s2", "#ex-b-s3"].forEach((s, i) =>
             tl.fromTo(s, { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, B + 0.6 + i * 0.5));
           tl.fromTo("#ex-b-demo", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, B + 0.7);
@@ -224,7 +231,7 @@
           const fsv = document.getElementById("ex-fork");
           const mk = (tag, at) => { const n = document.createElementNS(NS, tag); Object.entries(at).forEach(([k, v]) => n.setAttribute(k, v)); fsv.appendChild(n); return n; };
           const FX0 = 40, FX = 230, FX1 = 770, FY = 222, BY = [100, 200, 300], BC = ["#d97706", "#dc2b4a", "#0f9f6e"];
-          const SW = B + 2.0, RUN = 3.2;
+          const SW = B + 1.8, RUN = 2.8;
           const hist = mk("line", { x1: FX0, y1: FY, x2: FX, y2: FY, stroke: "#111827", "stroke-width": 8, "stroke-linecap": "round" });
           tl.fromTo(hist, { attr: { x2: FX0 } }, { attr: { x2: FX }, duration: 0.6, ease: "power2.out" }, B + 1.1);
           const node = mk("circle", { cx: FX, cy: FY, r: 13, fill: "#111827", opacity: 0 });
@@ -247,7 +254,9 @@
             });
           });
           tl.fromTo("#ex-b-verdict", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, SW + RUN + 0.1);
-          tl.fromTo("#ex-b-foot", { opacity: 0 }, { opacity: 1, duration: 0.5 }, SW + RUN + 0.5);
+          tl.fromTo("#ex-b-foot", { opacity: 0 }, { opacity: 1, duration: 0.5 }, SW + RUN + 0.4);
+          // slide B text fades fully out before the wipe, so no two slides' text is ever on screen together
+          tl.to("#ex-b", { opacity: 0, duration: 0.35, ease: "power2.in" }, D - 1.05);
           // wipe out (white -> dark), revealing the next dark scene underneath
           tl.to("#ex-page", { clipPath: "inset(0px 0px 0px 100%)", duration: 0.7, ease: "power3.inOut" }, D - 0.7);
           tl.fromTo("#ex-edge", { x: 0, opacity: 0 }, { x: 1920, opacity: 1, duration: 0.7, ease: "power3.inOut", immediateRender: false }, D - 0.7);

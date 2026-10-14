@@ -2,9 +2,9 @@
 
 **Repository:** https://github.com/kavya2693/predictive-maintenance  
 **Numbers taken from commit:** `70531ff` (outputs last changed in `70531ff (2026-10-13 21:58:39 +0400)`)  
-**Video:** `docs/demo/demo.mp4` (86.0 s, 1920x1080, 30 fps, silent)  
-**Generated:** 2026-10-14 14:37  
-**Automated checks:** 62 pass · 0 fail · 1 manual (of 63 figures)
+**Video:** `docs/demo/demo.mp4` (88.8 s, 1920x1080, 30 fps, silent)  
+**Generated:** 2026-10-14 18:56  
+**Automated checks:** 63 pass · 0 fail · 1 manual (of 64 figures)
 
 ## How to use this report
 
@@ -40,8 +40,8 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | F-11 | Replay the plant to today, then fork it | 04 | `src/predictive_maintenance/plant.py:281-293; tests/test_plant.py:48` | fork(); test_fork_gives_every_policy_the_same_future | - | direct | ✓ verified |
 | F-12 | Each policy runs a full year | 04 | `src/predictive_maintenance/cli.py (run_policy(..., DAYS_PER_YEAR, ...)); config.py:13` | DAYS_PER_YEAR = 365 | - | direct | ✓ verified |
 | F-13 | tick barcodes (no numbers) | 04 | `demo assets/plant_run.json (export_work_orders.py); outputs/closed_loop_runs.csv` | LOOP block in compositions/explainer.html | number of ticks per branch = failures for seed 101, crew 6 | derived | ✓ verified |
-| F-14 | 0.779 | 04, 09 | `outputs/results.json` | offline.policies.cox-sensors.c_index | - | direct | ✓ verified |
-| F-15 | 0.753 | 04 | `outputs/results.json` | offline.policies.gbm-sensors.c_index | - | direct | ✓ verified |
+| F-14 | 0.779 | 09 | `outputs/results.json` | offline.policies.cox-sensors.c_index | - | direct | ✓ verified |
+| F-15 | 0.753 | 09 | `outputs/results.json` | offline.policies.gbm-sensors.c_index | - | direct | ✓ verified |
 | F-16 | 29% | 04 | `outputs/results.json closed_loop` | cox-sensors, crew 6, failures_caught_share (0.2929) | x100, rounded | direct | ✓ verified |
 | F-17 | 69% | 04 | `outputs/results.json closed_loop` | gbm-sensors, crew 6, failures_caught_share (0.6868) | x100, rounded | direct | ✓ verified |
 | F-18 | seed 7 · 3 years | 05 | `src/predictive_maintenance/cli.py (--data-seed default 7); config.py:14` | HISTORY_YEARS = 3 | - | direct | ✓ verified |
@@ -53,10 +53,10 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | F-24 | 26 per asset-day | 05 | `src/predictive_maintenance/features.py:20-28 (FEATURE_NAMES)` | 5 sensors x 4 + load_m7 + load_rel3 + days_since_maint + 3 type flags | 5 x 4 + 3 + 3 = 26 | derived | ✓ verified |
 | F-25 | p(fail ≤ 14 d) / fail within 14 d / p(14 d) | 05, 06 | `outputs/results.json` | horizon_days | - | direct | ✓ verified |
 | F-26 | 119 trees | 05 | `outputs/results.json` | training.best_iteration | - | direct | ✓ verified |
-| F-27 | T* 187·121·218 d | 05 | `outputs/results.json` | fixed_intervals_days | - | direct | ✓ verified |
+| F-27 | calendar: 121–218 d | 05 | `outputs/results.json` | fixed_intervals_days (pump 187, compressor 121, heat exchanger 218) | min–max of the three intervals | derived | ✓ verified |
 | F-28 | saving = p·C_fail − C_job; > 0 ? yes: propose | 05 | `src/predictive_maintenance/policy.py:109-110` | saving = p * FAILURE_COST - PLANNED_COST; propose where saving > 0 | - | direct | ✓ verified |
 | F-29 | ≤ 2 a day · ≤ 6 a week · 21-day cooldown | 05 | `src/predictive_maintenance/policy.py:144-145; config.py:20, :106-107` | per_day = ceil(6 / 5); COOLDOWN_DAYS = 21 | ceil(6/5) = 2 | derived | ✓ verified |
-| F-30 | 7 policies × 5 forks | 05, 10 | `outputs/closed_loop_runs.csv` | distinct policies at crew 6; distinct seeds | - | direct | ✓ verified |
+| F-30 | 7 policies × 5 runs | 05, 10 | `outputs/closed_loop_runs.csv` | distinct policies at crew 6; distinct seeds (forks) | - | direct | ✓ verified |
 | F-31 | make run ≈ 2 min / ~2 min | 05, 10 | `outputs/results.json` | runtime_seconds = 127.3 | 127.3 / 60 = 2.1 min | derived | ✓ verified |
 | F-32 | Planner · accept → CMMS | 05 | `src/predictive_maintenance/workorders.py:1-5 (docstring); README 'Known limitations' (schema mapping not done)` | - | - | direct | ✓ verified |
 | F-33 | daily vibration · last 60 days (line chart) | 06 | `data/sensor_readings.csv.gz; demo assets/plant_run.json trace` | asset_id = COMP-141, 2024-11-01..2024-12-30 | values compared to 3 decimals | direct | ✓ verified |
@@ -65,33 +65,34 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | F-36 | CBM-2024-00001 · COMP-141 · U200-K-141 · 0.736 · P1 · 2025-01-03 · rotating-equipment | 06 | `outputs/work_orders.json` | [0] | - | direct | ✓ verified |
 | F-37 | hidden life ended 1.8 days later (bearing) | 06 | `demo assets/plant_run.json work_orders[0].truth (Plant.latent_remaining at the alert, fork seed 101); corroborated by data/lives_truth.csv (the same life, in the history run, ended by a bearing failure on day 731)` | latent_days_to_failure, latent_mode | - | direct | ✓ verified |
 | F-38 | 232 · 138 · 111 · 56 · 43 · 3 | 06 | `outputs/closed_loop_runs.csv (seed 101, crew 6); curves from demo assets/plant_run.json` | failures | - | direct | ✓ verified |
-| F-39 | fork 1 of 5 | 06 | `src/predictive_maintenance/config.py:108; demo assets/plant_run.json seed` | eval_seeds[0] = 101 | - | direct | ✓ verified |
+| F-39 | run 1 of 5 | 06 | `src/predictive_maintenance/config.py:108; demo assets/plant_run.json seed` | eval_seeds[0] = 101 | - | direct | ✓ verified |
 | F-40 | CBM-2024-00001 … CBM-2025-00006 | 07 | `outputs/work_orders.json [0:6], injected into compositions/value.html` | work_order_id, asset_id, failure_probability, evidence[0], expected_saving, due_by, crew | p to 2 dp; saving / 1000 to 1 dp; crew shortened (rotating-equipment → rotating) | direct | ✓ verified |
 | F-41 | + 6 more orders the following week | 07 | `outputs/results.json` | work_orders_first_two_weeks = 12 | 12 - 6 | derived | ✓ verified |
-| F-42 | All 6 pass validate() | 07 | `src/predictive_maintenance/cli.py (assert not bad); tools/export_work_orders.py asserts the same` | validate() | - | direct | ✓ verified |
+| F-42 | All 6 pass the format check (validate()) | 07 | `src/predictive_maintenance/cli.py (assert not bad); tools/export_work_orders.py asserts the same` | validate() | - | direct | ✓ verified |
 | F-43 | 5 of 6 were under 14 days from failing | 07 | `demo assets/plant_run.json work_orders[0:6].truth` | latent_days_to_failure: 1.8, 0.3, 5.0, 11.0, 3.3, 18.1 | count(0 < d <= 14) | derived | ✓ verified |
 | F-44 | CREW 6 / 6 | 07 | `outputs/work_orders.json` | orders created 2024-12-30..2025-01-03 | count | derived | ✓ verified |
 | F-45 | TUE 31 DEC · WED 1 JAN · THU 2 JAN | 07 | `outputs/work_orders.json` | created_on of orders 1-6 | - | direct | ✓ verified |
 | F-46 | 99.47% | 08 | `outputs/results.json closed_loop` | gbm-sensors, crew 6, uptime | x100 | direct | ✓ verified |
 | F-47 | vs calendar 99.00% | 08 | `outputs/results.json closed_loop` | fixed-interval, crew 6, uptime | x100 | direct | ✓ verified |
-| F-48 | +0.47 pp | 09 | `outputs/results.json` | paired_gbm_minus.fixed-interval.uptime_pp_mean | - | direct | ✓ verified |
-| F-49 | 44.2 | 08 | `outputs/results.json closed_loop` | gbm-sensors, crew 6, failures | - | direct | ✓ verified |
+| F-49 | 44.2 | 08, 09 | `outputs/results.json closed_loop` | gbm-sensors, crew 6, failures | - | direct | ✓ verified |
 | F-50 | calendar 111.2 | 08 | `outputs/results.json closed_loop` | fixed-interval, crew 6, failures | - | direct | ✓ verified |
-| F-51 | 2.02M | 08 | `outputs/results.json closed_loop` | gbm-sensors, crew 6, cost_total = 2,015,700 | / 1e6 | direct | ✓ verified |
+| F-51 | 2.02M | 08, 09 | `outputs/results.json closed_loop` | gbm-sensors, crew 6, cost_total = 2,015,700 | / 1e6 | direct | ✓ verified |
 | F-52 | 4.01M | 08 | `outputs/results.json closed_loop` | fixed-interval, crew 6, cost_total = 4,009,400 | / 1e6 | direct | ✓ verified |
-| F-53 | 68.7% | 08 | `outputs/results.json closed_loop` | gbm-sensors, crew 6, failures_caught_share | x100 | direct | ✓ verified |
-| F-54 | median lead 7.7 days | 08 | `outputs/results.json closed_loop` | gbm-sensors, crew 6, median_lead_days | - | direct | ✓ verified |
-| F-55 | the model beat every runnable policy in all 5 forks | 08 | `outputs/results.json` | paired_gbm_minus.*.seeds_gbm_better_uptime | all == 5 | direct | ✓ verified |
-| F-56 | +0.30 pp | 09 | `outputs/results.json closed_loop` | alarm-limits uptime - fixed-interval uptime (crew 6) | (0.992978 - 0.989989) x 100 = 0.299 | derived | ✓ verified |
-| F-57 | +0.19 pp | 09 | `outputs/results.json closed_loop` | cox-sensors uptime - fixed-interval uptime (crew 6) | (0.991939 - 0.989989) x 100 = 0.195 | derived | ✓ verified |
-| F-58 | +0.66 pp | 09 | `outputs/results.json closed_loop` | oracle uptime - fixed-interval uptime (crew 6) | (0.996549 - 0.989989) x 100 = 0.656 | derived | ✓ verified |
-| F-59 | 38 of the 44 breakdowns left are sudden | 09 | `outputs/closed_loop_runs.csv` | gbm-sensors, crew 6: mean sudden_failures 37.6, mean failures 44.2 | rounded to whole numbers | derived | ✓ verified |
-| F-60 | The model caught 1 of 189 | 09 | `outputs/results.json` | gbm_caught_by_mode.sudden | - | direct | ✓ verified |
+| F-53 | 68.7% | 08, 09 | `outputs/results.json closed_loop` | gbm-sensors, crew 6, failures_caught_share | x100 | direct | ✓ verified |
+| F-54 | median warning 7.7 days | 08 | `outputs/results.json closed_loop` | gbm-sensors, crew 6, median_lead_days | - | direct | ✓ verified |
+| F-55 | the model beat every other real policy in all 5 runs | 08 | `outputs/results.json` | paired_gbm_minus.*.seeds_gbm_better_uptime | all == 5 | direct | ✓ verified |
+| F-64 | 0.647 | 09 | `outputs/results.json` | offline.policies.alarm-limits.c_index | - | direct | ✓ verified |
+| F-65 | 29.3% | 09 | `outputs/results.json closed_loop` | cox-sensors, crew 6, failures_caught_share | x100 | direct | ✓ verified |
+| F-66 | 59.6% | 09 | `outputs/results.json closed_loop` | alarm-limits, crew 6, failures_caught_share | x100 | direct | ✓ verified |
+| F-67 | 128.6 | 09 | `outputs/results.json closed_loop` | cox-sensors, crew 6, failures | - | direct | ✓ verified |
+| F-68 | 3.40M | 09 | `outputs/results.json closed_loop` | cox-sensors, crew 6, cost_total | / 1e6 | direct | ✓ verified |
+| F-69 | higher uptime in all 5 runs | 09 | `outputs/results.json` | paired_gbm_minus.cox-sensors.seeds_gbm_better_uptime | == 5 | direct | ✓ verified |
+| F-70 | Test each one in a simulated year · same plant and same random start · the crew's work orders come from the winner · PICKED | 09 | `src/predictive_maintenance/cli.py (closed_loop, build(... 'gbm-sensors')); simulate.py (run_policy); tests/test_plant.py (test_fork_gives_every_policy_the_same_future); docs/adr/0001-judge-policies-in-closed-loop.md; README design decision 'Which risk model drives the crew'` | - | - | direct | ✓ verified |
 | F-61 | MIT | 10 | `LICENSE line 1` | - | - | direct | ✓ verified |
 | F-62 | LightGBM · lifelines · closed-loop sim · Python | 10 | `pyproject.toml dependencies; src/predictive_maintenance/simulate.py` | lightgbm, lifelines | - | direct | ✓ verified |
 | F-63 | $ make run | 10 | `Makefile` | run target | - | direct | ✓ verified |
 
-## 2. Automated check run (2026-10-14 14:37)
+## 2. Automated check run (2026-10-14 18:56)
 
 | ID | Expected on slide | Recomputed from repo | Result |
 |---|---|---|---|
@@ -121,10 +122,10 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | F-24 | 26 | 26 | ✓ pass |
 | F-25 | 14 | 14 | ✓ pass |
 | F-26 | 119 | 119 | ✓ pass |
-| F-27 | 187·121·218 | 187·121·218 | ✓ pass |
+| F-27 | 121–218 | 121–218 | ✓ pass |
 | F-28 | true | true | ✓ pass |
 | F-29 | true | true | ✓ pass |
-| F-30 | 7 policies × 5 forks | 7 policies × 5 forks | ✓ pass |
+| F-30 | 7 policies × 5 runs | 7 policies × 5 runs | ✓ pass |
 | F-31 | ~2 min | ~2 min | ✓ pass |
 | F-32 | true | true | ✓ pass |
 | F-33 | true | true | ✓ pass |
@@ -142,7 +143,6 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | F-45 | true | true | ✓ pass |
 | F-46 | 99.47% | 99.47% | ✓ pass |
 | F-47 | 99.00% | 99.00% | ✓ pass |
-| F-48 | +0.47 pp | +0.47 pp | ✓ pass |
 | F-49 | 44.2 | 44.2 | ✓ pass |
 | F-50 | 111.2 | 111.2 | ✓ pass |
 | F-51 | 2.02M | 2.02M | ✓ pass |
@@ -150,11 +150,13 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | F-53 | 68.7% | 68.7% | ✓ pass |
 | F-54 | 7.7 | 7.7 | ✓ pass |
 | F-55 | true | true | ✓ pass |
-| F-56 | +0.30 pp | +0.30 pp | ✓ pass |
-| F-57 | +0.19 pp | +0.19 pp | ✓ pass |
-| F-58 | +0.66 pp | +0.66 pp | ✓ pass |
-| F-59 | 38 of 44 | 38 of 44 | ✓ pass |
-| F-60 | 1 of 189 | 1 of 189 | ✓ pass |
+| F-64 | 0.647 | 0.647 | ✓ pass |
+| F-65 | 29.3% | 29.3% | ✓ pass |
+| F-66 | 59.6% | 59.6% | ✓ pass |
+| F-67 | 128.6 | 128.6 | ✓ pass |
+| F-68 | 3.40M | 3.40M | ✓ pass |
+| F-69 | 5 | 5 | ✓ pass |
+| F-70 | true | true | ✓ pass |
 | F-61 | true | true | ✓ pass |
 | F-62 | true | true | ✓ pass |
 | F-63 | true | true | ✓ pass |
@@ -164,14 +166,14 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | ID | Assumption | Source | Used by | Sensitivity: if this changes |
 |---|---|---|---|---|
 | A-01 | All data is synthetic: a seeded day-by-day plant model (200 assets, 3 years) generates the sensor history, the maintenance log and the latent lives. The same plant model also runs the closed-loop evaluation, so results describe a plant with these physics, not a given real plant (README 'Known limitations', the biggest gap). | `src/predictive_maintenance/plant.py; data.py:152-160 (generate, seed 7); config.py:14; README 'The data'` | all figures | figures all figures and slides 01, 02, 03, 04, 05, 06, 07, 08, 09, 10 change |
-| A-02 | Failure precursors: each failure mode drifts the sensors for a mode-specific number of days before the failure (bearing 21 d, fouling 35 d, overheating 4 d, ...); sudden failures give no warning. These lengths are assumptions. | `src/predictive_maintenance/config.py:93-101 (PRECURSOR_DAYS)` | F-17, F-34, F-35, F-37, F-53, F-54, F-59, F-60 | figures F-17, F-34, F-35, F-37, F-53, F-54, F-59, F-60 and slides 04, 06, 07, 08, 09 change |
-| A-03 | Costs: a planned job costs 1,500 plus one day of downtime; a failure costs its repair (9k pump, 22k compressor, 12k heat exchanger) plus 3-5 days of downtime at 3,000 a day. One downtime cost for every asset. | `src/predictive_maintenance/config.py:32-34, :61-62, :72-73, :83-84` | F-28, F-40, F-51, F-52 | figures F-28, F-40, F-51, F-52 and slides 05, 07, 08 change |
-| A-04 | Crew budget: 6 planned jobs a week, Monday to Friday, at most ceil(6/5) = 2 a day; an asset serviced in the last 21 days is not offered again. | `src/predictive_maintenance/config.py:106 (crew_jobs_per_week), :20 (COOLDOWN_DAYS); policy.py:144-145 (per_day)` | F-04, F-29, F-44, F-45, F-46, F-49, F-51, F-53 | figures F-04, F-29, F-44, F-45, F-46, F-49, F-51, F-53 and slides 02, 05, 07, 08 change |
+| A-02 | Failure precursors: each failure mode drifts the sensors for a mode-specific number of days before the failure (bearing 21 d, fouling 35 d, overheating 4 d, ...); sudden failures give no warning. These lengths are assumptions. | `src/predictive_maintenance/config.py:93-101 (PRECURSOR_DAYS)` | F-17, F-34, F-35, F-37, F-53, F-54 | figures F-17, F-34, F-35, F-37, F-53, F-54 and slides 04, 06, 07, 08, 09 change |
+| A-03 | Costs: a planned job costs 1,500 plus one day of downtime; a failure costs its repair (9k pump, 22k compressor, 12k heat exchanger) plus 3-5 days of downtime at 3,000 a day. One downtime cost for every asset. | `src/predictive_maintenance/config.py:32-34, :61-62, :72-73, :83-84` | F-28, F-40, F-51, F-52 | figures F-28, F-40, F-51, F-52 and slides 05, 07, 08, 09 change |
+| A-04 | Crew budget: 6 planned jobs a week, Monday to Friday, at most ceil(6/5) = 2 a day; an asset serviced in the last 21 days is not offered again. | `src/predictive_maintenance/config.py:106 (crew_jobs_per_week), :20 (COOLDOWN_DAYS); policy.py:144-145 (per_day)` | F-04, F-29, F-44, F-45, F-46, F-49, F-51, F-53 | figures F-04, F-29, F-44, F-45, F-46, F-49, F-51, F-53 and slides 02, 05, 07, 08, 09 change |
 | A-05 | Prediction horizon 14 days, feature window 60 days, baseline = window median excluding the last 14 days. | `src/predictive_maintenance/config.py:18-19; features.py:18 (RECENT = 14)` | F-23, F-25, F-34, F-35 | figures F-23, F-25, F-34, F-35 and slides 05, 06, 07 change |
-| A-06 | Every job is a perfect repair (the asset is as good as new); imperfect repair and infant mortality are not modelled. | `README 'Known limitations'; plant.py (_new_life on service)` | F-46, F-49, F-51, F-53 | figures F-46, F-49, F-51, F-53 and slides 08 change |
-| A-07 | Closed-loop evaluation: the plant is replayed to the end of the 2-year training history (2024-12-31), forked with seeds 101-105, and each policy runs 365 days from the same fork with the same random stream. Slides 08-09 show the mean of the 5 forks; slides 04 and 06 show fork 1 (seed 101). | `src/predictive_maintenance/cli.py:146-168 (closed_loop); plant.py:281-293 (fork); config.py:108 (eval_seeds); docs/adr/0001-judge-policies-in-closed-loop.md` | F-11, F-12, F-13, F-30, F-38, F-39, F-46, F-47, F-48, F-49, F-50, F-51, F-52, F-53, F-54, F-55, F-56, F-57, F-58, F-59 | figures F-11, F-12, F-13, F-30, F-38, F-39, F-46, F-47, F-48, F-49, F-50, F-51, F-52, F-53, F-54, F-55, F-56, F-57, F-58, F-59 and slides 04, 05, 06, 08, 09, 10 change |
-| A-08 | Truth for scoring: an alert is a catch when the asset's latent life would have ended within 14 days; the latent failure day comes from the plant model (lives_truth.csv / Plant.latent_remaining) and is never a feature. | `src/predictive_maintenance/simulate.py:31-33 (true_alerts); features.py (latent_labels); data.py:1-9` | F-16, F-17, F-37, F-43, F-53, F-60 | figures F-16, F-17, F-37, F-43, F-53, F-60 and slides 04, 06, 07, 08, 09 change |
-| A-09 | Video rounding: uptime to 2 decimals, percentages to whole numbers or 1 decimal as shown, costs in millions to 2 decimals, savings in thousands to 1 decimal, failure probability to 2 decimals on the sheet (3 on the work-order card), failure means to 1 decimal or whole numbers as shown. | `this audit (display convention)` | F-07, F-16, F-17, F-31, F-35, F-40, F-46, F-47, F-48, F-49, F-50, F-51, F-52, F-53, F-54, F-56, F-57, F-58, F-59 | figures F-07, F-16, F-17, F-31, F-35, F-40, F-46, F-47, F-48, F-49, F-50, F-51, F-52, F-53, F-54, F-56, F-57, F-58, F-59 and slides 02, 04, 05, 06, 07, 08, 09, 10 change |
+| A-06 | Every job is a perfect repair (the asset is as good as new); imperfect repair and infant mortality are not modelled. | `README 'Known limitations'; plant.py (_new_life on service)` | F-46, F-49, F-51, F-53 | figures F-46, F-49, F-51, F-53 and slides 08, 09 change |
+| A-07 | Closed-loop evaluation: the plant is replayed to the end of the 2-year training history (2024-12-31), forked with seeds 101-105, and each policy runs 365 days from the same fork with the same random stream. Slides 08-09 show the mean of the 5 forks (called 'runs' on screen); slides 04 and 06 show fork 1 (seed 101). | `src/predictive_maintenance/cli.py:146-168 (closed_loop); plant.py:281-293 (fork); config.py:108 (eval_seeds); docs/adr/0001-judge-policies-in-closed-loop.md` | F-11, F-12, F-13, F-30, F-38, F-39, F-46, F-47, F-49, F-50, F-51, F-52, F-53, F-54, F-55, F-65, F-66, F-67, F-68, F-69, F-70 | figures F-11, F-12, F-13, F-30, F-38, F-39, F-46, F-47, F-49, F-50, F-51, F-52, F-53, F-54, F-55, F-65, F-66, F-67, F-68, F-69, F-70 and slides 04, 05, 06, 08, 09, 10 change |
+| A-08 | Truth for scoring: an alert is a catch when the asset's latent life would have ended within 14 days; the latent failure day comes from the plant model (lives_truth.csv / Plant.latent_remaining) and is never a feature. | `src/predictive_maintenance/simulate.py:31-33 (true_alerts); features.py (latent_labels); data.py:1-9` | F-16, F-17, F-37, F-43, F-53, F-65, F-66 | figures F-16, F-17, F-37, F-43, F-53, F-65, F-66 and slides 04, 06, 07, 08, 09 change |
+| A-09 | Video rounding: uptime to 2 decimals, percentages to whole numbers or 1 decimal as shown, costs in millions to 2 decimals, savings in thousands to 1 decimal, failure probability to 2 decimals on the sheet (3 on the work-order card), failure means to 1 decimal or whole numbers as shown. | `this audit (display convention)` | F-07, F-14, F-15, F-16, F-17, F-31, F-35, F-40, F-46, F-47, F-49, F-50, F-51, F-52, F-53, F-54, F-64, F-65, F-66, F-67, F-68 | figures F-07, F-14, F-15, F-16, F-17, F-31, F-35, F-40, F-46, F-47, F-49, F-50, F-51, F-52, F-53, F-54, F-64, F-65, F-66, F-67, F-68 and slides 02, 04, 05, 06, 07, 08, 09, 10 change |
 | A-10 | Slide 01 (industries, everyday problems) is general maintenance knowledge used as context; it is not a result of this repo and carries no numbers. | `author's framing; README 'The problem' supports problems 1-3` | F-01, F-02 | figures F-01, F-02 and slides 01 change |
 
 ## 4. Slide by slide
@@ -185,6 +187,7 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 
 > 01 · THE INDUSTRY  
 > Every week, the crew cannot service every machine.  
+> Who runs plants full of pumps and compressors, and the four problems their maintenance teams hit.  
 > WHO LIVES WITH THIS · Refining & chemicals · Water & utilities · Power & process plants  
 > 01 Calendar jobs open up healthy machines — Months of life thrown away  
 > 02 Due jobs get pushed back when output is tight — The overdue list keeps growing  
@@ -215,8 +218,10 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 **On-screen text (verbatim)**
 
 > 02 · THIS PROJECT  
+> The project in one line: more machines than the crew can reach, so it has to choose.  
 > 200 machines, one crew. About 6 planned jobs a week. Which six?  
 > 110 pumps · 40 compressors · 50 heat exchangers · 219,000 daily sensor readings · 130–157 breakdowns a year on the calendar  
+> Calendar = servicing each machine on a fixed schedule, the plant's current way.  
 
 **Figures on this slide**
 
@@ -238,7 +243,7 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 **To change this slide:** Headline spans #hook-l1..l3 and chips #hook-f1..f3 in compositions/s02-hook.html; plant size is config.py ASSET_TYPES. (project folder `docs/demo/source`).
 
 ### Slide 03: How it works (white chapter, slide A)  
-*11.3-19.3 s · composition `compositions/explainer.html (CONFIG.blocks, CONFIG.groups, CONFIG.loop)`*
+*11.3-18.7 s · composition `compositions/explainer.html (CONFIG.blocks, CONFIG.groups, CONFIG.loop)`*
 
 ![Slide 03](slides/slide-03.jpg)
 
@@ -246,6 +251,7 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 
 > 03 · HOW IT WORKS  
 > From sensors to work orders  
+> Read left to right: watch the sensors, spot machines likely to fail soon, send the crew where it saves most.  
 > [WHAT THE PLANT LOGS: SENSORS daily readings per machine → SERVICE LOG past jobs and breakdowns] → [EVERY WORKING DAY: RISK MODEL fails within two weeks? → WORTH A JOB? risk × cost beats job cost → CREW PLAN biggest savings first] → WORK ORDERS ✓ fewer breakdowns ✓ lower cost ✓ higher uptime  
 > fill the week's crew (loop over the crew plan)  
 
@@ -266,7 +272,7 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 **To change this slide:** Edit CONFIG in compositions/explainer.html; badge truth is F-09. (project folder `docs/demo/source`).
 
 ### Slide 04: The key idea (white chapter, slide B)  
-*19.3-26.3 s · composition `compositions/explainer.html (#ex-b ..., LOOP block injected by tools/inject_sheet.py)`*
+*18.7-26.3 s · composition `compositions/explainer.html (#ex-b ..., LOOP block injected by tools/inject_sheet.py)`*
 
 ![Slide 04](slides/slide-04.jpg)
 
@@ -274,12 +280,13 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 
 > 04 · THE KEY IDEA  
 > Judge policies in a closed loop  
-> Replay the plant to today, then fork it — every policy starts from the same plant and future  
+> Each way of picking jobs (a policy) runs a simulated year on the same plant. Fewer breakdown ticks is better.  
+> Replay the plant to today, then copy it — every policy starts from the same plant and future  
 > Each policy runs a full year — its jobs change which machines fail next  
 > Score each job against the hidden failure day — a job counts even when it prevented the failure  
-> ONE FORK · ONE YEAR · EACH TICK = A BREAKDOWN: HISTORY → CALENDAR / ALARM LIMITS / MODEL + BREAK-EVEN  
+> ONE COPY · ONE YEAR · EACH TICK = A BREAKDOWN: HISTORY → CALENDAR / ALARM LIMITS / MODEL + BREAK-EVEN  
 > Same future for every policy, so a gap in breakdowns is caused by the policy.  
-> Ranked by C-index alone, Cox would have won (0.779 vs 0.753). In the loop it caught 29% of failures, not 69%.  
+> On C-index, a ranking score, Cox looked best. In the loop it caught 29% of failures, not 69%.  
 
 **Figures on this slide**
 
@@ -288,8 +295,6 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | F-11 | Replay the plant to today, then fork it | `src/predictive_maintenance/plant.py:281-293; tests/test_plant.py:48` · fork(); test_fork_gives_every_policy_the_same_future | - | ✓ |
 | F-12 | Each policy runs a full year | `src/predictive_maintenance/cli.py (run_policy(..., DAYS_PER_YEAR, ...)); config.py:13` · DAYS_PER_YEAR = 365 | - | ✓ |
 | F-13 | tick barcodes (no numbers) | `demo assets/plant_run.json (export_work_orders.py); outputs/closed_loop_runs.csv` · LOOP block in compositions/explainer.html | number of ticks per branch = failures for seed 101, crew 6 | ✓ |
-| F-14 | 0.779 | `outputs/results.json` · offline.policies.cox-sensors.c_index | - | ✓ |
-| F-15 | 0.753 | `outputs/results.json` · offline.policies.gbm-sensors.c_index | - | ✓ |
 | F-16 | 29% | `outputs/results.json closed_loop` · cox-sensors, crew 6, failures_caught_share (0.2929) | x100, rounded | ✓ |
 | F-17 | 69% | `outputs/results.json closed_loop` · gbm-sensors, crew 6, failures_caught_share (0.6868) | x100, rounded | ✓ |
 
@@ -299,7 +304,7 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 
 - The fork drawing is schematic; tick positions are the real failure days of fork 1 (seed 101), scaled to the branch length.
 
-**To change this slide:** Markup under #ex-b in compositions/explainer.html; ticks come from tools/inject_sheet.py (LOOP block); footnote figures are F-14..F-17. (project folder `docs/demo/source`).
+**To change this slide:** Markup under #ex-b in compositions/explainer.html; ticks come from tools/inject_sheet.py (LOOP block); footnote figures are F-16, F-17. (project folder `docs/demo/source`).
 
 ### Slide 05: Architecture  
 *26.0-40.8 s · composition `compositions/s03-architecture.html`*
@@ -310,13 +315,14 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 
 > 05 · ARCHITECTURE  
 > One model scores, one rule decides, a closed loop judges.  
-> 1 SOURCES: plant.py Plant model (seed 7 · 3 years) → make data → sensor_readings.csv.gz (219,000) · assets.csv (200 machines) · maintenance_log.csv (1,005 jobs) · lives_truth.csv (eval only · 1,205)  
-> 2 FEATURES: features.py Window features (60-day window · rel · slope · sd · 26 per asset-day) · features.py Labels (fail within 14 d · observable only) · labels · lives → fit  
-> 3 MODELS: models.py LightGBM (p(fail ≤ 14 d) · 119 trees) · models.py Landmark Cox (same features) · config.py Set by hand (costs · budget) · models.py Weibull by type (T* 187·121·218 d · + AFT median RUL)  
-> 4 DECIDE: policy.py · CostAwareModel Break-even rule (saving = p·C_fail − C_job; > 0 ? yes: propose; no: leave it running) → rank by saving → policy.py · schedule() Crew scheduler (≤ 2 a day · ≤ 6 a week · 21-day cooldown · crew this week 0..6 / 6) · other policies (alarm limits · calendar · run-to-failure · oracle) → same scheduler  
-> 5 SERVE + JUDGE: workorders.py Work orders (JSON · validate() · p · RUL · evidence) → Planner (outside the repo · accept → CMMS) · simulate.py Closed loop (plant.step(jobs) · 7 policies × 5 forks · day 0..365 / 365) → evaluate.py Scoring (precision@budget · lead · C-index) · make run ≈ 2 min  
-> latent failure day · evaluation only (lives_truth.csv → Scoring)  
-> critical path: readings → features → p → break-even → crew → work order  
+> Each box is a file in the repo. Read left to right: sensor data in, this week's work orders out.  
+> 1 SOURCES: plant.py Plant model (seed 7 · 3 years) → make data → sensor_readings .csv.gz · 219,000 · assets.csv 200 machines · maintenance_log .csv · 1,005 jobs · lives_truth.csv eval only · 1,205  
+> 2 FEATURES: features.py Window features (60-day window · trend · spread · 26 per machine-day) · features.py Labels (fail within 14 d · no hidden truth) · labels · lives → fit  
+> 3 MODELS: models.py LightGBM (odds of failing in 14 d · 119 trees) · models.py Landmark Cox (survival model, rival) · config.py Set by hand (costs · budget) · models.py Weibull by type (calendar: 121–218 d · + remaining life)  
+> 4 DECIDE: policy.CostAwareModel Break-even rule (risk × failure cost − job cost = saving; > 0 ? yes: propose; no: leave it running) → rank by saving → policy.py · schedule() Crew scheduler (≤ 2 a day · ≤ 6 a week · 21 days between jobs · crew this week 0..6 / 6) · other policies (alarm limits · calendar · run-to-failure · oracle) → same scheduler  
+> 5 SERVE + JUDGE: workorders.py Work orders (JSON · validate() · risk · evidence · due) → Planner (outside the repo · approves the job) · simulate.py Closed loop (jobs change the plant · 7 policies × 5 runs · day 0..365 / 365) → evaluate.py Scoring (jobs truly needed · warning days · ranking) · make run ≈ 2 min  
+> hidden failure day · scoring only (lives_truth.csv → Scoring)  
+> main path: readings → features → risk → break-even → crew → work order  
 > Legend: per-day call · batch / training · feedback · data store · human · alternate path · decision  
 
 **Figures on this slide**
@@ -334,10 +340,10 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | F-24 | 26 per asset-day | `src/predictive_maintenance/features.py:20-28 (FEATURE_NAMES)` · 5 sensors x 4 + load_m7 + load_rel3 + days_since_maint + 3 type flags | 5 x 4 + 3 + 3 = 26 | ✓ |
 | F-25 | p(fail ≤ 14 d) / fail within 14 d / p(14 d) | `outputs/results.json` · horizon_days | - | ✓ |
 | F-26 | 119 trees | `outputs/results.json` · training.best_iteration | - | ✓ |
-| F-27 | T* 187·121·218 d | `outputs/results.json` · fixed_intervals_days | - | ✓ |
+| F-27 | calendar: 121–218 d | `outputs/results.json` · fixed_intervals_days (pump 187, compressor 121, heat exchanger 218) | min–max of the three intervals | ✓ |
 | F-28 | saving = p·C_fail − C_job; > 0 ? yes: propose | `src/predictive_maintenance/policy.py:109-110` · saving = p * FAILURE_COST - PLANNED_COST; propose where saving > 0 | - | ✓ |
 | F-29 | ≤ 2 a day · ≤ 6 a week · 21-day cooldown | `src/predictive_maintenance/policy.py:144-145; config.py:20, :106-107` · per_day = ceil(6 / 5); COOLDOWN_DAYS = 21 | ceil(6/5) = 2 | ✓ |
-| F-30 | 7 policies × 5 forks | `outputs/closed_loop_runs.csv` · distinct policies at crew 6; distinct seeds | - | ✓ |
+| F-30 | 7 policies × 5 runs | `outputs/closed_loop_runs.csv` · distinct policies at crew 6; distinct seeds (forks) | - | ✓ |
 | F-31 | make run ≈ 2 min / ~2 min | `outputs/results.json` · runtime_seconds = 127.3 | 127.3 / 60 = 2.1 min | ✓ |
 | F-32 | Planner · accept → CMMS | `src/predictive_maintenance/workorders.py:1-5 (docstring); README 'Known limitations' (schema mapping not done)` · - | - | ✓ |
 
@@ -360,10 +366,10 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 **On-screen text (verbatim)**
 
 > 06 · THE SYSTEM RUNNING  
-> One compressor, the morning its alert fired. — daily vibration · last 60 days · from sensor_readings.csv.gz · its own baseline: median of days −60…−15 · +52% vs its baseline · alert · 2024-12-31  
-> WORK ORDER · workorders.py CBM-2024-00001 · asset COMP-141 · U200-K-141 · p(fail in 14 d) 0.736 · evidence vibration +52% · priority · due P1 · 2025-01-03 · crew rotating-equipment  
+> One compressor, the morning its alert fired. — Purple line = its daily vibration. A rise above its own normal level is the warning sign. — daily vibration · last 60 days · from sensor_readings.csv.gz · its own baseline: median of days −60…−15 · +52% vs its baseline · alert · 2024-12-31  
+> WORK ORDER · workorders.py CBM-2024-00001 · asset COMP-141 · U200-K-141 · risk of failing in 14 d 0.736 · evidence vibration +52% · priority · due P1 · 2025-01-03 · crew rotating-equipment  
 > In the replay its hidden life ended 1.8 days later (bearing). The job got there first.  
-> Same plant, same year, six policies. — closed loop · fork 1 of 5 · crew 6 jobs / week · cumulative breakdowns · day 0..365 / 365  
+> Same plant, same year, six policies. — Breakdowns adding up over one simulated year (run 1 of 5, crew of 6 jobs a week). Lower is better. · day 0..365 / 365  
 > run-to-failure 232 · Cox 138 · calendar 111 · alarm limits 56 · model 43 · oracle 3  
 
 **Figures on this slide**
@@ -377,7 +383,7 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | F-36 | CBM-2024-00001 · COMP-141 · U200-K-141 · 0.736 · P1 · 2025-01-03 · rotating-equipment | `outputs/work_orders.json` · [0] | - | ✓ |
 | F-37 | hidden life ended 1.8 days later (bearing) | `demo assets/plant_run.json work_orders[0].truth (Plant.latent_remaining at the alert, fork seed 101); corroborated by data/lives_truth.csv (the same life, in the history run, ended by a bearing failure on day 731)` · latent_days_to_failure, latent_mode | - | ✓ |
 | F-38 | 232 · 138 · 111 · 56 · 43 · 3 | `outputs/closed_loop_runs.csv (seed 101, crew 6); curves from demo assets/plant_run.json` · failures | - | ✓ |
-| F-39 | fork 1 of 5 | `src/predictive_maintenance/config.py:108; demo assets/plant_run.json seed` · eval_seeds[0] = 101 | - | ✓ |
+| F-39 | run 1 of 5 | `src/predictive_maintenance/config.py:108; demo assets/plant_run.json seed` · eval_seeds[0] = 101 | - | ✓ |
 
 **Assumptions:** A-02, A-05, A-07, A-08
 
@@ -397,14 +403,15 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 
 > 07 · END-USER VALUE  
 > What the planner gets  
-> WORK ORDERS · THIS WEEK · CREW 6 / 6 — columns ORDER, ASSET, P(14D), EVIDENCE, SAVING, DUE, CREW  
+> Each row is one job this week: the machine, its RISK of failing within 14 days, the sensor that moved, and the expected saving.  
+> WORK ORDERS · THIS WEEK · CREW 6 / 6 — columns ORDER, ASSET, RISK, EVIDENCE, SAVING, DUE, CREW  
 > CBM-2024-00001 COMP-141 0.74 vibration +52% 22.7k Jan 03 rotating  
 > CBM-2024-00002 PUMP-106 0.96 vibration +86% 12.8k Jan 03 mechanical  
 > CBM-2025-00003 PUMP-054 0.93 vibration +59% 12.3k Jan 04 mechanical  
 > CBM-2025-00004 PUMP-026 0.75 vibration +51% 9.0k Jan 04 mechanical  
 > CBM-2025-00005 PUMP-014 0.89 vibration +11% 11.6k Jan 05 mechanical  
 > CBM-2025-00006 PUMP-032 0.46 pressure -6% 3.8k Jan 05 mechanical  
-> + 6 more orders the following week · ✓ All 6 pass validate() · in the replay, 5 of 6 were under 14 days from failing  
+> + 6 more orders the following week · ✓ All 6 pass the format check · in the replay, 5 of 6 were under 14 days from failing  
 > WORKSHOP · PLANNER + 2 CREWS · TUE 31 DEC / WED 1 JAN / THU 2 JAN · PLANT FLOOR U100 U200 U300 U400  
 > Six ready jobs, each with the sensor that moved. The crew goes where a breakdown is coming.  
 
@@ -415,7 +422,7 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | F-35 | +52% vs its baseline / vibration +52% | `outputs/work_orders.json` · [0].evidence[0] = vibration, 0.521 | x100, rounded | ✓ |
 | F-40 | CBM-2024-00001 … CBM-2025-00006 | `outputs/work_orders.json [0:6], injected into compositions/value.html` · work_order_id, asset_id, failure_probability, evidence[0], expected_saving, due_by, crew | p to 2 dp; saving / 1000 to 1 dp; crew shortened (rotating-equipment → rotating) | ✓ |
 | F-41 | + 6 more orders the following week | `outputs/results.json` · work_orders_first_two_weeks = 12 | 12 - 6 | ✓ |
-| F-42 | All 6 pass validate() | `src/predictive_maintenance/cli.py (assert not bad); tools/export_work_orders.py asserts the same` · validate() | - | ✓ |
+| F-42 | All 6 pass the format check (validate()) | `src/predictive_maintenance/cli.py (assert not bad); tools/export_work_orders.py asserts the same` · validate() | - | ✓ |
 | F-43 | 5 of 6 were under 14 days from failing | `demo assets/plant_run.json work_orders[0:6].truth` · latent_days_to_failure: 1.8, 0.3, 5.0, 11.0, 3.3, 18.1 | count(0 < d <= 14) | ✓ |
 | F-44 | CREW 6 / 6 | `outputs/work_orders.json` · orders created 2024-12-30..2025-01-03 | count | ✓ |
 | F-45 | TUE 31 DEC · WED 1 JAN · THU 2 JAN | `outputs/work_orders.json` · created_on of orders 1-6 | - | ✓ |
@@ -438,13 +445,14 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 
 **On-screen text (verbatim)**
 
-> 08 · RESULTS · CLOSED-LOOP YEAR, MEAN OF 5 FORKS  
+> 08 · RESULTS · SIMULATED YEAR, AVERAGE OF 5 RUNS  
 > Fewer breakdowns, lower cost, same crew.  
+> The model's job list against calendar maintenance. Higher uptime, fewer breakdowns and lower cost are better.  
 > UPTIME 99.47% asset uptime, model policy · vs calendar 99.00%  
 > BREAKDOWNS 44.2 unplanned failures a year · calendar 111.2 → 44.2  
 > COST 2.02M maintenance + downtime a year · calendar 4.01M → 2.02M  
-> MODEL 68.7% failures caught in time · median lead 7.7 days  
-> 200 machines · crew 6 jobs / week · the model beat every runnable policy in all 5 forks  
+> MODEL 68.7% failures caught in time · median warning 7.7 days  
+> 200 machines · crew of 6 jobs a week · the model beat every other real policy in all 5 runs  
 
 **Figures on this slide**
 
@@ -459,8 +467,8 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | F-51 | 2.02M | `outputs/results.json closed_loop` · gbm-sensors, crew 6, cost_total = 2,015,700 | / 1e6 | ✓ |
 | F-52 | 4.01M | `outputs/results.json closed_loop` · fixed-interval, crew 6, cost_total = 4,009,400 | / 1e6 | ✓ |
 | F-53 | 68.7% | `outputs/results.json closed_loop` · gbm-sensors, crew 6, failures_caught_share | x100 | ✓ |
-| F-54 | median lead 7.7 days | `outputs/results.json closed_loop` · gbm-sensors, crew 6, median_lead_days | - | ✓ |
-| F-55 | the model beat every runnable policy in all 5 forks | `outputs/results.json` · paired_gbm_minus.*.seeds_gbm_better_uptime | all == 5 | ✓ |
+| F-54 | median warning 7.7 days | `outputs/results.json closed_loop` · gbm-sensors, crew 6, median_lead_days | - | ✓ |
+| F-55 | the model beat every other real policy in all 5 runs | `outputs/results.json` · paired_gbm_minus.*.seeds_gbm_better_uptime | all == 5 | ✓ |
 
 **Assumptions:** A-03, A-04, A-06, A-07, A-09
 
@@ -470,41 +478,48 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 
 **To change this slide:** The stats array and card text in compositions/s05-results.html. (project folder `docs/demo/source`).
 
-### Slide 09: What didn't win  
-*75.8-82.0 s · composition `compositions/s06-twist.html`*
+### Slide 09: Lesson and fix  
+*75.8-84.8 s · composition `compositions/s06-twist.html`*
 
 ![Slide 09](slides/slide-09.jpg)
 
 **On-screen text (verbatim)**
 
-> 09 · WHAT DIDN'T WIN  
-> Hand-set alarm limits get most of the way.  
-> Uptime gained over calendar maintenance, closed-loop year, mean of 5 forks  
-> Alarm limits (per-sensor, set by hand) +0.30 pp · LightGBM + break-even (the model policy) +0.47 pp · Cox on sensors (best C-index, 0.779) +0.19 pp · Oracle (knows the hidden lives) +0.66 pp  
-> Why the gap stays: 38 of the 44 breakdowns left are sudden, with no sensor warning. The model caught 1 of 189.  
+> 09 · LESSON AND FIX  
+> The ranking score picks the wrong model. So I test a full year.  
+> C-index = how well a model ranks machines by risk; caught = breakdowns stopped in time. Higher is better.  
+> THE LESSON · On the ranking score, Cox looks best · C-index, held-out third year (1.0 = perfect order) · Cox (survival model) 0.779 TRAP · LightGBM (gradient boosting) 0.753 · Alarm limits (set by hand) 0.647 · Choosing on this score would have sent Cox's job list to the crew.  
+> THE FIX, IN THE REPO · Test each one in a simulated year · Failures caught in time, crew of 6 jobs a week, 5 runs · LightGBM 68.7% PICKED · Alarm limits 59.6% · Cox 29.3% · Same plant and same random start for every model; the crew's work orders come from the winner.  
+> PAYOFF · LightGBM vs Cox: 44.2 vs 128.6 breakdowns a year, cost 2.02M vs 3.40M · higher uptime in all 5 runs  
 
 **Figures on this slide**
 
 | ID | Shown | Source · key | Calculation | Check |
 |---|---|---|---|---|
 | F-14 | 0.779 | `outputs/results.json` · offline.policies.cox-sensors.c_index | - | ✓ |
-| F-48 | +0.47 pp | `outputs/results.json` · paired_gbm_minus.fixed-interval.uptime_pp_mean | - | ✓ |
-| F-56 | +0.30 pp | `outputs/results.json closed_loop` · alarm-limits uptime - fixed-interval uptime (crew 6) | (0.992978 - 0.989989) x 100 = 0.299 | ✓ |
-| F-57 | +0.19 pp | `outputs/results.json closed_loop` · cox-sensors uptime - fixed-interval uptime (crew 6) | (0.991939 - 0.989989) x 100 = 0.195 | ✓ |
-| F-58 | +0.66 pp | `outputs/results.json closed_loop` · oracle uptime - fixed-interval uptime (crew 6) | (0.996549 - 0.989989) x 100 = 0.656 | ✓ |
-| F-59 | 38 of the 44 breakdowns left are sudden | `outputs/closed_loop_runs.csv` · gbm-sensors, crew 6: mean sudden_failures 37.6, mean failures 44.2 | rounded to whole numbers | ✓ |
-| F-60 | The model caught 1 of 189 | `outputs/results.json` · gbm_caught_by_mode.sudden | - | ✓ |
+| F-15 | 0.753 | `outputs/results.json` · offline.policies.gbm-sensors.c_index | - | ✓ |
+| F-49 | 44.2 | `outputs/results.json closed_loop` · gbm-sensors, crew 6, failures | - | ✓ |
+| F-51 | 2.02M | `outputs/results.json closed_loop` · gbm-sensors, crew 6, cost_total = 2,015,700 | / 1e6 | ✓ |
+| F-53 | 68.7% | `outputs/results.json closed_loop` · gbm-sensors, crew 6, failures_caught_share | x100 | ✓ |
+| F-64 | 0.647 | `outputs/results.json` · offline.policies.alarm-limits.c_index | - | ✓ |
+| F-65 | 29.3% | `outputs/results.json closed_loop` · cox-sensors, crew 6, failures_caught_share | x100 | ✓ |
+| F-66 | 59.6% | `outputs/results.json closed_loop` · alarm-limits, crew 6, failures_caught_share | x100 | ✓ |
+| F-67 | 128.6 | `outputs/results.json closed_loop` · cox-sensors, crew 6, failures | - | ✓ |
+| F-68 | 3.40M | `outputs/results.json closed_loop` · cox-sensors, crew 6, cost_total | / 1e6 | ✓ |
+| F-69 | higher uptime in all 5 runs | `outputs/results.json` · paired_gbm_minus.cox-sensors.seeds_gbm_better_uptime | == 5 | ✓ |
+| F-70 | Test each one in a simulated year · same plant and same random start · the crew's work orders come from the winner · PICKED | `src/predictive_maintenance/cli.py (closed_loop, build(... 'gbm-sensors')); simulate.py (run_policy); tests/test_plant.py (test_fork_gives_every_policy_the_same_future); docs/adr/0001-judge-policies-in-closed-loop.md; README design decision 'Which risk model drives the crew'` · - | - | ✓ |
 
-**Assumptions:** A-02, A-07, A-09
+**Assumptions:** A-07, A-08, A-09
 
 **Illustrative, not data:**
 
-- Bar lengths: 900 px track = 0.66 pp (the oracle).
+- Bars share one scale in both panels: 260 px track = 1.0 (C-index) or 100% (failures caught). Grey bars are the options compared; mint marks the picked policy; coral only labels the trap.
+- 'PICKED' is the author's choice recorded in the README design decisions and enforced in cli.py, where the work orders are built from gbm-sensors; the code does not pick the model automatically.
 
-**To change this slide:** Rows #twist-r1..r4 (bar widths are inline styles) in compositions/s06-twist.html. (project folder `docs/demo/source`).
+**To change this slide:** Rows #twist-l1..l3 and #twist-r1..r3 (bar widths are inline styles), notes and payoff in compositions/s06-twist.html. (project folder `docs/demo/source`).
 
 ### Slide 10: End card  
-*81.6-86.0 s · composition `compositions/s07-end.html`*
+*84.4-88.8 s · composition `compositions/s07-end.html`*
 
 ![Slide 10](slides/slide-10.jpg)
 
@@ -514,13 +529,14 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 > predictive-maintenance  
 > github.com/kavya2693/predictive-maintenance  
 > LightGBM · lifelines · closed-loop sim · Python  
-> $ make run   # 200 machines, 7 policies × 5 forks, ~2 min  
+> $ make run   # 200 machines, 7 policies × 5 runs, ~2 min  
+> One command rebuilds every table the numbers in this video come from.  
 
 **Figures on this slide**
 
 | ID | Shown | Source · key | Calculation | Check |
 |---|---|---|---|---|
-| F-30 | 7 policies × 5 forks | `outputs/closed_loop_runs.csv` · distinct policies at crew 6; distinct seeds | - | ✓ |
+| F-30 | 7 policies × 5 runs | `outputs/closed_loop_runs.csv` · distinct policies at crew 6; distinct seeds (forks) | - | ✓ |
 | F-31 | make run ≈ 2 min / ~2 min | `outputs/results.json` · runtime_seconds = 127.3 | 127.3 / 60 = 2.1 min | ✓ |
 | F-61 | MIT | `LICENSE line 1` · - | - | ✓ |
 | F-62 | LightGBM · lifelines · closed-loop sim · Python | `pyproject.toml dependencies; src/predictive_maintenance/simulate.py` · lightgbm, lifelines | - | ✓ |
@@ -535,14 +551,14 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 | Input / assumption | Affected figures | Affected slides | Files to edit | Commands to re-run |
 |---|---|---|---|---|
 | A-01: All data is synthetic: a seeded day-by-day plant model (200 assets, 3 years) generates the sensor history, the maintenance log and the latent lives | all figures | 01, 02, 03, 04, 05, 06, 07, 08, 09, 10 | `src/predictive_maintenance/config.py; src/predictive_maintenance/plant.py` | `make data; make run; export_work_orders.py + inject_sheet.py` |
-| A-02: Failure precursors: each failure mode drifts the sensors for a mode-specific number of days before the failure (bearing 21 d, fouling 35 d, overheating 4 d,  | F-17, F-34, F-35, F-37, F-53, F-54, F-59, F-60 | 04, 06, 07, 08, 09 | `src/predictive_maintenance/config.py:93-101` | `make data; make run; export_work_orders.py + inject_sheet.py` |
-| A-03: Costs: a planned job costs 1,500 plus one day of downtime; a failure costs its repair (9k pump, 22k compressor, 12k heat exchanger) plus 3-5 days of downtime at 3,000 a day | F-28, F-40, F-51, F-52 | 05, 07, 08 | `src/predictive_maintenance/config.py:32-34 and the AssetType blocks` | `make run; export_work_orders.py + inject_sheet.py` |
-| A-04: Crew budget: 6 planned jobs a week, Monday to Friday, at most ceil(6/5) = 2 a day; an asset serviced in the last 21 days is not offered again | F-04, F-29, F-44, F-45, F-46, F-49, F-51, F-53 | 02, 05, 07, 08 | `src/predictive_maintenance/config.py:106, :20` | `make run; export_work_orders.py + inject_sheet.py` |
+| A-02: Failure precursors: each failure mode drifts the sensors for a mode-specific number of days before the failure (bearing 21 d, fouling 35 d, overheating 4 d,  | F-17, F-34, F-35, F-37, F-53, F-54 | 04, 06, 07, 08, 09 | `src/predictive_maintenance/config.py:93-101` | `make data; make run; export_work_orders.py + inject_sheet.py` |
+| A-03: Costs: a planned job costs 1,500 plus one day of downtime; a failure costs its repair (9k pump, 22k compressor, 12k heat exchanger) plus 3-5 days of downtime at 3,000 a day | F-28, F-40, F-51, F-52 | 05, 07, 08, 09 | `src/predictive_maintenance/config.py:32-34 and the AssetType blocks` | `make run; export_work_orders.py + inject_sheet.py` |
+| A-04: Crew budget: 6 planned jobs a week, Monday to Friday, at most ceil(6/5) = 2 a day; an asset serviced in the last 21 days is not offered again | F-04, F-29, F-44, F-45, F-46, F-49, F-51, F-53 | 02, 05, 07, 08, 09 | `src/predictive_maintenance/config.py:106, :20` | `make run; export_work_orders.py + inject_sheet.py` |
 | A-05: Prediction horizon 14 days, feature window 60 days, baseline = window median excluding the last 14 days | F-23, F-25, F-34, F-35 | 05, 06, 07 | `src/predictive_maintenance/config.py:18-19; src/predictive_maintenance/features.py:18` | `make run; export_work_orders.py + inject_sheet.py` |
-| A-06: Every job is a perfect repair (the asset is as good as new); imperfect repair and infant mortality are not modelled | F-46, F-49, F-51, F-53 | 08 | `src/predictive_maintenance/plant.py` | `make run` |
-| A-07: Closed-loop evaluation: the plant is replayed to the end of the 2-year training history (2024-12-31), forked with seeds 101-105, and each policy runs 365 days from the same fork with the same random stream | F-11, F-12, F-13, F-30, F-38, F-39, F-46, F-47, F-48, F-49, F-50, F-51, F-52, F-53, F-54, F-55, F-56, F-57, F-58, F-59 | 04, 05, 06, 08, 09, 10 | `src/predictive_maintenance/config.py:108` | `make run; export_work_orders.py + inject_sheet.py` |
-| A-08: Truth for scoring: an alert is a catch when the asset's latent life would have ended within 14 days; the latent failure day comes from the plant model (lives_truth | F-16, F-17, F-37, F-43, F-53, F-60 | 04, 06, 07, 08, 09 | `src/predictive_maintenance/simulate.py` | `make run` |
-| A-09: Video rounding: uptime to 2 decimals, percentages to whole numbers or 1 decimal as shown, costs in millions to 2 decimals, savings in thousands to 1 decimal, failure probability to 2 decimals on the sheet (3 on the work-order card), failure means to 1 decimal or whole numbers as shown | F-07, F-16, F-17, F-31, F-35, F-40, F-46, F-47, F-48, F-49, F-50, F-51, F-52, F-53, F-54, F-56, F-57, F-58, F-59 | 02, 04, 05, 06, 07, 08, 09, 10 | `the composition file named on each slide` | `hyperframes render` |
+| A-06: Every job is a perfect repair (the asset is as good as new); imperfect repair and infant mortality are not modelled | F-46, F-49, F-51, F-53 | 08, 09 | `src/predictive_maintenance/plant.py` | `make run` |
+| A-07: Closed-loop evaluation: the plant is replayed to the end of the 2-year training history (2024-12-31), forked with seeds 101-105, and each policy runs 365 days from the same fork with the same random stream | F-11, F-12, F-13, F-30, F-38, F-39, F-46, F-47, F-49, F-50, F-51, F-52, F-53, F-54, F-55, F-65, F-66, F-67, F-68, F-69, F-70 | 04, 05, 06, 08, 09, 10 | `src/predictive_maintenance/config.py:108` | `make run; export_work_orders.py + inject_sheet.py` |
+| A-08: Truth for scoring: an alert is a catch when the asset's latent life would have ended within 14 days; the latent failure day comes from the plant model (lives_truth | F-16, F-17, F-37, F-43, F-53, F-65, F-66 | 04, 06, 07, 08, 09 | `src/predictive_maintenance/simulate.py` | `make run` |
+| A-09: Video rounding: uptime to 2 decimals, percentages to whole numbers or 1 decimal as shown, costs in millions to 2 decimals, savings in thousands to 1 decimal, failure probability to 2 decimals on the sheet (3 on the work-order card), failure means to 1 decimal or whole numbers as shown | F-07, F-14, F-15, F-16, F-17, F-31, F-35, F-40, F-46, F-47, F-49, F-50, F-51, F-52, F-53, F-54, F-64, F-65, F-66, F-67, F-68 | 02, 04, 05, 06, 07, 08, 09, 10 | `the composition file named on each slide` | `hyperframes render` |
 | A-10: Slide 01 (industries, everyday problems) is general maintenance knowledge used as context; it is not a result of this repo and carries no numbers | F-01, F-02 | 01 | `compositions/s01-context.html` | `hyperframes render` |
 
 ## 6. Known differences and caveats
@@ -552,7 +568,9 @@ python3 docs/demo/source/tools/build_audit_report.py docs/demo/source/audit/fact
 - 'Hidden life ended 1.8 days later' and '5 of 6 under 14 days from failing' use the plant's latent truth (Plant.latent_remaining), which exists only in simulation.
 - Expected saving on the sheet is the model's own estimate (p x failure cost - planned cost); it is not a realised saving.
 - The repo saves no plots; slide 06 charts are drawn from exported numbers (F-33, F-38), not from matplotlib output.
-- '+0.47 pp' is the paired mean from results.json; it equals the difference of the two 5-fork mean uptimes.
+- On screen, 'runs' means the 5 closed-loop forks (seeds 101-105); 'simulated year' means one 365-day closed-loop run from a fork.
+- Dropped from slide 09 in this version (README 'What disappoints' still reports both): hand-set alarm limits get most of the way (the model adds +0.17 pp uptime over them, +0.47 pp over the calendar), and sudden failures are untouched (1 of 189 caught; 38 of the 44 breakdowns a year that remain). The repo implements no fix for either; README 'Known limitations' and 'Insights' name the next steps (vibration spectra, an inspect-or-repair policy).
+- Slide 09's fix is about how the model was chosen (closed-loop year vs C-index); the C-index figures are offline on the held-out third year, the failures-caught figures are closed-loop means of 5 forks at crew 6.
 - Precision at budget (46%) is not on screen: half the model's jobs land on an asset that would not have failed inside 14 days (README 'What disappoints').
 - Slide 01 statements are general industry knowledge (A-10).
 

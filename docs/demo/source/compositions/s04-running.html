@@ -9,7 +9,7 @@
         #running-root .panel {
           position: absolute; border-radius: 14px; border: 2px solid var(--line); background: rgba(11, 23, 34, 0.92);
         }
-        #running-root .ax { font-family: var(--mono); font-size: 20px; fill: #8494a6; }
+        #running-root .ax { font-family: var(--mono); font-size: 22px; fill: #9fb0c2; }
         #running-root .legend {
           position: absolute; right: 120px; top: 126px; font-family: var(--mono); font-size: 24px;
           line-height: 1.5; color: var(--ink-soft); text-align: right;
@@ -21,7 +21,7 @@
         }
         /* work order card */
         #running-root .wo {
-          position: absolute; left: 1250px; top: 214px; width: 550px; height: 636px; border-radius: 14px;
+          position: absolute; left: 1250px; top: 244px; width: 550px; height: 616px; border-radius: 14px;
           border: 2px solid rgba(242, 196, 109, 0.7); background: rgba(15, 26, 38, 0.96); padding: 28px 30px; overflow: hidden;
         }
         #running-root .wo-h { font-family: var(--mono); font-size: 22px; letter-spacing: 0.1em; color: var(--c-eval); }
@@ -48,16 +48,17 @@
           <!-- phase A: one machine, one alert -->
           <div id="ra">
             <div class="scene-title" data-layout-allow-overlap id="ra-title">One compressor, the morning its alert fired.</div>
-            <div class="panel" id="ra-panel" style="left: 120px; top: 214px; width: 1090px; height: 636px"></div>
+            <div class="scene-sub" id="ra-sub">Purple line = its daily vibration. A rise above its own normal level is the warning sign.</div>
+            <div class="panel" id="ra-panel" style="left: 120px; top: 244px; width: 1090px; height: 616px"></div>
             <svg id="ra-svg" viewBox="0 0 1920 1080"></svg>
-            <div class="note" id="ra-n1" style="left: 160px; top: 236px; color: var(--ink-soft)">daily vibration · last 60 days</div>
-            <div class="note" id="ra-n2" style="left: 160px; top: 270px; color: var(--ink-mute)">from sensor_readings.csv.gz</div>
-            <div class="chip" id="ra-chip" style="left: 640px; top: 352px">+52% vs baseline</div>
+            <div class="note" id="ra-n1" style="left: 160px; top: 262px; color: var(--ink-soft)">daily vibration · last 60 days</div>
+            <div class="note" id="ra-n2" style="left: 160px; top: 296px; color: var(--ink-mute)">from sensor_readings.csv.gz</div>
+            <div class="chip" id="ra-chip" style="left: 640px; top: 372px">+52% vs baseline</div>
             <div class="wo" id="ra-wo">
               <div class="wo-h">WORK ORDER · workorders.py</div>
               <div class="wo-id" id="ra-id"></div>
               <div class="kv" id="ra-k1"><span class="k">asset</span><span class="v" id="ra-asset"></span></div>
-              <div class="kv" id="ra-k2"><span class="k">p(fail in 14 d)</span><span class="v hot" id="ra-p">0.000</span></div>
+              <div class="kv" id="ra-k2"><span class="k">risk of failing in 14 d</span><span class="v hot" id="ra-p">0.000</span></div>
               <div class="kv" id="ra-k3"><span class="k">evidence</span><span class="v" id="ra-ev"></span></div>
               <div class="kv" id="ra-k4"><span class="k">priority · due</span><span class="v" id="ra-due"></span></div>
               <div class="kv" id="ra-k5"><span class="k">crew</span><span class="v" id="ra-crew"></span></div>
@@ -68,13 +69,10 @@
           <!-- phase B: the year, six policies -->
           <div id="rb">
             <div class="scene-title" data-layout-allow-overlap id="rb-title">Same plant, same year, six policies.</div>
-            <div class="legend" id="rb-legend">
-              <div>closed loop · fork 1 of 5 · crew 6 jobs / week</div>
-              <div>cumulative breakdowns</div>
-            </div>
-            <div class="panel" id="rb-panel" style="left: 120px; top: 214px; width: 1680px; height: 690px"></div>
+            <div class="scene-sub" id="rb-sub">Breakdowns adding up over one simulated year (run 1 of 5, crew of 6 jobs a week). Lower is better.</div>
+            <div class="panel" id="rb-panel" style="left: 120px; top: 244px; width: 1680px; height: 660px"></div>
             <svg id="rb-svg" viewBox="0 0 1920 1080"></svg>
-            <div class="daylab" id="rb-day" style="left: 220px; top: 236px">day <b id="rb-dayn">0</b> / 365</div>
+            <div class="daylab" id="rb-day" style="left: 220px; top: 262px">day <b id="rb-dayn">0</b> / 365</div>
             <div id="rb-labels"></div>
           </div>
         </div>
@@ -92,7 +90,7 @@
 
           // ================= phase A: the vibration trace and the work order it produced
           const TR = RUN.trace, WO = RUN.first_order;
-          const A = { x0: 200, x1: 1150, y0: 790, y1: 330 };
+          const A = { x0: 200, x1: 1150, y0: 800, y1: 360 };
           const vals = TR.values.filter((v) => v !== null);
           const vmin = Math.floor(Math.min(...vals) - 0.5), vmax = Math.ceil(Math.max(...vals) + 0.5);
           const X = (d) => A.x0 + ((d + 60) / 60) * (A.x1 - A.x0);
@@ -115,8 +113,8 @@
           const base = baseVals.length % 2 ? baseVals[Math.floor(mid)] : (baseVals[mid - 1] + baseVals[mid]) / 2;
           const bl = mk(sa, "line", { x1: A.x0, y1: Y(base), x2: X(-15), y2: Y(base), stroke: "#7fa8ff", "stroke-width": 3, "stroke-dasharray": "10 8", opacity: 0 });
           const blab = mk(sa, "g", { opacity: 0 });
-          mk(blab, "line", { x1: 640, y1: 251, x2: 678, y2: 251, stroke: "#7fa8ff", "stroke-width": 3, "stroke-dasharray": "8 6" });
-          const bt = mk(blab, "text", { x: 688, y: 258, class: "ax", style: "fill:#7fa8ff" });
+          mk(blab, "line", { x1: 572, y1: 277, x2: 610, y2: 277, stroke: "#7fa8ff", "stroke-width": 3, "stroke-dasharray": "8 6" });
+          const bt = mk(blab, "text", { x: 620, y: 284, class: "ax", style: "fill:#7fa8ff" });
           bt.textContent = "its own baseline: median of days −60…−15";
           // recent 7 days band
           const band = mk(sa, "rect", { x: X(-7), y: A.y1 - 10, width: X(0) - X(-7), height: A.y0 - A.y1 + 10, fill: "rgba(255,138,115,0.10)", opacity: 0 });
@@ -142,6 +140,7 @@
           document.getElementById("ra-chip").textContent = "+" + Math.round(WO.evidence.change_vs_baseline_7d * 100) + "% vs its baseline";
 
           tl.fromTo("#ra-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 0.2);
+          tl.fromTo("#ra-sub", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.5);
           tl.fromTo("#ra-panel", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.5);
           tl.fromTo("#ra-svg", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.6);
           tl.fromTo(["#ra-n1", "#ra-n2"], { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.8);
@@ -161,7 +160,7 @@
           tl.to("#ra", { opacity: 0, duration: 0.4, ease: "power2.in" }, P2);
 
           // ================= phase B: cumulative breakdowns over the closed-loop year
-          const B = { x0: 220, x1: 1490, y0: 840, y1: 290, ymax: 240 };
+          const B = { x0: 220, x1: 1490, y0: 840, y1: 320, ymax: 240 };
           const XB = (d) => B.x0 + (d / 365) * (B.x1 - B.x0);
           const YB = (v) => B.y0 - (v / B.ymax) * (B.y0 - B.y1);
           const sb = document.getElementById("rb-svg");
@@ -176,7 +175,7 @@
             t.textContent = s;
           });
           const SER = [
-            ["run-to-failure", "run-to-failure", "#8494a6", ""],
+            ["run-to-failure", "run-to-failure", "#9fb0c2", ""],
             ["cox-sensors", "Cox", "#b9a2ff", ""],
             ["fixed-interval", "calendar", "#7fa8ff", ""],
             ["alarm-limits", "alarm limits", "#f2c46d", ""],
@@ -207,11 +206,11 @@
           tl.fromTo(cursor, { attr: { opacity: 0 } }, { attr: { opacity: 1 }, duration: 0.2 }, T0);
           tl.fromTo(cursor, { attr: { x1: B.x0, x2: B.x0 } }, { attr: { x1: B.x1, x2: B.x1 }, duration: RUNB, ease: "none" }, T0);
           tl.to(cursor, { attr: { opacity: 0 }, duration: 0.3 }, T0 + RUNB);
-          tl.fromTo("#rb", { opacity: 0 }, { opacity: 1, duration: 0.01 }, P2 + 0.39);
-          tl.fromTo("#rb-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, P2 + 0.4);
-          tl.fromTo("#rb-legend", { opacity: 0 }, { opacity: 1, duration: 0.5 }, P2 + 0.6);
+          tl.fromTo("#rb", { opacity: 0 }, { opacity: 1, duration: 0.01 }, P2 + 0.5); // after phase A has fully faded
+          tl.fromTo("#rb-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, P2 + 0.55);
+          tl.fromTo("#rb-sub", { opacity: 0 }, { opacity: 1, duration: 0.5 }, P2 + 0.6);
           tl.fromTo(["#rb-panel", "#rb-svg", "#rb-day"], { opacity: 0 }, { opacity: 1, duration: 0.5 }, P2 + 0.5);
-          tl.to("#running-in", { opacity: 0, duration: 0.4, ease: "power2.in" }, D - 0.4);
+          tl.to("#running-in", { opacity: 0, duration: 0.4, ease: "power2.in" }, D - 0.8); // dip: fully out before the next scene starts
           window.__timelines["running"] = tl;
         })();
       </script>
